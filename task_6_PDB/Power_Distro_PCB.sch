@@ -9277,42 +9277,42 @@ Source: http://www.vishay.com/docs/10129/hpc0201a.pdf</description>
 <part name="WIFI_OUT" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="C-GRID-02" device="-70553"/>
 <part name="CPU_OUT" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="C-GRID-02" device="-70553"/>
 <part name="F1" library="fuse" library_urn="urn:adsk.eagle:library:233" deviceset="TE5" device="" package3d_urn="urn:adsk.eagle:package:14069/1" value="24V_20A"/>
-<part name="TVS_1" library="POWER_DISTRO" deviceset="SMAJ26A_TVS" device="SMA" value="26V_TVS"/>
+<part name="TVS_1" library="POWER_DISTRO" deviceset="SMAJ26A_TVS" device="SMA" value="26V"/>
 <part name="GND3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="F2" library="fuse" library_urn="urn:adsk.eagle:library:233" deviceset="TE5" device="" package3d_urn="urn:adsk.eagle:package:14069/1" value="24V, 15A"/>
-<part name="VREG_1" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="29300-3.3WU"/>
+<part name="VREG_1" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="3V3"/>
 <part name="GND1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="TVS_2" library="POWER_DISTRO" deviceset="SMBJ3V3_TVS" device="SMB"/>
+<part name="TVS_2" library="POWER_DISTRO" deviceset="SMBJ3V3_TVS" device="SMB" value="3V3"/>
 <part name="F3" library="fuse" library_urn="urn:adsk.eagle:library:233" deviceset="TE5" device="" package3d_urn="urn:adsk.eagle:package:14069/1" value="3.3V_1A"/>
-<part name="VREG_2" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="29300-5.0WU"/>
-<part name="TVS_3" library="POWER_DISTRO" deviceset="SMAJ5.0_TVS" device="SMA"/>
+<part name="VREG_2" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="5V"/>
+<part name="TVS_3" library="POWER_DISTRO" deviceset="SMAJ5.0_TVS" device="SMA" value="5V"/>
 <part name="F4" library="fuse" library_urn="urn:adsk.eagle:library:233" deviceset="TE5" device="" package3d_urn="urn:adsk.eagle:package:14069/1" value="5V_1A"/>
 <part name="GND4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="LIDAR_OUT" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="C-GRID-02" device="-70553"/>
-<part name="VREG_3" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="29300-12WU"/>
+<part name="VREG_3" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="12V"/>
 <part name="GND5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="TVS_4" library="POWER_DISTRO" deviceset="PRSMA16_TVS" device=""/>
+<part name="TVS_4" library="POWER_DISTRO" deviceset="PRSMA16_TVS" device="" value="16V"/>
 <part name="F5" library="fuse" library_urn="urn:adsk.eagle:library:233" deviceset="TE5" device="" package3d_urn="urn:adsk.eagle:package:14069/1" value="12V_2A"/>
-<part name="PWR_IN_IND" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="RED"/>
-<part name="3.3V_IND" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="GREEN"/>
-<part name="5V_IND" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="GREEN"/>
-<part name="12V_LO_IND" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="GREEN"/>
-<part name="MOTOR_IND" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="GREEN"/>
+<part name="PWR" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="RED"/>
+<part name="3.3V" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="GREEN"/>
+<part name="5V" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="GREEN"/>
+<part name="12V" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="GREEN"/>
+<part name="MOTOR" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="GREEN"/>
 <part name="GND6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND9" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="VREG_4" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="MIC29300-3.3WU"/>
+<part name="VREG_4" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="3V3"/>
 <part name="GND12" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R1" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R1206" package3d_urn="urn:adsk.eagle:package:26062/1" value="47"/>
 <part name="R2" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R1206" package3d_urn="urn:adsk.eagle:package:26062/1" value="47"/>
 <part name="R3" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R1206" package3d_urn="urn:adsk.eagle:package:26062/1" value="47"/>
 <part name="R4" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R1206" package3d_urn="urn:adsk.eagle:package:26062/1" value="47"/>
 <part name="R5" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R1206" package3d_urn="urn:adsk.eagle:package:26062/1" value="47"/>
-<part name="VREG_5" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="MIC29300-3.3WU"/>
-<part name="VREG_6" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="MIC29300-3.3WU"/>
-<part name="VREG_7" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="MIC2900-3.3WU"/>
+<part name="VREG_5" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="3V3"/>
+<part name="VREG_6" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="3V3"/>
+<part name="VREG_7" library="POWER_DISTRO" deviceset="HIGH-CURRENT_REG" device="SMA" value="3V3"/>
 <part name="GND11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND14" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -9344,10 +9344,10 @@ Source: http://www.vishay.com/docs/10129/hpc0201a.pdf</description>
 <part name="GND25" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND26" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND27" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="TVS_5" library="POWER_DISTRO" deviceset="SMBJ3V3_TVS" device="SMB"/>
-<part name="TVS_6" library="POWER_DISTRO" deviceset="SMAJ5.0_TVS" device="SMA"/>
-<part name="TVS_7" library="POWER_DISTRO" deviceset="PRSMA16_TVS" device=""/>
-<part name="TVS_8" library="POWER_DISTRO" deviceset="SMAJ26A_TVS" device="SMA" value="26V_TVS"/>
+<part name="TVS_5" library="POWER_DISTRO" deviceset="SMBJ3V3_TVS" device="SMB" value="3V3"/>
+<part name="TVS_6" library="POWER_DISTRO" deviceset="SMAJ5.0_TVS" device="SMA" value="5V"/>
+<part name="TVS_7" library="POWER_DISTRO" deviceset="PRSMA16_TVS" device="" value="16V"/>
+<part name="TVS_8" library="POWER_DISTRO" deviceset="SMAJ26A_TVS" device="SMA" value="26V"/>
 <part name="C15" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:26140/1" value="100uF"/>
 <part name="GND28" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C16" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:26140/1" value="33uF"/>
@@ -9393,11 +9393,11 @@ OVP, RVP, Reg</text>
 <instance part="GND5" gate="1" x="96.52" y="-38.1"/>
 <instance part="TVS_4" gate="G$1" x="119.38" y="-25.4" rot="R90"/>
 <instance part="F5" gate="1" x="127" y="-15.24"/>
-<instance part="PWR_IN_IND" gate="G$1" x="-119.38" y="50.8"/>
-<instance part="3.3V_IND" gate="G$1" x="-104.14" y="50.8"/>
-<instance part="5V_IND" gate="G$1" x="-83.82" y="50.8"/>
-<instance part="12V_LO_IND" gate="G$1" x="-58.42" y="50.8"/>
-<instance part="MOTOR_IND" gate="G$1" x="-30.48" y="50.8"/>
+<instance part="PWR" gate="G$1" x="-119.38" y="50.8"/>
+<instance part="3.3V" gate="G$1" x="-104.14" y="50.8"/>
+<instance part="5V" gate="G$1" x="-83.82" y="50.8"/>
+<instance part="12V" gate="G$1" x="-58.42" y="50.8"/>
+<instance part="MOTOR" gate="G$1" x="-30.48" y="50.8"/>
 <instance part="GND6" gate="1" x="-119.38" y="43.18"/>
 <instance part="GND7" gate="1" x="-104.14" y="43.18"/>
 <instance part="GND8" gate="1" x="-83.82" y="43.18"/>
@@ -9502,23 +9502,23 @@ OVP, RVP, Reg</text>
 <junction x="119.38" y="-35.56"/>
 </segment>
 <segment>
-<pinref part="PWR_IN_IND" gate="G$1" pin="C"/>
+<pinref part="PWR" gate="G$1" pin="C"/>
 <pinref part="GND6" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="3.3V_IND" gate="G$1" pin="C"/>
+<pinref part="3.3V" gate="G$1" pin="C"/>
 <pinref part="GND7" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="5V_IND" gate="G$1" pin="C"/>
+<pinref part="5V" gate="G$1" pin="C"/>
 <pinref part="GND8" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="12V_LO_IND" gate="G$1" pin="C"/>
+<pinref part="12V" gate="G$1" pin="C"/>
 <pinref part="GND9" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="MOTOR_IND" gate="G$1" pin="C"/>
+<pinref part="MOTOR" gate="G$1" pin="C"/>
 <pinref part="GND10" gate="1" pin="GND"/>
 </segment>
 <segment>
@@ -9722,31 +9722,31 @@ OVP, RVP, Reg</text>
 </net>
 <net name="N$2" class="0">
 <segment>
-<pinref part="3.3V_IND" gate="G$1" pin="A"/>
+<pinref part="3.3V" gate="G$1" pin="A"/>
 <pinref part="R1" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$5" class="0">
 <segment>
-<pinref part="5V_IND" gate="G$1" pin="A"/>
+<pinref part="5V" gate="G$1" pin="A"/>
 <pinref part="R2" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$8" class="0">
 <segment>
-<pinref part="12V_LO_IND" gate="G$1" pin="A"/>
+<pinref part="12V" gate="G$1" pin="A"/>
 <pinref part="R3" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$9" class="0">
 <segment>
-<pinref part="MOTOR_IND" gate="G$1" pin="A"/>
+<pinref part="MOTOR" gate="G$1" pin="A"/>
 <pinref part="R4" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$12" class="0">
 <segment>
-<pinref part="PWR_IN_IND" gate="G$1" pin="A"/>
+<pinref part="PWR" gate="G$1" pin="A"/>
 <pinref part="R5" gate="G$1" pin="1"/>
 </segment>
 </net>

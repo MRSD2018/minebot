@@ -9259,7 +9259,7 @@ Source: http://www.vishay.com/docs/10129/hpc0201a.pdf</description>
 <class number="0" name="default" width="0.0254" drill="0.254">
 <clearance class="0" value="0.254"/>
 </class>
-<class number="1" name="Power IN" width="0" drill="0">
+<class number="1" name="Power IN" width="18.7198" drill="0">
 </class>
 <class number="2" name="Motor_OUT" width="0" drill="0">
 </class>
@@ -9363,7 +9363,7 @@ OVP, RVP, Reg</text>
 <text x="78.74" y="2.54" size="5.08" layer="97">12V Output</text>
 </plain>
 <instances>
-<instance part="PWR_IN" gate="-1" x="17.78" y="55.88" rot="R180"/>
+<instance part="PWR_IN" gate="-1" x="15.24" y="55.88" rot="R180"/>
 <instance part="PWR_IN" gate="-2" x="17.78" y="76.2" rot="R180"/>
 <instance part="MOTOR_OUT" gate="-1" x="109.22" y="55.88"/>
 <instance part="MOTOR_OUT" gate="-2" x="109.22" y="76.2"/>
@@ -9446,13 +9446,13 @@ OVP, RVP, Reg</text>
 <instance part="TVS_6" gate="G$1" x="25.4" y="-12.7"/>
 <instance part="TVS_7" gate="G$1" x="144.78" y="-15.24"/>
 <instance part="TVS_8" gate="G$1" x="48.26" y="55.88"/>
-<instance part="C15" gate="G$1" x="101.6" y="63.5"/>
-<instance part="GND28" gate="1" x="101.6" y="71.12" rot="R180"/>
+<instance part="C15" gate="G$1" x="22.86" y="63.5"/>
+<instance part="GND28" gate="1" x="22.86" y="71.12" rot="R180"/>
 </instances>
 <busses>
 </busses>
 <nets>
-<net name="GND" class="0">
+<net name="GND" class="1">
 <segment>
 <pinref part="PWR_IN" gate="-2" pin="S"/>
 <pinref part="TVS_1" gate="G$1" pin="ANODE"/>
@@ -9592,10 +9592,10 @@ OVP, RVP, Reg</text>
 <segment>
 <pinref part="C15" gate="G$1" pin="1"/>
 <pinref part="GND28" gate="1" pin="GND"/>
-<wire x1="101.6" y1="66.04" x2="101.6" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="22.86" y1="66.04" x2="22.86" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="24V_REG" class="0">
+<net name="24V_REG" class="1">
 <segment>
 <pinref part="TVS_1" gate="G$1" pin="CATHODE"/>
 <wire x1="76.2" y1="55.88" x2="76.2" y2="48.26" width="0.1524" layer="91"/>
@@ -9786,7 +9786,7 @@ OVP, RVP, Reg</text>
 <junction x="-58.42" y="88.9"/>
 </segment>
 </net>
-<net name="24V_REG_MOTOR" class="0">
+<net name="24V_REG_MOTOR" class="1">
 <segment>
 <pinref part="F2" gate="1" pin="2"/>
 <pinref part="MOTOR_OUT" gate="-1" pin="S"/>
@@ -9794,8 +9794,6 @@ OVP, RVP, Reg</text>
 <label x="101.6" y="45.72" size="1.778" layer="95"/>
 <junction x="101.6" y="55.88"/>
 <wire x1="101.6" y1="55.88" x2="106.68" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="C15" gate="G$1" pin="2"/>
-<wire x1="101.6" y1="55.88" x2="101.6" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="VREG_7" gate="G$1" pin="IN"/>
@@ -9805,10 +9803,15 @@ OVP, RVP, Reg</text>
 <junction x="-30.48" y="88.9"/>
 </segment>
 </net>
-<net name="N$3" class="0">
+<net name="N$3" class="1">
 <segment>
-<wire x1="20.32" y1="55.88" x2="27.94" y2="55.88" width="0.1524" layer="91"/>
 <pinref part="F1" gate="1" pin="1"/>
+<pinref part="C15" gate="G$1" pin="2"/>
+<wire x1="22.86" y1="55.88" x2="27.94" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="22.86" y1="58.42" x2="22.86" y2="55.88" width="0.1524" layer="91"/>
+<junction x="22.86" y="55.88"/>
+<pinref part="PWR_IN" gate="-1" pin="S"/>
+<wire x1="17.78" y1="55.88" x2="22.86" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$4" class="0">
