@@ -9456,7 +9456,7 @@ OVP, RVP, Reg</text>
 <busses>
 </busses>
 <nets>
-<net name="GND" class="0">
+<net name="GND" class="1">
 <segment>
 <pinref part="PWR_IN" gate="-2" pin="S"/>
 <pinref part="TVS_1" gate="G$1" pin="ANODE"/>
@@ -9604,7 +9604,7 @@ OVP, RVP, Reg</text>
 <wire x1="88.9" y1="66.04" x2="88.9" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="24V_REG" class="0">
+<net name="24V_REG" class="1">
 <segment>
 <pinref part="TVS_1" gate="G$1" pin="CATHODE"/>
 <wire x1="76.2" y1="55.88" x2="76.2" y2="48.26" width="0.1524" layer="91"/>
@@ -9799,7 +9799,7 @@ OVP, RVP, Reg</text>
 <junction x="-58.42" y="88.9"/>
 </segment>
 </net>
-<net name="24V_REG_MOTOR" class="0">
+<net name="24V_REG_MOTOR" class="1">
 <segment>
 <pinref part="F2" gate="1" pin="2"/>
 <pinref part="MOTOR_OUT" gate="-1" pin="S"/>
@@ -9816,7 +9816,7 @@ OVP, RVP, Reg</text>
 <junction x="-30.48" y="88.9"/>
 </segment>
 </net>
-<net name="N$3" class="0">
+<net name="N$3" class="1">
 <segment>
 <pinref part="F1" gate="1" pin="1"/>
 <pinref part="C15" gate="G$1" pin="2"/>

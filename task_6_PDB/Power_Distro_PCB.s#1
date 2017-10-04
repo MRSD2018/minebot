@@ -492,6 +492,15 @@ Wickmann</description>
 <smd name="4" x="0" y="1.524" dx="11.176" dy="9.906" layer="1"/>
 <text x="-5.08" y="10.16" size="1.27" layer="25">&gt;NAME</text>
 <text x="-5.08" y="7.62" size="1.27" layer="27">&gt;VALUE</text>
+<pad name="VIA22" x="0" y="1.27" drill="0.6" shape="octagon"/>
+<pad name="VIA21" x="-3.81" y="1.27" drill="0.6" shape="octagon"/>
+<pad name="VIA11" x="-3.81" y="5.08" drill="0.6" shape="octagon"/>
+<pad name="VIA13" x="3.81" y="5.08" drill="0.6" shape="octagon"/>
+<pad name="VIA12" x="0" y="5.08" drill="0.6" shape="octagon"/>
+<pad name="VIA23" x="3.81" y="1.27" drill="0.6" shape="octagon"/>
+<pad name="VIA33" x="3.81" y="-2.54" drill="0.6" shape="octagon"/>
+<pad name="VIA32" x="0" y="-2.54" drill="0.6" shape="octagon"/>
+<pad name="VIA31" x="-3.81" y="-2.54" drill="0.6" shape="octagon"/>
 </package>
 </packages>
 <symbols>

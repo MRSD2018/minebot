@@ -52,7 +52,7 @@
 <layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
-<layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
 <layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
@@ -107,6 +107,15 @@
 <smd name="4" x="0" y="1.524" dx="11.176" dy="9.906" layer="1"/>
 <text x="-5.08" y="10.16" size="1.27" layer="25">&gt;NAME</text>
 <text x="-5.08" y="7.62" size="1.27" layer="27">&gt;VALUE</text>
+<pad name="P$1" x="0" y="1.27" drill="0.6" shape="octagon"/>
+<pad name="P$2" x="-3.81" y="1.27" drill="0.6" shape="octagon"/>
+<pad name="P$3" x="-3.81" y="5.08" drill="0.6" shape="octagon"/>
+<pad name="P$4" x="3.81" y="5.08" drill="0.6" shape="octagon"/>
+<pad name="P$5" x="3.81" y="1.27" drill="0.6" shape="octagon"/>
+<pad name="P$6" x="0" y="5.08" drill="0.6" shape="octagon"/>
+<pad name="P$7" x="0" y="-2.54" drill="0.6" shape="octagon"/>
+<pad name="P$8" x="-3.81" y="-2.54" drill="0.6" shape="octagon"/>
+<pad name="P$9" x="3.81" y="-2.54" drill="0.6" shape="octagon"/>
 </package>
 <package name="8PIN_THRU">
 <description>8-pin, Through-hole mount</description>
