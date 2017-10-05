@@ -84,7 +84,7 @@
 <circle x="4.953" y="58.42" radius="3.175" width="0.1524" layer="21"/>
 <hole x="58.293" y="58.42" drill="3.175"/>
 <circle x="58.293" y="58.42" radius="3.175" width="0.1524" layer="21"/>
-<text x="8.382" y="60.96" size="1.27" layer="25">Team B : Aaron Basel David Edward Georgia</text>
+<text x="10.16" y="1.397" size="1.27" layer="25">Team B : Aaron Basel David Edward Georgia</text>
 </plain>
 <libraries>
 <library name="con-molex" urn="urn:adsk.eagle:library:165">
@@ -2486,33 +2486,33 @@ design rules under a new name.</description>
 <approved hash="19,1,bb9c3c9c3b60bc60"/>
 <approved hash="19,1,bf1d3c1d3cfebffe"/>
 <approved hash="19,1,bf5d3c5d3ce2bfe2"/>
-<approved hash="19,1,be3c233c20b0bdb0"/>
 <approved hash="19,1,b23f2f3f2eb3b3b3"/>
+<approved hash="19,1,be3c233c20b0bdb0"/>
 <approved hash="19,1,3e3ca33ca3b03eb0"/>
 <approved hash="19,1,f2c071c0704df34d"/>
 <approved hash="19,1,7ec1fdc1fc4e7f4e"/>
 <approved hash="19,1,7ebb03bb03367e36"/>
+<approved hash="19,1,7abf7dbf7d327a32"/>
 <approved hash="19,1,7a3f7d3f7db27ab2"/>
 <approved hash="19,1,7a3d7d3d7cb27bb2"/>
-<approved hash="19,1,7abf7dbf7d327a32"/>
-<approved hash="19,1,bebf23bf233bbe3b"/>
-<approved hash="19,1,bebe23be2338be38"/>
-<approved hash="19,1,383fbd3fb2ba37ba"/>
-<approved hash="19,1,fe417d417dc6fec6"/>
-<approved hash="19,1,7f43fc43f3c670c6"/>
-<approved hash="19,1,fe407d407dc5fec5"/>
-<approved hash="19,1,fa3bfd3bfdbefabe"/>
-<approved hash="19,1,fabcfdbcfd39fa39"/>
-<approved hash="19,1,fabdfdbdfd3afa3a"/>
 <approved hash="19,1,ba1f271f2781ba81"/>
 <approved hash="19,1,3d5fb85fb8e23de2"/>
 <approved hash="19,1,b25d375d36c2b3c2"/>
 <approved hash="19,1,7221f121f1427242"/>
 <approved hash="19,1,f521762177bef4be"/>
 <approved hash="19,1,7a23f923f99e7a9e"/>
-<approved hash="19,1,f9ddf6ddf742f842"/>
 <approved hash="19,1,f99cf69cf701f801"/>
+<approved hash="19,1,f9ddf6ddf742f842"/>
 <approved hash="19,1,fb9f789f7801fb01"/>
+<approved hash="19,1,bebe23be2338be38"/>
+<approved hash="19,1,bebf23bf233bbe3b"/>
+<approved hash="19,1,383fbd3fb2ba37ba"/>
+<approved hash="19,1,7f43fc43f3c670c6"/>
+<approved hash="19,1,fe407d407dc5fec5"/>
+<approved hash="19,1,fe417d417dc6fec6"/>
+<approved hash="19,1,fabcfdbcfd39fa39"/>
+<approved hash="19,1,fa3bfd3bfdbefabe"/>
+<approved hash="19,1,fabdfdbdfd3afa3a"/>
 </errors>
 </board>
 </drawing>
