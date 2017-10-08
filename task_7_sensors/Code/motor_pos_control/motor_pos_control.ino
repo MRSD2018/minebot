@@ -40,7 +40,7 @@ void setup() {
 }
 
 void loop() {
-  cw();
+  ccw();
 
   while(Serial.available())
   {
@@ -50,6 +50,7 @@ void loop() {
   
   //calculate the revolutions
   revo = (double)encoderTicks/(holesPerRevo * resPerCycle);  //revolutions in float
+  Serial.println(revo);
 
   now = micros();
   rpm = (revo - pastRevo)*60/((double)(now-past)/1000000);  //finding the rpm
@@ -64,24 +65,24 @@ void loop() {
 //  analogWrite(PWM,100);
 //  Serial.print(pwmToWrite);
 //  Serial.print("\t");
-  Serial.println(rpm);
+//  Serial.println(rpm);
 }
 
 void handleChannelA()
 {
   channelAVal = digitalReadFast(channelAPin);
   channelBVal = digitalReadFast(channelBPin);
-  if(channelAVal == channelBVal){encoderTicks++;} //cw as positive
+  if(channelAVal == channelBVal){encoderTicks++;} //ccw as positive
   else{encoderTicks--;}
 }
 
-void cw()
+void ccw()
 {
   digitalWriteFast(L1,HIGH);
   digitalWriteFast(L2,LOW);
 }
 
-void ccw()
+void cw()
 {
   digitalWriteFast(L1,LOW);
   digitalWriteFast(L2,HIGH);
