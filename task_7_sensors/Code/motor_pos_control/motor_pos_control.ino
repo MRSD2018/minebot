@@ -28,6 +28,8 @@ String serialstuff;
 long rpmDesired = 40;
 long pwmToWrite = 0;
 
+long startEncoder =0;
+
 void setup() {
   Serial.begin(9600);
   pinMode(L1, OUTPUT);
@@ -40,7 +42,7 @@ void setup() {
 }
 
 void loop() {
-  ccw();
+  cw();
 
   while(Serial.available())
   {
@@ -50,7 +52,6 @@ void loop() {
   
   //calculate the revolutions
   revo = (double)encoderTicks/(holesPerRevo * resPerCycle);  //revolutions in float
-  Serial.println(revo);
 
   now = micros();
   rpm = (revo - pastRevo)*60/((double)(now-past)/1000000);  //finding the rpm
@@ -65,26 +66,42 @@ void loop() {
 //  analogWrite(PWM,100);
 //  Serial.print(pwmToWrite);
 //  Serial.print("\t");
-//  Serial.println(rpm);
+  Serial.println(rpm);
 }
 
 void handleChannelA()
 {
   channelAVal = digitalReadFast(channelAPin);
   channelBVal = digitalReadFast(channelBPin);
-  if(channelAVal == channelBVal){encoderTicks++;} //ccw as positive
+  if(channelAVal == channelBVal){encoderTicks++;} //cw as positive
   else{encoderTicks--;}
 }
 
-void ccw()
+void cw()
 {
   digitalWriteFast(L1,HIGH);
   digitalWriteFast(L2,LOW);
 }
 
-void cw()
+void ccw()
 {
   digitalWriteFast(L1,LOW);
   digitalWriteFast(L2,HIGH);
+}
+
+void posControl(deg)
+{
+  startEncoder = encoderTickes;
+  ticks = deg/2
+  while ticks >= encoderTicks - startEncoder {
+    if deg > 0 {
+      cw();
+      analogWrite(PWM, 50);
+    }
+    if deg < 0 {
+      ccw();
+      analogWrite(PWM, 50);
+    }
+  }
 }
 
