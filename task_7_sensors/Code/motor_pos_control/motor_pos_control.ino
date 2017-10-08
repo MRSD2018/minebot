@@ -2,20 +2,18 @@
 //https://code.google.com/archive/p/digitalwritefast/downloads
 
 #define PWM 3
-#define L1 4
+#define L1 4        //L1 high L2 low counter clockwise, L1 low L2 high clockwise
 #define L2 5
 #define channelAPin 2
 #define channelBPin 6
-#define ticksPerRevo 180
-#define resPerCycle 2 //if i read only RISING then it will be 1
+#define holesPerRevo 180  //how many holes are there in the encoder for 1 motor output turn
+#define resPerCycle 2 //if i read only RISING then it will be 1, CHANGE means both RISING and FALLING so = 2
 
-volatile bool channelAVal;
+volatile bool channelAVal;    //binary high or low from encoder
 volatile bool channelBVal;
-volatile bool channelAPrevVal;
-volatile bool channelBPrevVal;
-volatile long encoderTicks = 0;
+volatile long encoderTicks = 0;   //a tick is a change in channel A, both RISING and FALLING edges
 
-long past = 0;
+long past = 0;   //time in microseconds
 long now = 0;
 
 double revo = 0;
@@ -38,7 +36,7 @@ void setup() {
 
   pinMode(channelAPin, INPUT); //should I do internal pullup?
   pinMode(channelBPin, INPUT);
-  attachInterrupt(digitalPinToInterrupt(channelAPin), handleChannelA, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(channelAPin), handleChannelA, CHANGE);   //attaching the callback
 }
 
 void loop() {
@@ -51,10 +49,10 @@ void loop() {
   }
   
   //calculate the revolutions
-  revo = (double)encoderTicks/(ticksPerRevo * resPerCycle);
+  revo = (double)encoderTicks/(holesPerRevo * resPerCycle);  //revolutions in float
 
   now = micros();
-  rpm = (revo - pastRevo)*60/((double)(now-past)/1000000);
+  rpm = (revo - pastRevo)*60/((double)(now-past)/1000000);  //finding the rpm
   pastRevo = revo;
   past = now;
 
@@ -62,7 +60,7 @@ void loop() {
   if(pwmToWrite>255){pwmToWrite = 255;}
   else if(pwmToWrite<0){pwmToWrite = 0;}
 
-  analogWrite(PWM,pwmToWrite);
+  analogWrite(PWM,pwmToWrite);  //analogWrite only allows 0 to 255 on UNO
 //  analogWrite(PWM,100);
 //  Serial.print(pwmToWrite);
 //  Serial.print("\t");
@@ -79,13 +77,13 @@ void handleChannelA()
 
 void cw()
 {
-  digitalWrite(L1,HIGH);
-  digitalWrite(L2,LOW);
+  digitalWriteFast(L1,HIGH);
+  digitalWriteFast(L2,LOW);
 }
 
 void ccw()
 {
-  digitalWrite(L1,LOW);
-  digitalWrite(L2,HIGH);
+  digitalWriteFast(L1,LOW);
+  digitalWriteFast(L2,HIGH);
 }
 

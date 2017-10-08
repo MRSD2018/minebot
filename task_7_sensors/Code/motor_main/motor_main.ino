@@ -2,7 +2,7 @@
 //#include <digitalWriteFast.h> //thank you jrraines!
 //https://code.google.com/archive/p/digitalwritefast/downloads
 
-dcMotor dc_test(3, 4, 5);
+dcMotor dc_test(3, 4, 5, 2, 6);
 
 void setup() {
   // put your setup code here, to run once:
