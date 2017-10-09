@@ -1,11 +1,11 @@
 #include <digitalWriteFast.h> //thank you jrraines!! 
 //https://code.google.com/archive/p/digitalwritefast/downloads
 
-#define PWM 3
+#define PWM 6
 #define L1 4        //L1 high L2 low counter clockwise, L1 low L2 high clockwise
 #define L2 5
-#define channelAPin 2
-#define channelBPin 6
+#define channelAPin 3
+#define channelBPin 7
 #define holesPerRevo 180  //how many holes are there in the encoder for 1 motor output turn
 #define resPerCycle 2 //if i read only RISING then it will be 1, CHANGE means both RISING and FALLING so = 2
 
@@ -21,14 +21,17 @@ double pastRevo = 0;
 double rpm = 0;
 
 double kp = 0.1;
-double kd = 0;
+double kd = 0.1;
 double ki = 0;
 
 String serialstuff;
 long rpmDesired = 40;
 long pwmToWrite = 0;
 
-long startEncoder =0;
+long pos = 0;
+long posPast = 0;
+long goalPos = 0;
+long deg = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -42,66 +45,80 @@ void setup() {
 }
 
 void loop() {
-  cw();
 
   while(Serial.available())
   {
     serialstuff = Serial.readString();
-    rpmDesired = serialstuff.toInt();
+    deg = serialstuff.toInt();
+    Serial.print(deg);
   }
+
+//Position Control
+  revo = (double)encoderTicks/(holesPerRevo * resPerCycle);  //revolutions in float
+  now = micros();
+  pos = posPast + ((revo-pastRevo) * 360) ; //finding position in deg
+
+//PD control
+  goalPos = (kd*((double)(deg - pos))) + (kp*(double)(revo-pastRevo)*(360/(now-past/1000000)));
+  pwmToWrite = abs(goalPos*100); //Set motor speed
+  if(pwmToWrite>255){pwmToWrite = 255;} //Limit max PWM
+  if(pwmToWrite<255){pwmToWrite = 0;} //Limit min PWM
+  
+  Serial.println(goalPos);
+
+  //Motor CCW
+  if(goalPos<0){
+    ccw();
+    analogWrite(PWM, pwmToWrite);
+  }
+  //Motor CW
+  if(goalPos>0) {
+    cw();
+    analogWrite(PWM, pwmToWrite);
+  }
+
+  //Update
+  pastRevo = revo;
+  posPast = pos;
+  past = now;
   
   //calculate the revolutions
-  revo = (double)encoderTicks/(holesPerRevo * resPerCycle);  //revolutions in float
+//  revo = (double)encoderTicks/(holesPerRevo * resPerCycle);  //revolutions in float
+//
+//  now = micros();
+//  rpm = (revo - pastRevo)*60/((double)(now-past)/1000000);  //finding the rpm
+//  pastRevo = revo;
+//  past = now;
+//
+//  pwmToWrite += (kp*((double)rpmDesired-rpm));
+//  if(pwmToWrite>255){pwmToWrite = 255;}
+//  else if(pwmToWrite<0){pwmToWrite = 0;}
 
-  now = micros();
-  rpm = (revo - pastRevo)*60/((double)(now-past)/1000000);  //finding the rpm
-  pastRevo = revo;
-  past = now;
-
-  pwmToWrite += (kp*((double)rpmDesired-rpm));
-  if(pwmToWrite>255){pwmToWrite = 255;}
-  else if(pwmToWrite<0){pwmToWrite = 0;}
-
-  analogWrite(PWM,pwmToWrite);  //analogWrite only allows 0 to 255 on UNO
+//  analogWrite(PWM,pwmToWrite);  //analogWrite only allows 0 to 255 on UNO
 //  analogWrite(PWM,100);
 //  Serial.print(pwmToWrite);
 //  Serial.print("\t");
-  Serial.println(rpm);
+//  Serial.println(rpm);
 }
 
 void handleChannelA()
 {
   channelAVal = digitalReadFast(channelAPin);
   channelBVal = digitalReadFast(channelBPin);
-  if(channelAVal == channelBVal){encoderTicks++;} //cw as positive
-  else{encoderTicks--;}
+  if(channelAVal == channelBVal){encoderTicks--;} 
+  else{encoderTicks++;}//cw as positive
 }
 
-void cw()
+void ccw()
 {
   digitalWriteFast(L1,HIGH);
   digitalWriteFast(L2,LOW);
 }
 
-void ccw()
+void cw()
 {
   digitalWriteFast(L1,LOW);
   digitalWriteFast(L2,HIGH);
 }
 
-void posControl(deg)
-{
-  startEncoder = encoderTickes;
-  ticks = deg/2
-  while ticks >= encoderTicks - startEncoder {
-    if deg > 0 {
-      cw();
-      analogWrite(PWM, 50);
-    }
-    if deg < 0 {
-      ccw();
-      analogWrite(PWM, 50);
-    }
-  }
-}
 
