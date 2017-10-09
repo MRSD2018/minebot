@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QtSerialPort/QSerialPort>
 #include "qcustomplot.h"
 
 namespace Ui {
@@ -20,14 +21,20 @@ public:
     void setupRealtimeDataDemo(QCustomPlot *customPlot);
 
 private slots:
+    void openSerialPort();
+    void closeSerialPort();
+    void writeData(const QByteArray &data);
+    void readData();
     void realtimeDataSlot();
+    void handleError(QSerialPort::SerialPortError error);
 
 private:
   Ui::MainWindow *ui;
-  QString demoName;
   QTimer dataTimer;
   QCPItemTracer *itemDemoPhaseTracer;
-  int currentDemoIndex;
+  QSerialPort *serial;
+  QByteArray strCat;
+  QString serialIn;
 };
 
 #endif // MAINWINDOW_H

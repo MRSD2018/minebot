@@ -5,18 +5,24 @@
 #include <QScreen>
 #include <QMessageBox>
 #include <QMetaEnum>
+#include <QtSerialPort/QSerialPort>
+#include <QDebug>
+#include <QStringRef>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowTitle("MRSD Sensors Lab");
 
     setupRealtimeDataDemo(ui->customPlot);
-    setWindowTitle("QCustomPlot: "+demoName);
     statusBar()->clearMessage();
-    currentDemoIndex = 10;
     ui->customPlot->replot();
+
+    serial = new QSerialPort(this);
+    openSerialPort();
+
 }
 
 MainWindow::~MainWindow()
@@ -24,10 +30,68 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::openSerialPort()
+{
+    serial->setPortName("COM7");
+    serial->setBaudRate(QSerialPort::Baud9600);
+    serial->setDataBits(QSerialPort::Data8);
+    serial->setParity(QSerialPort::NoParity);
+    serial->setStopBits(QSerialPort::OneStop);
+    serial->setFlowControl(QSerialPort::NoFlowControl);
+
+    if (serial->open(QIODevice::ReadWrite)) {
+        qDebug() << "Serial Port Opened!" << endl;
+    } else {
+        qDebug() << "Serial Port Open Failed! :(" << endl;
+    }
+
+    connect(serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+            this, &MainWindow::handleError);
+    connect(serial, &QSerialPort::readyRead, this, &MainWindow::readData);
+}
+
+void MainWindow::closeSerialPort()
+{
+    if (serial->isOpen())
+        serial->close();
+}
+
+void MainWindow::writeData(const QByteArray &data)
+{
+    serial->write(data);
+}
+
+void MainWindow::readData()
+{
+    QByteArray data = serial->readAll();
+
+    //qDebug() << data << endl;
+
+    strCat += data;
+    QString search(strCat);
+    QStringList searchList = search.split("\r\n",QString::SkipEmptyParts);
+
+    //qDebug() << searchList << endl;
+
+    if (searchList.size() > 1)
+    {
+        serialIn = searchList[searchList.size()-2]; // 2nd last member
+        strCat = strCat.right(50);
+
+        qDebug() << "Serial In: " << serialIn << endl;
+    }
+}
+
+void MainWindow::handleError(QSerialPort::SerialPortError error)
+{
+    if (error == QSerialPort::ResourceError) {
+        QMessageBox::critical(this, tr("Critical Error"), serial->errorString());
+        closeSerialPort();
+    }
+}
+
 void MainWindow::setupRealtimeDataDemo(QCustomPlot *customPlot)
 {
-  demoName = "Real Time Data Demo";
-
   // include this section to fully disable antialiasing for higher performance:
   /*
   customPlot->setNotAntialiasedElements(QCP::aeAll);
@@ -46,7 +110,7 @@ void MainWindow::setupRealtimeDataDemo(QCustomPlot *customPlot)
   timeTicker->setTimeFormat("%h:%m:%s");
   customPlot->xAxis->setTicker(timeTicker);
   customPlot->axisRect()->setupFullAxesBox();
-  customPlot->yAxis->setRange(-1.2, 1.2);
+  customPlot->yAxis->setRange(-100, 1000);
 
   // make left and bottom axes transfer their ranges to right and top axes:
   connect(customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), customPlot->xAxis2, SLOT(setRange(QCPRange)));
@@ -66,11 +130,11 @@ void MainWindow::realtimeDataSlot()
   if (key-lastPointKey > 0.002) // at most add point every 2 ms
   {
     // add data to lines:
-    ui->customPlot->graph(0)->addData(key, qSin(key)+qrand()/(double)RAND_MAX*1*qSin(key/0.3843));
+    ui->customPlot->graph(0)->addData(key, serialIn.toDouble());
     ui->customPlot->graph(1)->addData(key, qCos(key)+qrand()/(double)RAND_MAX*0.5*qSin(key/0.4364));
     // rescale value (vertical) axis to fit the current data:
-    //ui->customPlot->graph(0)->rescaleValueAxis();
-    //ui->customPlot->graph(1)->rescaleValueAxis(true);
+    ui->customPlot->graph(0)->rescaleValueAxis(true);
+    ui->customPlot->graph(1)->rescaleValueAxis(true);
     lastPointKey = key;
   }
   // make key axis range scroll with the data (at a constant range size of 8):
