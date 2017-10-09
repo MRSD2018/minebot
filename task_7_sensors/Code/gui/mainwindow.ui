@@ -6,146 +6,137 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>768</width>
-    <height>545</height>
+    <width>469</width>
+    <height>273</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MRSD Sensor Lab</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>icon.ico</normaloff>icon.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>731</width>
-      <height>481</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="tab1">
-     <attribute name="title">
-      <string>DC Motor</string>
-     </attribute>
-     <widget class="QCustomPlot" name="customPlot" native="true">
-      <property name="geometry">
-       <rect>
-        <x>40</x>
-        <y>140</y>
-        <width>281</width>
-        <height>251</height>
-       </rect>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="motorTabs">
+      <property name="currentIndex">
+       <number>0</number>
       </property>
+      <widget class="QWidget" name="dcTab">
+       <attribute name="title">
+        <string>DC Motor</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QWidget" name="control" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QRadioButton" name="position">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Position Control</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="velocity">
+             <property name="text">
+              <string>Velocity Control</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QWidget" name="input" native="true">
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="1" column="0">
+            <widget class="QPushButton" name="manualButton">
+             <property name="text">
+              <string>Use Manual Input</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="manualInput"/>
+           </item>
+           <item row="0" column="0" colspan="2">
+            <widget class="QPushButton" name="sensorButton">
+             <property name="text">
+              <string>Use Pressure Sensor</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCustomPlot" name="motorPlot" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+          <zorder>manualInput</zorder>
+          <zorder>sensorButton</zorder>
+          <zorder>manualButton</zorder>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCustomPlot" name="sensorPlot" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="stepperTab">
+       <attribute name="title">
+        <string>Stepper Motor</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="servoTab">
+       <attribute name="title">
+        <string>Servo Motor</string>
+       </attribute>
+      </widget>
      </widget>
-     <widget class="QPushButton" name="addButton">
-      <property name="geometry">
-       <rect>
-        <x>40</x>
-        <y>40</y>
-        <width>80</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Add</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="clearButton">
-      <property name="geometry">
-       <rect>
-        <x>130</x>
-        <y>40</y>
-        <width>80</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Clear</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_2">
-      <property name="geometry">
-       <rect>
-        <x>380</x>
-        <y>40</y>
-        <width>35</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Y</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>240</x>
-        <y>40</y>
-        <width>35</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>X</string>
-      </property>
-     </widget>
-     <widget class="QDoubleSpinBox" name="boxY">
-      <property name="geometry">
-       <rect>
-        <x>430</x>
-        <y>40</y>
-        <width>62</width>
-        <height>22</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QDoubleSpinBox" name="boxX">
-      <property name="geometry">
-       <rect>
-        <x>290</x>
-        <y>40</y>
-        <width>62</width>
-        <height>22</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QCustomPlot" name="plot_2" native="true">
-      <property name="geometry">
-       <rect>
-        <x>410</x>
-        <y>140</y>
-        <width>281</width>
-        <height>251</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tab2">
-     <attribute name="title">
-      <string>Stepper Motor</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="tab3">
-     <attribute name="title">
-      <string>Servo Motor</string>
-     </attribute>
-    </widget>
-   </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>768</width>
+     <width>469</width>
      <height>17</height>
     </rect>
    </property>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -153,7 +144,11 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

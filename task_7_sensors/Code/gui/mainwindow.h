@@ -18,7 +18,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void setupRealtimeDataDemo(QCustomPlot *customPlot);
+    void setupPlots(QCustomPlot *motorPlot, QCustomPlot *sensorPlot);
 
 private slots:
     void openSerialPort();
@@ -27,6 +27,8 @@ private slots:
     void readData();
     void realtimeDataSlot();
     void handleError(QSerialPort::SerialPortError error);
+
+    void on_sensorButton_clicked();
 
 private:
   Ui::MainWindow *ui;

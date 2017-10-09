@@ -15,14 +15,15 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle("MRSD Sensors Lab");
+//    setWindowIcon("icon.ico");
 
-    setupRealtimeDataDemo(ui->customPlot);
+    setupPlots(ui->motorPlot, ui->sensorPlot);
     statusBar()->clearMessage();
-    ui->customPlot->replot();
+    ui->motorPlot->replot();
+    ui->sensorPlot->replot();
 
     serial = new QSerialPort(this);
     openSerialPort();
-
 }
 
 MainWindow::~MainWindow()
@@ -78,7 +79,7 @@ void MainWindow::readData()
         serialIn = searchList[searchList.size()-2]; // 2nd last member
         strCat = strCat.right(50);
 
-        qDebug() << "Serial In: " << serialIn << endl;
+        //qDebug() << "Serial In: " << serialIn << endl;
     }
 }
 
@@ -90,31 +91,41 @@ void MainWindow::handleError(QSerialPort::SerialPortError error)
     }
 }
 
-void MainWindow::setupRealtimeDataDemo(QCustomPlot *customPlot)
+void MainWindow::setupPlots(QCustomPlot *motorPlot, QCustomPlot *sensorPlot)
 {
-  // include this section to fully disable antialiasing for higher performance:
-  /*
-  customPlot->setNotAntialiasedElements(QCP::aeAll);
-  QFont font;
-  font.setStyleStrategy(QFont::NoAntialias);
-  customPlot->xAxis->setTickLabelFont(font);
-  customPlot->yAxis->setTickLabelFont(font);
-  customPlot->legend->setFont(font);
-  */
-  customPlot->addGraph(); // blue line
-  customPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
-  customPlot->addGraph(); // red line
-  customPlot->graph(1)->setPen(QPen(QColor(255, 110, 40)));
+  motorPlot->addGraph(); // blue line
+  motorPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
+  motorPlot->addGraph(); // red line
+  motorPlot->graph(1)->setPen(QPen(QColor(255, 110, 40)));
+
+  sensorPlot->addGraph(); // blue line
+  sensorPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
 
   QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
   timeTicker->setTimeFormat("%h:%m:%s");
-  customPlot->xAxis->setTicker(timeTicker);
-  customPlot->axisRect()->setupFullAxesBox();
-  customPlot->yAxis->setRange(-100, 1000);
+
+  motorPlot->xAxis->setTicker(timeTicker);
+  motorPlot->axisRect()->setupFullAxesBox();
+  motorPlot->yAxis->setRange(-100, 1000);
+  motorPlot->plotLayout()->insertRow(0);
+  motorPlot->plotLayout()->addElement(0, 0, new QCPTextElement(motorPlot, "DC Motor Position Control", QFont("sans", 12, QFont::Bold)));
+  motorPlot->xAxis->setLabel("Time (s)");
+  motorPlot->yAxis->setLabel("Angle (Degrees)");
+
+  sensorPlot->xAxis->setTicker(timeTicker);
+  sensorPlot->axisRect()->setupFullAxesBox();
+  sensorPlot->yAxis->setRange(-100, 1000);
+  sensorPlot->plotLayout()->insertRow(0);
+  sensorPlot->plotLayout()->addElement(0, 0, new QCPTextElement(sensorPlot, "Pressure Sensor Data", QFont("sans", 12, QFont::Bold)));
+  sensorPlot->xAxis->setLabel("Time (s)");
+  sensorPlot->yAxis->setLabel("Sensor Data (N)");
 
   // make left and bottom axes transfer their ranges to right and top axes:
-  connect(customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), customPlot->xAxis2, SLOT(setRange(QCPRange)));
-  connect(customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), customPlot->yAxis2, SLOT(setRange(QCPRange)));
+  connect(motorPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), motorPlot->xAxis2, SLOT(setRange(QCPRange)));
+  connect(motorPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), motorPlot->yAxis2, SLOT(setRange(QCPRange)));
+
+  connect(sensorPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), sensorPlot->xAxis2, SLOT(setRange(QCPRange)));
+  connect(sensorPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), sensorPlot->yAxis2, SLOT(setRange(QCPRange)));
 
   // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
   connect(&dataTimer, SIGNAL(timeout()), this, SLOT(realtimeDataSlot()));
@@ -130,16 +141,16 @@ void MainWindow::realtimeDataSlot()
   if (key-lastPointKey > 0.002) // at most add point every 2 ms
   {
     // add data to lines:
-    ui->customPlot->graph(0)->addData(key, serialIn.toDouble());
-    ui->customPlot->graph(1)->addData(key, qCos(key)+qrand()/(double)RAND_MAX*0.5*qSin(key/0.4364));
+    ui->motorPlot->graph(0)->addData(key, serialIn.toDouble());
+    ui->motorPlot->graph(1)->addData(key, qCos(key)+qrand()/(double)RAND_MAX*0.5*qSin(key/0.4364));
     // rescale value (vertical) axis to fit the current data:
-    ui->customPlot->graph(0)->rescaleValueAxis(true);
-    ui->customPlot->graph(1)->rescaleValueAxis(true);
+    ui->motorPlot->graph(0)->rescaleValueAxis(true);
+    ui->motorPlot->graph(1)->rescaleValueAxis(true);
     lastPointKey = key;
   }
   // make key axis range scroll with the data (at a constant range size of 8):
-  ui->customPlot->xAxis->setRange(key, 8, Qt::AlignRight);
-  ui->customPlot->replot();
+  ui->motorPlot->xAxis->setRange(key, 8, Qt::AlignRight);
+  ui->motorPlot->replot();
 
   // calculate frames per second:
   static double lastFpsKey;
@@ -150,9 +161,15 @@ void MainWindow::realtimeDataSlot()
     ui->statusBar->showMessage(
           QString("%1 FPS, Total Data points: %2")
           .arg(frameCount/(key-lastFpsKey), 0, 'f', 0)
-          .arg(ui->customPlot->graph(0)->data()->size()+ui->customPlot->graph(1)->data()->size())
+          .arg(ui->motorPlot->graph(0)->data()->size()+ui->motorPlot->graph(1)->data()->size())
           , 0);
     lastFpsKey = key;
     frameCount = 0;
   }
+}
+
+void MainWindow::on_sensorButton_clicked()
+{
+    writeData("R_001");
+    qDebug() << "Wrote to Serial!" << endl;
 }
