@@ -18,7 +18,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void setupPlots(QCustomPlot *motorPlot, QCustomPlot *sensorPlot);
+    void setupPlots();
+    void changeLabels(QCustomPlot *plot, QString title, QString axis);
+    void modifyPlots(int state);
 
 private slots:
     void openSerialPort();
@@ -32,6 +34,11 @@ private slots:
 
     void on_motorTabs_tabBarClicked(int index);
 
+    void on_dcPos_clicked();
+    void on_dcVel_clicked();
+    void on_stepPos_clicked();
+    void on_servPos_clicked();
+
 private:
   Ui::MainWindow *ui;
   QTimer dataTimer;
@@ -39,6 +46,11 @@ private:
   QSerialPort *serial;
   QByteArray strCat;
   QString serialIn;
+  // Plotting Data
+  float motorValue;
+  float setpointValue;
+  float sensorValue;
+  int directionValue;
 };
 
 #endif // MAINWINDOW_H

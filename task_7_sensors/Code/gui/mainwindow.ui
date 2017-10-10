@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>469</width>
-    <height>273</height>
+    <width>820</width>
+    <height>598</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,14 +32,54 @@
         <string>DC Motor Position</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="1" column="1">
-         <widget class="QCustomPlot" name="sensorPlot" native="true">
+        <item row="1" column="0" rowspan="2">
+         <widget class="QCustomPlot" name="motorPlot" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
-            <verstretch>10</verstretch>
+            <verstretch>2</verstretch>
            </sizepolicy>
           </property>
+          <zorder>manualInput</zorder>
+          <zorder>sensorButton</zorder>
+          <zorder>manualButton</zorder>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QWidget" name="input_5" native="true">
+          <layout class="QGridLayout" name="gridLayout_11">
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="dcVel">
+             <property name="text">
+              <string>DC Motor Velocity Control</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="dcPos">
+             <property name="text">
+              <string>DC Motor Position Control</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QRadioButton" name="stepPos">
+             <property name="text">
+              <string>Stepper Motor Position Control</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QRadioButton" name="servPos">
+             <property name="text">
+              <string>Servo Motor Position Control</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
         <item row="0" column="1">
@@ -65,17 +105,14 @@
           </layout>
          </widget>
         </item>
-        <item row="0" column="0" rowspan="2">
-         <widget class="QCustomPlot" name="motorPlot" native="true">
+        <item row="1" column="1" rowspan="2">
+         <widget class="QCustomPlot" name="sensorPlot" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>2</verstretch>
            </sizepolicy>
           </property>
-          <zorder>manualInput</zorder>
-          <zorder>sensorButton</zorder>
-          <zorder>manualButton</zorder>
          </widget>
         </item>
        </layout>
@@ -86,7 +123,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_10">
         <item row="0" column="0" rowspan="2">
-         <widget class="QCustomPlot" name="motorPlot_4" native="true">
+         <widget class="QCustomPlot" name="motorPlot1" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -119,7 +156,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QCustomPlot" name="sensorPlot_4" native="true">
+         <widget class="QCustomPlot" name="sensorPlot1" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -136,7 +173,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_6">
         <item row="0" column="0" rowspan="2">
-         <widget class="QCustomPlot" name="motorPlot_2" native="true">
+         <widget class="QCustomPlot" name="motorPlot2" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -169,7 +206,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QCustomPlot" name="sensorPlot_2" native="true">
+         <widget class="QCustomPlot" name="sensorPlot2" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -186,7 +223,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_8">
         <item row="0" column="0" rowspan="2">
-         <widget class="QCustomPlot" name="motorPlot_3" native="true">
+         <widget class="QCustomPlot" name="motorPlot3" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -219,7 +256,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QCustomPlot" name="sensorPlot_3" native="true">
+         <widget class="QCustomPlot" name="sensorPlot3" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -242,7 +279,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>469</width>
+     <width>820</width>
      <height>17</height>
     </rect>
    </property>
