@@ -1,30 +1,6 @@
-//ADD THESE AS DECLARATIONS
-/*
-#define slotSensor(12)
-*/
-
-//ADD THIS INTO setup()
-/*
-pinMode(slotSensor,INPUT);
-*/
-
-//ADD THESE INTO loop()
-/*
-if(digitalRead(slotSensor)){slotOpen();}
-else{slotClosed();}
-*/
-
-/*-------------------------------------------------*/
-
-void slotOpen()
+int slotSensorDirection()
 {
-  //define motor direction here
-  //add other functions?
-}
-
-void slotClosed()
-{
-  //define motor direction here
-  //add other functions?
+  if(digitalRead(slotSensor)){return 1;} //ccw
+  else{return -1;} //cw
 }
 

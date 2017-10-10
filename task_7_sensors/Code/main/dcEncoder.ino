@@ -1,29 +1,14 @@
-//ADD THESE AS DECLARATIONS
-/*
-#define channelA 3
-#define channelB 6
-extern volatile int channelAVal;
-extern volatile int channelBVal;
-extern volatile long encoderTicks = 0;
-*/
+volatile bool channelAVal;
+volatile bool channelBVal;
+volatile long encoderTicks;
 
-//ADD THIS INTO setup()
-/*
-attachInterrupt(digitalPinToInterrupt(channelA),handleChannelA,CHANGE);
-*/
-
-//ADD THESE INTO loop()
-/*
-
-*/
-
-/*---------------------------------------------------------------------------------------------*/
+void setupEncoder(){attachInterrupt(digitalPinToInterrupt(channelAPin),encoderCount, CHANGE);}
 
 //ISR
-void handleChannelA()
+void encoderCount()
 {
-  channelAVal = digitalReadFast(channelA);
-  channelBVal = digitalReadFast(channelB);
+  channelAVal = digitalReadFast(channelAPin);
+  channelBVal = digitalReadFast(channelBPin);
   if(channelAVal == channelBVal){encoderTicks++;} //ccw as positive
   else{encoderTicks--;}
 }

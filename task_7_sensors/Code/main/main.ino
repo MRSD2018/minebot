@@ -1,36 +1,85 @@
 #include "dcMotor.h"
-#include <digitalWri/teFast.h> //thank you jrraines!
+#include <digitalWriteFast.h> //thank you jrraines!
 //https://code.google.com/archive/p/digitalwritefast/downloads
+#include <Servo.h>
+#include "ForceSensor.h"
+#include "dcMotor.h"
+#include "ir_stepper.h"
 
+//button
 #define pushButton 2
-#define channelA 3
 
+//motor
+#define PWM 6
+#define L1 4
+#define L2 5
+#define channelAPin 3
+#define channelBPin 7
 
-dcMotor dc(3,4,5); //PWM, L1, L2
+//forceSensor
+#define forceSensor A1
 
-extern volatile bool but_interrupt_flag = 0;
-extern const int debounce_time = 20; //ms
-extern volatile int channelAVal;
-extern volatile int channelBVal;
-extern volatile long encoderTicks = 0;
+//potServo
+#define pot A0
+#define servoPWM 9
 
+//slotSensor
+#define slotSensor 12
+
+//irSensor
+#define irSensor A2
+#define stepperStep 8
+#define stepperDir 10
+#define stepperEn 11
+
+//items
+Servo myservo;
+dcMotor motor(PWM, L1, L2, channelAPin, channelBPin);
+ForceSensor force(forceSensor);
+IR_Stepper ir_stepper;
+
+//button
+extern volatile bool but_interrupt_flag;
+extern const int debounce_time; //ms
+
+//dcEncoder
+extern volatile bool channelAVal;
+extern volatile bool channelBVal;
+extern volatile long encoderTicks;
+
+//potServo
+extern int potIn;
+extern int Angle;
+
+//states
+int STATE = 0;
 
 void setup() {
+  Serial.setTimeout(100);
   Serial.begin(9600);
-  pinMode(channelA, INPUT);
-  pinMode(channelB, INPUT);
-
-
-  attachInterrupt(digitalPinToInterrupt(pushButton),button_press,RISING);
-  attachInterrupt(digitalPinToInterrupt(channelA,handleChannelA,CHANGE);
+  setupButton();
+  setupPotServo();
+  setupIRStepper();
+  setupEncoder();
+  setupForce();
 }
 
 void loop() {
-  if (but_interrupt_flag)
-  {
-    debounce(pushButton);
-    //do bunch of stuff here
-    but_interrupt_flag = 0; //this will make sure we don't go into ISR again when doing stuff
-  }
+  checkButtonForState(); //checks if button pressed, debouncing needed, and changes STATE if needed
 
+  switch(STATE)
+  {
+    case 0: //DC pos control
+      posForce();
+      break;
+    case 1: //DC vel control, direction affected by slotSensor
+      velForce();
+      break;
+    case 2: //pot Servo
+      potServo();
+      break;
+    case 3: //ir Stepper
+      irStepper();
+      break;
+  }
 }
