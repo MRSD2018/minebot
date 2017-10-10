@@ -23,6 +23,7 @@ void setup() {
 
 void loop() {
   motor.posPID(force.getForce());
+  // motor.vel(force.getForce());
 }
 
 void encoderCount()

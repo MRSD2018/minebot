@@ -62,20 +62,34 @@ void dcMotor::posPID(const double commandedPositionDeg) {
   positionErrorSum += positionError * dt;
 
   // calculate PWM
-  pwmToWrite =  kp * positionError
+  pwmToWritePos =  kp * positionError
                 + kd * (positionError - prevPositionError) / dt
                 + ki * (positionErrorSum);
-  motorInputScaled = (double)pwmToWrite / 255 * 100;
+  motorInputScaledPos = (double)pwmToWritePos / 255 * 100;
 
   // drive motor
-  if (motorInputScaled > 100) {
-    motorInputScaled = 100;
-  } else if (motorInputScaled < -100) {
-    motorInputScaled = -100;
+  if (motorInputScaledPos > 100) {
+    motorInputScaledPos = 100;
+  } else if (motorInputScaledPos < -100) {
+    motorInputScaledPos = -100;
   }
-  fullControl(motorInputScaled);
+  fullControl(motorInputScaledPos);
 
   // update values for next timestep
   prevPositionError = positionError;
   prevTime = nowTime;
+}
+
+void dcMotor::vel(const double commandedVelocity){
+  pwmToWriteVel =  kp_v * commandedVelocity;
+                // + kd * (positionError - prevPositionError) / dt
+                // + ki * (positionErrorSum);
+  motorInputScaledVel = (double)pwmToWriteVel / 255 * 100;
+    // drive motor
+  if (motorInputScaledVel > 100) {
+    motorInputScaledVel = 100;
+  } else if (motorInputScaledVel < -100) {
+    motorInputScaledVel = -100;
+  }
+  fullControl(motorInputScaledVel);
 }

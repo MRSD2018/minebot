@@ -13,7 +13,7 @@ class dcMotor {
     void speed(float percentage); //by percentage?
     void fullControl(float val); //maps -100 percent to 100 percent, with direction
     void posPID(const double commandedPositionDeg);
-    // void velPID(const double commandedVelocity);
+    void vel(const double commandedVelocity);
   private:
     int _PWM, _L1, _L2, _channelAPin, _channelBPin;
 
@@ -24,7 +24,8 @@ class dcMotor {
     float prevActualPositionDeg;
     float prevPositionError;
     float positionErrorSum;
-    float motorInputScaled;
+    float motorInputScaledPos;
+    float motorInputScaledVel;
     float actualPositionDeg;
     float positionError;
 
@@ -33,11 +34,15 @@ class dcMotor {
     double kd = 250;
     double ki = 0.00018;
 
+    // velocity control gains
+    float kp_v = 0.1;
+
     unsigned long prevTime;
     unsigned long nowTime;
     double dt;
 
-    int pwmToWrite;
+    int pwmToWritePos;
+    int pwmToWriteVel;
 };
 
 #endif
