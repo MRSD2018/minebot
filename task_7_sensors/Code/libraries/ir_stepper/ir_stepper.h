@@ -5,6 +5,7 @@ private:
   int analogInPin;
   int stepPin;
   int dirPin;
+  int enablePin;
   int stepperCurPos;
   int stepperDesiredPos;
   bool dirHigh;
@@ -12,7 +13,7 @@ private:
  
 public:
  IR_Stepper();
- IR_Stepper(int analogInPin, int stepPin, int dirPin);
+ IR_Stepper(int analogInPin, int stepPin, int dirPin, int enablePin);
  void step();
  void fast_step();
  void go_to_des_pos();
@@ -22,7 +23,7 @@ public:
 
 IR_Stepper::IR_Stepper(){};
 
-IR_Stepper::IR_Stepper(int analogInPin, int stepPin, int dirPin)
+IR_Stepper::IR_Stepper(int analogInPin, int stepPin, int dirPin, int enablePin)
 {
   /*
   for debugging
@@ -33,6 +34,7 @@ IR_Stepper::IR_Stepper(int analogInPin, int stepPin, int dirPin)
   this->analogInPin = analogInPin;
   this->stepPin = stepPin;
   this->dirPin = dirPin;
+  this->enablePin = enablePin;
   this->stepperCurPos = 0;
   this->stepperDesiredPos = 0;
   this->dirHigh = true;
@@ -40,7 +42,10 @@ IR_Stepper::IR_Stepper(int analogInPin, int stepPin, int dirPin)
   pinMode(this->analogInPin, INPUT);
   pinMode(this->stepPin, OUTPUT);
   pinMode(this->dirPin, OUTPUT);
-  digitalWrite(dirPin, HIGH);
+  pinMode(this->enablePin, OUTPUT);
+  digitalWrite(this->dirPin, HIGH);
+  digitalWrite(this->enablePin, LOW);
+  
 }
 
 void IR_Stepper::step()
@@ -85,5 +90,13 @@ void IR_Stepper::go_to_des_pos()
   this->stepperCurPos = desPos;
 }
 
-void IR_Stepper::start_running() { Timer1.resume(); }
-void IR_Stepper::stop_running() { Timer1.stop(); }
+void IR_Stepper::start_running() 
+{ 
+  digitalWrite(this->enablePin, LOW);
+  Timer1.resume(); 
+}
+void IR_Stepper::stop_running() 
+{ 
+  digitalWrite(this->enablePin, HIGH);
+  Timer1.stop(); 
+}
