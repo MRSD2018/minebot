@@ -27,35 +27,19 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="dcTab">
+      <widget class="QWidget" name="dcPosition">
        <attribute name="title">
-        <string>DC Motor</string>
+        <string>DC Motor Position</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QWidget" name="control" native="true">
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <widget class="QRadioButton" name="position">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Position Control</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="velocity">
-             <property name="text">
-              <string>Velocity Control</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+        <item row="1" column="1">
+         <widget class="QCustomPlot" name="sensorPlot" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>10</verstretch>
+           </sizepolicy>
+          </property>
          </widget>
         </item>
         <item row="0" column="1">
@@ -74,14 +58,14 @@
            <item row="0" column="0" colspan="2">
             <widget class="QPushButton" name="sensorButton">
              <property name="text">
-              <string>Use Pressure Sensor</string>
+              <string>Use Sensor Data</string>
              </property>
             </widget>
            </item>
           </layout>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item row="0" column="0" rowspan="2">
          <widget class="QCustomPlot" name="motorPlot" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -94,12 +78,52 @@
           <zorder>manualButton</zorder>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QCustomPlot" name="sensorPlot" native="true">
+       </layout>
+      </widget>
+      <widget class="QWidget" name="dcVelocity">
+       <attribute name="title">
+        <string>DC Motor Velocity</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_10">
+        <item row="0" column="0" rowspan="2">
+         <widget class="QCustomPlot" name="motorPlot_4" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QWidget" name="input_4" native="true">
+          <layout class="QGridLayout" name="gridLayout_9">
+           <item row="1" column="0">
+            <widget class="QPushButton" name="manualButton_4">
+             <property name="text">
+              <string>Use Manual Input</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="manualInput_5"/>
+           </item>
+           <item row="0" column="0" colspan="2">
+            <widget class="QPushButton" name="sensorButton_5">
+             <property name="text">
+              <string>Use Pressure Sensor</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCustomPlot" name="sensorPlot_4" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>10</verstretch>
            </sizepolicy>
           </property>
          </widget>
@@ -110,11 +134,101 @@
        <attribute name="title">
         <string>Stepper Motor</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0" rowspan="2">
+         <widget class="QCustomPlot" name="motorPlot_2" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QWidget" name="input_2" native="true">
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="1" column="0">
+            <widget class="QPushButton" name="manualButton_2">
+             <property name="text">
+              <string>Use Manual Input</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="manualInput_3"/>
+           </item>
+           <item row="0" column="0" colspan="2">
+            <widget class="QPushButton" name="sensorButton_3">
+             <property name="text">
+              <string>Use Infrared Sensor</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCustomPlot" name="sensorPlot_2" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>10</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="servoTab">
        <attribute name="title">
         <string>Servo Motor</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_8">
+        <item row="0" column="0" rowspan="2">
+         <widget class="QCustomPlot" name="motorPlot_3" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QWidget" name="input_3" native="true">
+          <layout class="QGridLayout" name="gridLayout_7">
+           <item row="1" column="0">
+            <widget class="QPushButton" name="manualButton_3">
+             <property name="text">
+              <string>Use Manual Input</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="manualInput_4"/>
+           </item>
+           <item row="0" column="0" colspan="2">
+            <widget class="QPushButton" name="sensorButton_4">
+             <property name="text">
+              <string>Use Potentiometer</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCustomPlot" name="sensorPlot_3" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>10</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>

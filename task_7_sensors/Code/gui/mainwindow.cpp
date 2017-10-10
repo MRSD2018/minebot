@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle("MRSD Sensors Lab");
-//    setWindowIcon("icon.ico");
+
 
     setupPlots(ui->motorPlot, ui->sensorPlot);
     statusBar()->clearMessage();
@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     serial = new QSerialPort(this);
     openSerialPort();
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -60,6 +61,7 @@ void MainWindow::closeSerialPort()
 void MainWindow::writeData(const QByteArray &data)
 {
     serial->write(data);
+    qDebug() << "Serial Message Sent: " << data << endl;
 }
 
 void MainWindow::readData()
@@ -79,7 +81,7 @@ void MainWindow::readData()
         serialIn = searchList[searchList.size()-2]; // 2nd last member
         strCat = strCat.right(50);
 
-        //qDebug() << "Serial In: " << serialIn << endl;
+        qDebug() << "Serial In: " << serialIn << endl;
     }
 }
 
@@ -173,3 +175,31 @@ void MainWindow::on_sensorButton_clicked()
     writeData("R_001");
     qDebug() << "Wrote to Serial!" << endl;
 }
+
+void MainWindow::on_motorTabs_tabBarClicked(int index)
+{
+    switch(index)
+    {
+        case 0: // DC Position
+            writeData("A");
+            break;
+        case 1: // DC Velocity
+            writeData("B");
+            break;
+        case 2: // Stepper Position
+            writeData("C");
+            break;
+        case 3: // Servo Position
+            writeData("D");
+            break;
+        default: break;
+    }
+}
+
+
+
+
+
+
+
+

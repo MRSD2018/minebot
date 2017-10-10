@@ -30,6 +30,8 @@ private slots:
 
     void on_sensorButton_clicked();
 
+    void on_motorTabs_tabBarClicked(int index);
+
 private:
   Ui::MainWindow *ui;
   QTimer dataTimer;
