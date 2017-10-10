@@ -78,13 +78,15 @@ void MainWindow::readData()
 
         QStringList data = serialIn.split("_",QString::SkipEmptyParts);
 
-        if (data[0] == "X" && data.length() == 5)
+        if (data[0] == "X" && data.length() == 6)
         {
-            qDebug() << "Serial Data: " << data << endl;
             motorValue = data[1].toFloat();
             setpointValue = data[2].toFloat();
             sensorValue = data[3].toFloat();
-            directionValue = data[4].toFloat();
+            directionValue = data[4].toInt();
+            state = data[5].toInt();
+            modifyPlots(state);
+//            qDebug() << "Serial Data: " << motorValue << endl;
         }
     }
 }
@@ -99,36 +101,34 @@ void MainWindow::handleError(QSerialPort::SerialPortError error)
 
 void MainWindow::setupPlots()
 {
-  QCustomPlot *motorPlot = ui->motorPlot;
-  QCustomPlot *sensorPlot = ui->sensorPlot;
-
-  motorPlot->addGraph(); // blue line
-  motorPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
-  motorPlot->addGraph(); // red line
-  motorPlot->graph(1)->setPen(QPen(QColor(255, 110, 40)));
-  sensorPlot->addGraph(); // blue line
-  sensorPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
+  ui->motorPlot->addGraph(); // blue line
+  ui->motorPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
+  ui->motorPlot->addGraph(); // red line
+  ui->motorPlot->graph(1)->setPen(QPen(QColor(255, 110, 40)));
+  ui->sensorPlot->addGraph(); // blue line
+  ui->sensorPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
 
   QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
-  timeTicker->setTimeFormat("%h:%m:%s");
+  timeTicker->setTimeFormat("%s");
 
-  motorPlot->xAxis->setTicker(timeTicker);
-  motorPlot->axisRect()->setupFullAxesBox();
-  motorPlot->yAxis->setRange(0, 1000);
-  motorPlot->plotLayout()->insertRow(0);
-  sensorPlot->xAxis->setTicker(timeTicker);
-  sensorPlot->axisRect()->setupFullAxesBox();
-  sensorPlot->yAxis->setRange(0, 1000);
-  sensorPlot->plotLayout()->insertRow(0);
+  ui->motorPlot->xAxis->setTicker(timeTicker);
+  ui->motorPlot->axisRect()->setupFullAxesBox();
+  ui->motorPlot->yAxis->setRange(0, 100);
+  ui->motorPlot->plotLayout()->insertRow(0);
+
+  ui->sensorPlot->xAxis->setTicker(timeTicker);
+  ui->sensorPlot->axisRect()->setupFullAxesBox();
+  ui->sensorPlot->yAxis->setRange(0, 100);
+  ui->sensorPlot->plotLayout()->insertRow(0);
 
   modifyPlots(0);
 
   // make left and bottom axes transfer their ranges to right and top axes:
-  connect(motorPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), motorPlot->xAxis2, SLOT(setRange(QCPRange)));
-  connect(motorPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), motorPlot->yAxis2, SLOT(setRange(QCPRange)));
+  connect(ui->motorPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->motorPlot->xAxis2, SLOT(setRange(QCPRange)));
+  connect(ui->motorPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui->motorPlot->yAxis2, SLOT(setRange(QCPRange)));
 
-  connect(sensorPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), sensorPlot->xAxis2, SLOT(setRange(QCPRange)));
-  connect(sensorPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), sensorPlot->yAxis2, SLOT(setRange(QCPRange)));
+  connect(ui->sensorPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->sensorPlot->xAxis2, SLOT(setRange(QCPRange)));
+  connect(ui->sensorPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui->sensorPlot->yAxis2, SLOT(setRange(QCPRange)));
 
   // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
   connect(&dataTimer, SIGNAL(timeout()), this, SLOT(realtimeDataSlot()));
@@ -150,18 +150,22 @@ void MainWindow::modifyPlots(int state)
         case 0:
             changeLabels(ui->motorPlot, "DC Motor Position", "Angle (Degrees)");
             changeLabels(ui->sensorPlot, "Pressure Sensor", "Sensor Data (N)");
+            ui->dcPos->setChecked(true);
             break;
         case 1:
             changeLabels(ui->motorPlot, "DC Motor Velocity", "Angle (Degrees/Second)");
             changeLabels(ui->sensorPlot, "Pressure Sensor", "Sensor Data (N)");
+            ui->dcVel->setChecked(true);
             break;
         case 2:
             changeLabels(ui->motorPlot, "Stepper Motor Position", "Angle (Degrees)");
             changeLabels(ui->sensorPlot, "Infrared Sensor", "Sensor Data (m)");
+            ui->stepPos->setChecked(true);
             break;
         case 3:
             changeLabels(ui->motorPlot, "Servo Motor Position", "Angle (Degrees)");
             changeLabels(ui->sensorPlot, "Potentiometer Sensor", "Sensor Data (Degrees)");
+            ui->servPos->setChecked(true);
             break;
         default: break;
     }
@@ -180,9 +184,9 @@ void MainWindow::realtimeDataSlot()
     ui->motorPlot->graph(1)->addData(key, setpointValue);
     ui->sensorPlot->graph(0)->addData(key, sensorValue);
     // rescale value (vertical) axis to fit the current data:
-    ui->motorPlot->graph(0)->rescaleValueAxis(false);
-//    ui->motorPlot->graph(1)->rescaleValueAxis(true);
-    ui->sensorPlot->graph(0)->rescaleValueAxis(false);
+//    ui->motorPlot->graph(0)->rescaleValueAxis(false);
+//    ui->motorPlot->graph(1)->rescaleValueAxis(false);
+    ui->sensorPlot->graph(0)->rescaleValueAxis(true);
     lastPointKey = key;
   }
   // make key axis range scroll with the data (at a constant range size of 8):
@@ -204,12 +208,6 @@ void MainWindow::realtimeDataSlot()
     lastFpsKey = key;
     frameCount = 0;
   }
-}
-
-void MainWindow::on_sensorButton_clicked()
-{
-    writeData("R_001");
-    qDebug() << "Wrote to Serial!" << endl;
 }
 
 void MainWindow::on_motorTabs_tabBarClicked(int index)
@@ -255,3 +253,20 @@ void MainWindow::on_servPos_clicked()
     writeData("D");
     modifyPlots(3);
 }
+
+void MainWindow::on_manualButton_clicked()
+{
+    double value(ui->manualInput->value());
+
+    QString valueAsString = QString::number(value);
+    valueAsString = "M_" + valueAsString;
+    QByteArray serialSend(valueAsString.toUtf8());
+
+    writeData(serialSend);
+}
+
+void MainWindow::on_sensorButton_clicked()
+{
+    writeData("S");
+}
+

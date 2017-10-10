@@ -32,19 +32,6 @@
         <string>DC Motor Position</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="1" column="0" rowspan="2">
-         <widget class="QCustomPlot" name="motorPlot" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
-          </property>
-          <zorder>manualInput</zorder>
-          <zorder>sensorButton</zorder>
-          <zorder>manualButton</zorder>
-         </widget>
-        </item>
         <item row="0" column="0">
          <widget class="QWidget" name="input_5" native="true">
           <layout class="QGridLayout" name="gridLayout_11">
@@ -107,6 +94,16 @@
         </item>
         <item row="1" column="1" rowspan="2">
          <widget class="QCustomPlot" name="sensorPlot" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" rowspan="2">
+         <widget class="QCustomPlot" name="motorPlot" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>

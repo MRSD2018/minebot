@@ -39,6 +39,8 @@ private slots:
     void on_stepPos_clicked();
     void on_servPos_clicked();
 
+    void on_manualButton_clicked();
+
 private:
   Ui::MainWindow *ui;
   QTimer dataTimer;
@@ -51,6 +53,7 @@ private:
   float setpointValue;
   float sensorValue;
   int directionValue;
+  int state;
 };
 
 #endif // MAINWINDOW_H
