@@ -1,18 +1,19 @@
 #include "Arduino.h"
 #include "dcMotor.h"
-// #include "digitalWriteFast.h" //thank you jrraines!
-//https://code.google.com/archive/p/digitalwritefast/downloads
 
-dcMotor::dcMotor(int PWM, int L1, int L2)
-// dcMotor::dcMotor(int PWM, int L1, int L2, int chanA, int chanB)
+dcMotor::dcMotor(int PWM, int L1, int L2, int chanA, int chanB)
 {
 	pinMode(PWM, OUTPUT);
 	pinMode(L1,OUTPUT);
 	pinMode(L2,OUTPUT);
+	pinMode(chanA,OUTPUT);
+	pinMode(chanB,OUTPUT);
 
 	_PWM = PWM;
 	_L1 = L1;
 	_L2 = L2;
+	_chanA = chanA;
+	_chanB = chanB;
 }
 
 void dcMotor::ccw()
@@ -46,4 +47,35 @@ void dcMotor::fullControl(float val)
 		ccw();
 		speed(val);
 	}
+}
+
+void dcMotor::posPID(const double commandedPositionDeg) {
+  // calculate current time and timestep
+  nowTime = millis();
+  dt = double(nowTime - prevTime); // note this is in milliseconds still
+
+  // get current position
+  actualPositionDeg = (double)encoderTicks * holesPerRev * revPerCycle / 360; // 360 degrees in revolution
+
+  // calculate errors
+  positionError = commandedPositionDeg - actualPositionDeg;
+  positionErrorSum += positionError * dt;
+
+  // calculate PWM
+  pwmToWrite =  kp * positionError
+                + kd * (positionError - prevPositionError) / dt
+                + ki * (positionErrorSum);
+  motorInputScaled = (double)pwmToWrite / 255 * 100;
+
+  // drive motor
+  if (motorInputScaled > 100) {
+    motorInputScaled = 100;
+  } else if (motorInputScaled < -100) {
+    motorInputScaled = -100;
+  }
+  fullControl(motorInputScaled);
+
+  // update values for next timestep
+  prevPositionError = positionError;
+  prevTime = nowTime;
 }

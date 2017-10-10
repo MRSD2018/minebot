@@ -11,15 +11,16 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  dc_test.fullControl(50);
-  delay(5000);
-  dc_test.fullControl(-50);
-  delay(5000);
-  dc_test.fullControl(80);
-  delay(5000);
-  dc_test.ccw();
-  dc_test.fullControl(-80);
-  delay(5000);
-  dc_test.fullControl(0);
-  delay(10000);
+    dc_test.fullControl(50);
+    dc_test.speed(50);
+    delay(5000);
+    dc_test.fullControl(-50);
+    delay(5000);
+    dc_test.fullControl(80);
+    delay(5000);
+    dc_test.ccw();
+    dc_test.fullControl(-80);
+    delay(5000);
+    dc_test.fullControl(0);
+    delay(10000);
 }
