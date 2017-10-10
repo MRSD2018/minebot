@@ -1,4 +1,4 @@
-//#include "digitalWriteFast.h"
+#include "digitalWriteFast.h"
 #include "dcMotor.h"
 #include "ForceSensor.h"
 
@@ -13,7 +13,7 @@ ForceSensor force(A1);
 
 volatile bool channelAVal;
 volatile bool channelBVal;
-volatile long encoderTicks;// = 0;
+volatile long encoderTicks;
 
 void setup() {
   Serial.begin(9600);
@@ -22,10 +22,9 @@ void setup() {
 }
 
 void loop() {
-//  Serial.println(force.getForce());
-//  Serial.println(encoderTicks);
-  motor.posPID(force.getForce(), encoderTicks);
-  // motor.vel(force.getForce());
+  // uncomment one or the other to get position or velocity control
+//  motor.posPID(force.getForce(), encoderTicks);
+  motor.vel(force.getForce());
 }
 
 void encoderCount()

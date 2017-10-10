@@ -1,4 +1,4 @@
-#include "Arduino.h"
+// #include "Arduino.h"
 #include "dcMotor.h"
 
 dcMotor::dcMotor(int PWM, int L1, int L2, int chanA, int chanB)
@@ -6,8 +6,8 @@ dcMotor::dcMotor(int PWM, int L1, int L2, int chanA, int chanB)
 	pinMode(PWM, OUTPUT);
 	pinMode(L1,OUTPUT);
 	pinMode(L2,OUTPUT);
-	pinMode(chanA,OUTPUT);
-	pinMode(chanB,OUTPUT);
+	pinMode(chanA,INPUT);
+	pinMode(chanB,INPUT);
 
 	_PWM = PWM;
 	_L1 = L1;
@@ -49,17 +49,21 @@ void dcMotor::fullControl(float val)
 	}
 }
 
-void dcMotor::posPID(const double commandedPositionDeg) {
+void dcMotor::posPID(const double commandedPositionDeg, int encoderTicks) {
+  // Serial.println(encoderTicks);
+
   // calculate current time and timestep
   nowTime = millis();
   dt = double(nowTime - prevTime); // note this is in milliseconds still
 
   // get current position
   actualPositionDeg = (double)encoderTicks * holesPerRev * revPerCycle / 360; // 360 degrees in revolution
+  // Serial.println(actualPositionDeg);
 
   // calculate errors
   positionError = commandedPositionDeg - actualPositionDeg;
   positionErrorSum += positionError * dt;
+  // Serial.println(positionError);
 
   // calculate PWM
   pwmToWritePos =  kp * positionError
