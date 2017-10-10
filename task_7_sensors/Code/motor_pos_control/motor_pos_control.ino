@@ -1,6 +1,6 @@
-#include "digitalWriteFast.h"
+//#include "digitalWriteFast.h"
 #include "dcMotor.h"
-#include "dcMotorPos.h"
+#include "ForceSensor.h"
 
 #define PWM 6
 #define L1 4
@@ -13,7 +13,7 @@ ForceSensor force(A1);
 
 volatile bool channelAVal;
 volatile bool channelBVal;
-volatile long encoderTicks = 0;
+volatile long encoderTicks;// = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -22,7 +22,9 @@ void setup() {
 }
 
 void loop() {
-  motor.posPID(force.getForce());
+//  Serial.println(force.getForce());
+//  Serial.println(encoderTicks);
+  motor.posPID(force.getForce(), encoderTicks);
   // motor.vel(force.getForce());
 }
 
