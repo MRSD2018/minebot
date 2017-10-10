@@ -8,7 +8,7 @@ void setup() {
   Serial.begin(9600);
 
   // this block needs to be in setup
-  ir_stepper = IR_Stepper(A5, 8, 7);
+  ir_stepper = IR_Stepper(A5, 8, 7, 9);
   Timer1.initialize(250000); // microseconds
   Timer1.attachInterrupt( [] () { ir_stepper.go_to_des_pos(); } ); 
   Timer1.stop();
