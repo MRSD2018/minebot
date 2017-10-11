@@ -18,6 +18,12 @@ void initDCPosition()
 void runDCPosition()
 {
   // Code Goes Here (Runs Every Loop)
+
+    // Assign Serial Data
+//  serialMotorActual = ?;
+//  serialMotorDesired = ?;
+//  serialSensor = ?;
+//  serialMotorDirection = ?;
 }
 
 void initDCVelocity()
@@ -29,6 +35,12 @@ void initDCVelocity()
 void runDCVelocity()
 {
   // Code Goes Here (Runs Every Loop)
+
+    // Assign Serial Data
+//  serialMotorActual = ?;
+//  serialMotorDesired = ?;
+//  serialSensor = ?;
+//  serialMotorDirection = ?;
 }
 
 void initStepper()
@@ -40,6 +52,12 @@ void initStepper()
 void runStepper()
 {
   // Code Goes Here (Runs Every Loop)
+
+    // Assign Serial Data
+//  serialMotorActual = ?;
+//  serialMotorDesired = ?;
+//  serialSensor = ?;
+//  serialMotorDirection = ?;
 }
 
 void initServo()
@@ -51,18 +69,27 @@ void initServo()
 void runServo()
 {
   // Code Goes Here (Runs Every Loop)
+
+  // Assign Serial Data
+//  serialMotorActual = ?;
+//  serialMotorDesired = ?;
+//  serialSensor = ?;
+//  serialMotorDirection = ?;
 }
 
 void handleSerial()
 {
   if (Serial.available() > 0) {
     String input = Serial.readString();
-    stateMachineSwitch(input);
+    parseSerial(input);
   }
 }
 
 int state = 0; // DC Position Intial State
-void stateMachineSwitch(String input)
+bool useSensor = true;
+float manualInput = 0.0f;
+
+void parseSerial(String input)
 {
   if (input == "A") // DC Position
   {
@@ -83,6 +110,15 @@ void stateMachineSwitch(String input)
   {
     state = 3;
     initServo();
+  }
+  else if (input == "S") // Use Sensor Data
+  {
+    useSensor = true;
+  }
+  else if (input.substring(0, 1) == "M")
+  {
+    useSensor = false;
+    manualInput = input.substring(2, input.length()).toFloat();
   }
 }
 
@@ -106,24 +142,29 @@ void stateMachine()
   }
 }
 
-int iterator = 0;
+float serialMotorActual;
+float serialMotorDesired; // setpoint
+float serialSensor;
+bool serialMotorDirection; // Zero = CW, One = ACW
+
+void sendSerialData()
+{
+  Serial.print("X_");
+  Serial.print(serialMotorActual);
+  Serial.print("_");
+  Serial.print(serialMotorDesired);
+  Serial.print("_"); 
+  Serial.print(serialSensor); 
+  Serial.print("_"); 
+  Serial.print(serialMotorDirection); 
+  Serial.print("_"); 
+  Serial.println(state); 
+}
 
 void loop() {
   handleSerial();
   stateMachine();
-
-  iterator += 1;
-
-  Serial.print("X_"); // for testing purposes
-  Serial.print(iterator); // for testing purposes
-  Serial.print("_"); // for testing purposes
-  Serial.print(iterator*1.2); // for testing purposes
-  Serial.print("_"); // for testing purposes
-  Serial.print(iterator); // for testing purposes
-  Serial.print("_"); // for testing purposes
-  Serial.print(0); // for testing purposes - Zero = CW, One = ACW
-  Serial.print("_"); // for testing purposes
-  Serial.println(state); // for testing purposes
-  
+  sendSerialData();  
 }
+
 

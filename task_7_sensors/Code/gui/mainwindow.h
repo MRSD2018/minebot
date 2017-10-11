@@ -31,7 +31,6 @@ private slots:
     void handleError(QSerialPort::SerialPortError error);
 
     void on_sensorButton_clicked();
-
     void on_motorTabs_tabBarClicked(int index);
 
     void on_dcPos_clicked();
