@@ -19,8 +19,8 @@ void potServo()
   myservo.write(Angle);
 
   // Serial Monitor
-  serialMotorActual = potIn;
+  serialMotorActual = Angle;
   serialMotorDesired = Angle; // setpoint
-  serialSensor = Angle;
+  serialSensor = potIn;
 }
 

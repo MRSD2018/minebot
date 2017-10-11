@@ -78,6 +78,8 @@ void MainWindow::readData()
 
         QStringList data = serialIn.split("_",QString::SkipEmptyParts);
 
+        qDebug() << "Serial Data: " << data << endl;
+
         if (data[0] == "X" && data.length() == 6)
         {
             motorValue = data[1].toFloat();
@@ -86,7 +88,7 @@ void MainWindow::readData()
             directionValue = data[4].toInt();
             state = data[5].toInt();
             modifyPlots(state);
-            qDebug() << "Serial Data: " << motorValue << endl;
+
         }
     }
 }
@@ -113,15 +115,10 @@ void MainWindow::setupPlots()
 
   ui->motorPlot->xAxis->setTicker(timeTicker);
   ui->motorPlot->axisRect()->setupFullAxesBox();
-  ui->motorPlot->yAxis->setRange(0, 100);
   ui->motorPlot->plotLayout()->insertRow(0);
-
   ui->sensorPlot->xAxis->setTicker(timeTicker);
   ui->sensorPlot->axisRect()->setupFullAxesBox();
-  ui->sensorPlot->yAxis->setRange(0, 100);
   ui->sensorPlot->plotLayout()->insertRow(0);
-
-  modifyPlots(0);
 
   // make left and bottom axes transfer their ranges to right and top axes:
   connect(ui->motorPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->motorPlot->xAxis2, SLOT(setRange(QCPRange)));
@@ -150,22 +147,30 @@ void MainWindow::modifyPlots(int state)
         case 0:
             changeLabels(ui->motorPlot, "DC Motor Position", "Angle (Degrees)");
             changeLabels(ui->sensorPlot, "Pressure Sensor", "Sensor Data (N)");
+            ui->motorPlot->yAxis->setRange(0, 1600);
+            ui->sensorPlot->yAxis->setRange(0, 1600);
             ui->dcPos->setChecked(true);
             break;
         case 1:
             changeLabels(ui->motorPlot, "DC Motor Velocity", "Angle (Degrees/Second)");
             changeLabels(ui->sensorPlot, "Pressure Sensor", "Sensor Data (N)");
+            ui->motorPlot->yAxis->setRange(0, 1600);
+            ui->sensorPlot->yAxis->setRange(0, 1600);
             ui->dcVel->setChecked(true);
             break;
         case 2:
             changeLabels(ui->motorPlot, "Stepper Motor Position", "Angle (Degrees)");
             changeLabels(ui->sensorPlot, "Infrared Sensor", "Sensor Data (m)");
             ui->stepPos->setChecked(true);
+            ui->motorPlot->yAxis->setRange(0, 200);
+            ui->sensorPlot->yAxis->setRange(0, 200);
             break;
         case 3:
             changeLabels(ui->motorPlot, "Servo Motor Position", "Angle (Degrees)");
             changeLabels(ui->sensorPlot, "Potentiometer Sensor", "Sensor Data (Degrees)");
             ui->servPos->setChecked(true);
+            ui->motorPlot->yAxis->setRange(0, 180);
+            ui->sensorPlot->yAxis->setRange(0, 1024);
             break;
         default: break;
     }
@@ -186,7 +191,7 @@ void MainWindow::realtimeDataSlot()
     // rescale value (vertical) axis to fit the current data:
 //    ui->motorPlot->graph(0)->rescaleValueAxis(false);
 //    ui->motorPlot->graph(1)->rescaleValueAxis(false);
-    ui->sensorPlot->graph(0)->rescaleValueAxis(true);
+//    ui->sensorPlot->graph(0)->rescaleValueAxis(false);
     lastPointKey = key;
   }
   // make key axis range scroll with the data (at a constant range size of 8):

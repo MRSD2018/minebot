@@ -14,6 +14,11 @@ class dcMotor {
     void fullControl(float val); //maps -100 percent to 100 percent, with direction
     void posPID(const double commandedPositionDeg, int encoderTicks);
     void vel(const double commandedVelocity);
+
+    float get_current_position();
+    // float get_desired_position();
+    // float get_current_velocity();
+    // float get_desired_velocity();
     
   private:
     int _PWM, _L1, _L2, _chanA, _chanB;

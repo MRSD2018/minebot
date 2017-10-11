@@ -97,3 +97,23 @@ void dcMotor::vel(const double commandedVelocity){
   }
   fullControl(motorInputScaledVel);
 }
+
+float dcMotor::get_current_position()
+{
+  return actualPositionDeg;
+}
+
+// float dcMotor::get_desired_position()
+// {
+//   return commandedPositionDeg;
+// }
+
+// float dcMotor::get_current_velocity()
+// {
+//   return commandedVelocity;
+// }
+
+// float dcMotor::get_desired_velocity()
+// {
+//   return commandedVelocity;
+// }
