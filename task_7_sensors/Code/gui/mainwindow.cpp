@@ -146,28 +146,28 @@ void MainWindow::modifyPlots(int state)
     {
         case 0:
             changeLabels(ui->motorPlot, "DC Motor Position", "Angle (Degrees)");
-            changeLabels(ui->sensorPlot, "Pressure Sensor", "Sensor Data (N)");
+            changeLabels(ui->sensorPlot, "Pressure Sensor", "Sensor Data");
             ui->motorPlot->yAxis->setRange(0, 1600);
             ui->sensorPlot->yAxis->setRange(0, 1600);
             ui->dcPos->setChecked(true);
             break;
         case 1:
             changeLabels(ui->motorPlot, "DC Motor Velocity", "Angle (Degrees/Second)");
-            changeLabels(ui->sensorPlot, "Pressure Sensor", "Sensor Data (N)");
+            changeLabels(ui->sensorPlot, "Pressure Sensor", "Sensor Data");
             ui->motorPlot->yAxis->setRange(0, 1600);
             ui->sensorPlot->yAxis->setRange(0, 1600);
             ui->dcVel->setChecked(true);
             break;
         case 2:
             changeLabels(ui->motorPlot, "Stepper Motor Position", "Angle (Degrees)");
-            changeLabels(ui->sensorPlot, "Infrared Sensor", "Sensor Data (m)");
+            changeLabels(ui->sensorPlot, "Infrared Sensor", "Sensor Data");
             ui->stepPos->setChecked(true);
             ui->motorPlot->yAxis->setRange(0, 200);
             ui->sensorPlot->yAxis->setRange(0, 200);
             break;
         case 3:
             changeLabels(ui->motorPlot, "Servo Motor Position", "Angle (Degrees)");
-            changeLabels(ui->sensorPlot, "Potentiometer Sensor", "Sensor Data (Degrees)");
+            changeLabels(ui->sensorPlot, "Potentiometer Sensor", "Sensor Data");
             ui->servPos->setChecked(true);
             ui->motorPlot->yAxis->setRange(0, 180);
             ui->sensorPlot->yAxis->setRange(0, 1024);
@@ -255,4 +255,3 @@ void MainWindow::on_sensorButton_clicked()
 {
     writeData("S");
 }
-
