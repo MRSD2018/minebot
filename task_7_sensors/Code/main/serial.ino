@@ -12,22 +12,22 @@ void parseSerial(String input)
   if (input == "A") // DC Position
   {
     STATE = 0;
-    ir_stepper.stop_running(); 
+    stopStepper();
   }
   else if (input == "B") // DC Velocity
   {
     STATE = 1;
-    ir_stepper.stop_running(); 
+    stopStepper();
   }
   else if (input == "C") // Stepper Position
   {
     STATE = 2;
-    ir_stepper.start_running(); 
+    startStepper();
   }
   else if (input == "D") // Servo Position
   {
     STATE = 3;
-    ir_stepper.stop_running(); 
+    stopStepper();
   }
   else if (input == "S") // Use Sensor Data
   {

@@ -34,7 +34,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::openSerialPort()
 {
-    serial->setPortName("COM7");
+    serial->setPortName("COM8");
     serial->setBaudRate(QSerialPort::Baud9600);
     serial->setDataBits(QSerialPort::Data8);
     serial->setParity(QSerialPort::NoParity);
@@ -86,7 +86,7 @@ void MainWindow::readData()
             directionValue = data[4].toInt();
             state = data[5].toInt();
             modifyPlots(state);
-//            qDebug() << "Serial Data: " << motorValue << endl;
+            qDebug() << "Serial Data: " << motorValue << endl;
         }
     }
 }

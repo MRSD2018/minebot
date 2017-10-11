@@ -97,12 +97,12 @@ void IR_Stepper::go_to_des_pos()
 void IR_Stepper::start_running() 
 { 
   digitalWrite(this->enablePin, LOW);
-  Timer1.resume(); 
+  // Timer1.resume(); 
 }
 void IR_Stepper::stop_running() 
 { 
   digitalWrite(this->enablePin, HIGH);
-  Timer1.stop(); 
+  // Timer1.stop(); 
 }
 
 float IR_Stepper::get_current_position()

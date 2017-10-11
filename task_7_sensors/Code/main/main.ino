@@ -53,7 +53,7 @@ extern int potIn;
 extern int Angle;
 
 //states
-int STATE = 2;
+int STATE = 3;
 
 //serial
 bool useSensor = true;
@@ -93,11 +93,12 @@ void loop() {
     case 1: //DC vel control, direction affected by slotSensor
       velForce();
       break;
-    case 2: //pot Servo
-      potServo();
-      break;
-    case 3: //ir Stepper
+    case 2: //ir Stepper
       irStepper();
       break;
+    case 3: //pot Servo
+      potServo();
+      break;
+
   }  
 }

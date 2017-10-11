@@ -1,14 +1,11 @@
 void setupIRStepper()
 {
   ir_stepper = IR_Stepper(irSensor, stepperStep, stepperDir, stepperEn);
+  ir_stepper.stop_running();
 }
 
 void startStepper()
 {
-  Timer1.initialize(250000); // microseconds
-  Timer1.attachInterrupt( [] () { ir_stepper.go_to_des_pos(); } ); 
-  Timer1.stop();
-  ir_stepper.stop_running();
   ir_stepper.start_running(); 
 }
 
@@ -18,7 +15,9 @@ void stopStepper()
 }
 
 void irStepper(){
+  
   ir_stepper.step();
+  ir_stepper.go_to_des_pos();
 
   // Serial Monitor
   serialMotorActual = ir_stepper.get_current_position();
