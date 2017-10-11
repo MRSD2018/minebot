@@ -210,25 +210,6 @@ void MainWindow::realtimeDataSlot()
   }
 }
 
-void MainWindow::on_motorTabs_tabBarClicked(int index)
-{
-    switch(index)
-    {
-        case 0: // DC Position
-            writeData("A");
-            break;
-        case 1: // DC Velocity
-            writeData("B");
-            break;
-        case 2: // Stepper Position
-            writeData("C");
-            break;
-        case 3: // Servo Position
-            writeData("D");
-            break;
-        default: break;
-    }
-}
 
 void MainWindow::on_dcPos_clicked()
 {

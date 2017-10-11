@@ -12,16 +12,16 @@
 //motor
 #define PWM 6
 #define L1 4
-#define L2 5
+#define L2 9
 #define channelAPin 3
 #define channelBPin 7
 
 //forceSensor
 #define forceSensor A1
 
-//potServo
+//servo
 #define pot A0
-#define servoPWM 9
+#define servoPWM 5
 
 //slotSensor
 #define slotSensor 12
@@ -52,20 +52,43 @@ extern int potIn;
 extern int Angle;
 
 //states
-int STATE = 0;
+int STATE = 2;
+
+//serial
+bool useSensor = true;
+float manualInput = 0.0f;
+float serialMotorActual;
+float serialMotorDesired; // setpoint
+float serialSensor;
+bool serialMotorDirection; // Zero = CW, One = ACW
 
 void setup() {
+  
   Serial.setTimeout(100);
-  Serial.begin(9600);
+  Serial.begin(9600);  
   setupButton();
+  
+  // SetupPotServo
   setupPotServo();
-  setupIRStepper();
+  myservo.attach(servoPWM);
+  
+//  setupIRStepper();
+  ir_stepper = IR_Stepper(irSensor, stepperStep, stepperDir, stepperEn);
+//  Timer1.initialize(250000); // microseconds
+//  Timer1.attachInterrupt( [] () { ir_stepper.go_to_des_pos(); } ); 
+//  Timer1.stop();
+//  ir_stepper.start_running(); 
+  
   setupEncoder();
   setupForce();
+
 }
 
 void loop() {
   checkButtonForState(); //checks if button pressed, debouncing needed, and changes STATE if needed
+
+  handleSerial();
+  sendSerialData();  
 
   switch(STATE)
   {
@@ -81,5 +104,5 @@ void loop() {
     case 3: //ir Stepper
       irStepper();
       break;
-  }
+  }  
 }

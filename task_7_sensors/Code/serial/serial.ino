@@ -6,7 +6,6 @@ bool LED = false; // for testing purposes
 
 void setup() {
   Serial.begin(9600); // Establish serial connection
-  pinMode(ledPin, OUTPUT); // for testing purposes
 }
 
 void initDCPosition()

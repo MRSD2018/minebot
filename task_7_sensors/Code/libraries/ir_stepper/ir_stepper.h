@@ -19,6 +19,9 @@ public:
  void go_to_des_pos();
  void start_running();
  void stop_running();
+ float get_current_position();
+ float get_desired_position();
+ float get_ir_sensor();
 };
 
 IR_Stepper::IR_Stepper(){};
@@ -99,4 +102,19 @@ void IR_Stepper::stop_running()
 { 
   digitalWrite(this->enablePin, HIGH);
   Timer1.stop(); 
+}
+
+float IR_Stepper::get_current_position()
+{
+
+}
+
+float IR_Stepper::get_desired_position()
+{
+
+}
+
+float IR_Stepper::get_ir_sensor()
+{
+
 }

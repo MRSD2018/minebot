@@ -31,14 +31,14 @@ private slots:
     void handleError(QSerialPort::SerialPortError error);
 
     void on_sensorButton_clicked();
-    void on_motorTabs_tabBarClicked(int index);
+    void on_manualButton_clicked();
 
     void on_dcPos_clicked();
     void on_dcVel_clicked();
     void on_stepPos_clicked();
     void on_servPos_clicked();
 
-    void on_manualButton_clicked();
+
 
 private:
   Ui::MainWindow *ui;
