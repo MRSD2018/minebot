@@ -1,19 +1,33 @@
 void setupForce(){force.initDataArray();}
 
 void posForce(){
-  motor.posPID(force.getForce(), encoderTicks);
+
+  float writeToMotor;
+  if (useSensor)
+    writeToMotor = force.getForce();
+  else
+    writeToMotor = manualInput;
+      
+  motor.posPID(writeToMotor, encoderTicks);
 
   // Serial Monitor
   serialMotorActual = motor.get_current_position();
-  serialMotorDesired = force.getForce();
+  serialMotorDesired = writeToMotor;
   serialSensor = force.getForce();
 }
 
 void velForce(){
-  motor.vel(slotSensorDirection()*force.getForce());
+
+  float writeToMotor;
+  if (useSensor)
+    writeToMotor = slotSensorDirection()*force.getForce();
+  else
+    writeToMotor = manualInput;
+  
+  motor.vel(writeToMotor);
 
   // Serial Monitor
-  serialMotorActual = slotSensorDirection()*force.getForce();
-  serialMotorDesired = slotSensorDirection()*force.getForce();
+  serialMotorActual = writeToMotor;
+  serialMotorDesired = writeToMotor;
   serialSensor = force.getForce();
 }

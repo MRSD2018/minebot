@@ -6,7 +6,7 @@ void setupIRStepper()
 
 void startStepper()
 {
-  ir_stepper.start_running(); 
+  ir_stepper.start_running();
 }
 
 void stopStepper()
@@ -14,13 +14,19 @@ void stopStepper()
   ir_stepper.stop_running();
 }
 
-void irStepper(){
-  
+void irStepper() {
+
   ir_stepper.step();
-  ir_stepper.go_to_des_pos();
+  ir_stepper.go_to_des_pos(useSensor, manualInput);
+
+  float writeToMotor;
+  if (useSensor)
+    writeToMotor = ir_stepper.get_desired_position();
+  else
+    writeToMotor = manualInput;
 
   // Serial Monitor
   serialMotorActual = ir_stepper.get_current_position();
-  serialMotorDesired = ir_stepper.get_desired_position();
+  serialMotorDesired = writeToMotor;
   serialSensor = ir_stepper.get_ir_sensor();
 }

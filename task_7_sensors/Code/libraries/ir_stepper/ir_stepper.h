@@ -17,7 +17,7 @@ public:
  IR_Stepper(int analogInPin, int stepPin, int dirPin, int enablePin);
  void step();
  void fast_step();
- void go_to_des_pos();
+ void go_to_des_pos(bool useSensor, float manualVal);
  void start_running();
  void stop_running();
  float get_current_position();
@@ -61,12 +61,17 @@ void IR_Stepper::step()
   this->stepperDesiredPos = (int)(this->stepperDesiredPos * this->filterConst + ir_ret * (1 - this->filterConst));
 }
 
-void IR_Stepper::go_to_des_pos()
+void IR_Stepper::go_to_des_pos(bool useSensor, float manualVal)
 {
   int dist;
   int curPos = this->stepperCurPos;
-  int desPos = this->stepperDesiredPos;
-  
+
+  int desPos;
+
+  if (useSensor)
+    desPos = this->stepperDesiredPos;
+  else
+    desPos = manualVal;
   /* 
   for debugging
   Serial.print(desPos);

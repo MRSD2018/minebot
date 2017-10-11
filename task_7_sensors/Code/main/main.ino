@@ -53,7 +53,7 @@ extern int potIn;
 extern int Angle;
 
 //states
-int STATE = 3;
+int STATE = 0;
 
 //serial
 bool useSensor = true;

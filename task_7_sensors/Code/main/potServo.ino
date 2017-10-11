@@ -16,11 +16,18 @@ void potServo()
 {
   potIn = analogRead(pot);
   Angle = map(potIn,0,1023,0,180);
-  myservo.write(Angle);
+
+  float writeToMotor;
+  if (useSensor)
+    writeToMotor = Angle;
+  else
+    writeToMotor = manualInput;
+      
+  myservo.write(writeToMotor);
 
   // Serial Monitor
-  serialMotorActual = Angle;
-  serialMotorDesired = Angle; // setpoint
+  serialMotorActual = writeToMotor;
+  serialMotorDesired = writeToMotor; // setpoint
   serialSensor = potIn;
 }
 
