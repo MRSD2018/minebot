@@ -14,6 +14,8 @@ void checkButtonForState()
   {
     debounce(pushButton);
     STATE++;
+    if(STATE == 3) startStepper();
+    else stopStepper();
     if (STATE>3){STATE = 0;}
     but_interrupt_flag = 0; //this will make sure we don't go into ISR again when doing stuff
   }

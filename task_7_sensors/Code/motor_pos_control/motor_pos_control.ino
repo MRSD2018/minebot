@@ -4,7 +4,7 @@
 
 #define PWM 6
 #define L1 4
-#define L2 5
+#define L2 9
 #define channelAPin 3
 #define channelBPin 7
 
@@ -23,7 +23,8 @@ void setup() {
 
 void loop() {
   // uncomment one or the other to get position or velocity control
-//  motor.posPID(force.getForce(), encoderTicks);
+  Serial.println(force.getForce());
+  motor.posPID(force.getForce(), encoderTicks);
   motor.vel(force.getForce());
 }
 

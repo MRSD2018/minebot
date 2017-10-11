@@ -10,6 +10,7 @@ private:
   int stepperDesiredPos;
   bool dirHigh;
   float filterConst;
+  int ir_ret;
  
 public:
  IR_Stepper();
@@ -54,7 +55,7 @@ IR_Stepper::IR_Stepper(int analogInPin, int stepPin, int dirPin, int enablePin)
 void IR_Stepper::step()
 {
   // read infrared sensor and scale it arbitrarily
-  int ir_ret = analogRead(this->analogInPin) / 3;
+  this->ir_ret = analogRead(this->analogInPin) / 3;
   
   // filter sensor return (simple 1st order filter) and set desired position
   this->stepperDesiredPos = (int)(this->stepperDesiredPos * this->filterConst + ir_ret * (1 - this->filterConst));
@@ -106,15 +107,15 @@ void IR_Stepper::stop_running()
 
 float IR_Stepper::get_current_position()
 {
-
+  return this->stepperCurPos;
 }
 
 float IR_Stepper::get_desired_position()
 {
-
+  return this->stepperDesiredPos;
 }
 
 float IR_Stepper::get_ir_sensor()
 {
-
+  return this->ir_ret;
 }
