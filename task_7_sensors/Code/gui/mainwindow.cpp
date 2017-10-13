@@ -104,11 +104,11 @@ void MainWindow::handleError(QSerialPort::SerialPortError error)
 void MainWindow::setupPlots()
 {
   ui->motorPlot->addGraph(); // blue line
-  ui->motorPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
+  ui->motorPlot->graph(0)->setPen(QPen(QColor(40, 110, 255),4));
   ui->motorPlot->addGraph(); // red line
-  ui->motorPlot->graph(1)->setPen(QPen(QColor(255, 110, 40)));
+  ui->motorPlot->graph(1)->setPen(QPen(QColor(255, 110, 40),4));
   ui->sensorPlot->addGraph(); // blue line
-  ui->sensorPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
+  ui->sensorPlot->graph(0)->setPen(QPen(QColor(40, 110, 255),4));
 
   QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
   timeTicker->setTimeFormat("%s");
@@ -146,20 +146,20 @@ void MainWindow::modifyPlots(int state)
     {
         case 0:
             changeLabels(ui->motorPlot, "DC Motor Position", "Angle (Degrees)");
-            changeLabels(ui->sensorPlot, "Pressure Sensor", "Sensor Data");
+            changeLabels(ui->sensorPlot, "Force Sensor", "Sensor Data (Grams)");
             ui->motorPlot->yAxis->setRange(0, 1600);
             ui->sensorPlot->yAxis->setRange(0, 1600);
             ui->dcPos->setChecked(true);
             break;
         case 1:
-            changeLabels(ui->motorPlot, "DC Motor Velocity", "Angle (Degrees/Second)");
-            changeLabels(ui->sensorPlot, "Pressure Sensor", "Sensor Data");
+            changeLabels(ui->motorPlot, "DC Motor Velocity", "Angle Rate");
+            changeLabels(ui->sensorPlot, "Force Sensor", "Sensor Data (Grams)");
             ui->motorPlot->yAxis->setRange(0, 1600);
             ui->sensorPlot->yAxis->setRange(0, 1600);
             ui->dcVel->setChecked(true);
             break;
         case 2:
-            changeLabels(ui->motorPlot, "Stepper Motor Position", "Angle (Degrees)");
+            changeLabels(ui->motorPlot, "Stepper Motor Position", "Angle (Steps)");
             changeLabels(ui->sensorPlot, "Infrared Sensor", "Sensor Data");
             ui->stepPos->setChecked(true);
             ui->motorPlot->yAxis->setRange(0, 200);
@@ -167,7 +167,7 @@ void MainWindow::modifyPlots(int state)
             break;
         case 3:
             changeLabels(ui->motorPlot, "Servo Motor Position", "Angle (Degrees)");
-            changeLabels(ui->sensorPlot, "Potentiometer Sensor", "Sensor Data");
+            changeLabels(ui->sensorPlot, "Potentiometer", "Sensor Data (Degrees)");
             ui->servPos->setChecked(true);
             ui->motorPlot->yAxis->setRange(0, 180);
             ui->sensorPlot->yAxis->setRange(0, 1024);
