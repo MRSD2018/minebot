@@ -1,4 +1,5 @@
 #include <Servo.h>
+
 //In
 #define Pot A0
 
@@ -15,7 +16,6 @@ void setup() {
   pinMode(Pot, INPUT);
   pinMode(3, OUTPUT);
   myservo.attach(PWM);
-
   Serial.begin(9600);
 }
 
@@ -26,7 +26,4 @@ void loop() {
   Serial.println(Angle);
   myservo.write(Angle);
   delay(10);
-
-  
-
 }
