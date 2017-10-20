@@ -1,0 +1,1 @@
+gcc -o 1_main Main.c declare.c timer_thread.c encoder_thread.c magnet_thread.c energy_thread.c filters.c calculate_I_ref.c -lbcm2835 -lpthread -lrt -lm
