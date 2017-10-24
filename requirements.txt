@@ -1,0 +1,45 @@
+M.P.1
+Detects 4 out of 5 of landmines in a grassy field
+A high level of detection accuracy is required, and this is a suitable goal for developmental testing
+M.P.2
+Detects landmines with a false to true positives ratio of no more than 2:1
+Minimizing the number of false positives will increase the rate of coverage
+M.P.3
+Detonates zero landmines during probing action
+The system should not trigger a landmine to detonate during detection
+M.P.4
+Physically marks landmine location to an accuracy of 10cm
+The accuracy of this process is critical as the marked location is used by deminers
+M.P.5
+Physically marks covered area to an accuracy of 10cm
+This accuracy is critical as it allows the surveyor to visually confirm covered area
+M.P.6
+Warns user of potential hazards within 0.25s
+If potential landmine is detected, the operator must immediately be warned
+M.P.7
+Surveys land at a rate of 0.05 m2/s  in an area known to be free of metallic objects
+
+D.P.1
+Determines whether a detection is a true or false positive within 5 minutes
+Detection must occur at a reasonable rate to minimize coverage time
+D.P.2
+Records landmine location on digital Dig Sheet to an accuracy of 50cm
+Digital mapping accuracy is less important than physical marking
+D.P.3
+Records area covered by system to an accuracy of 50cm
+Digital mapping accuracy is less important than physical marking
+
+
+M.N.1
+Able to be operated continuously for 1hr
+This will allow sufficient time for testing and demonstration purposes
+M.N.2
+Costs less than $5000
+This is a sufficient cost level for field adoption, and fits in the MRSD budget constraints
+
+D.N.1
+Weighs less than 50kg
+The system should be able to be handled by two people
+D.N.2
+Is able to make 180° pin turns
+This will allow for maneuverability of the system during operation

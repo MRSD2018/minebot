@@ -245,28 +245,28 @@ void loop()
     // update LCD once per half-second independent of read rate
     if (myIMU.delt_t > 500)
     {
-//      if(SerialDebug)
-//      {
-//        Serial.print("ax = ");  Serial.print((int)1000 * myIMU.ax);
-//        Serial.print(" ay = "); Serial.print((int)1000 * myIMU.ay);
-//        Serial.print(" az = "); Serial.print((int)1000 * myIMU.az);
-//        Serial.println(" mg");
-//
-//        Serial.print("gx = ");  Serial.print(myIMU.gx, 2);
-//        Serial.print(" gy = "); Serial.print(myIMU.gy, 2);
-//        Serial.print(" gz = "); Serial.print(myIMU.gz, 2);
-//        Serial.println(" deg/s");
-//
-//        Serial.print("mx = ");  Serial.print((int)myIMU.mx);
-//        Serial.print(" my = "); Serial.print((int)myIMU.my);
-//        Serial.print(" mz = "); Serial.print((int)myIMU.mz);
-//        Serial.println(" mG");
-//
-//        Serial.print("q0 = ");  Serial.print(*getQ());
-//        Serial.print(" qx = "); Serial.print(*(getQ() + 1));
-//        Serial.print(" qy = "); Serial.print(*(getQ() + 2));
-//        Serial.print(" qz = "); Serial.println(*(getQ() + 3));
-//      }
+      if(SerialDebug)
+      {
+        Serial.print("ax = ");  Serial.print((int)1000 * myIMU.ax);
+        Serial.print(" ay = "); Serial.print((int)1000 * myIMU.ay);
+        Serial.print(" az = "); Serial.print((int)1000 * myIMU.az);
+        Serial.println(" mg");
+
+        Serial.print("gx = ");  Serial.print(myIMU.gx, 2);
+        Serial.print(" gy = "); Serial.print(myIMU.gy, 2);
+        Serial.print(" gz = "); Serial.print(myIMU.gz, 2);
+        Serial.println(" deg/s");
+
+        Serial.print("mx = ");  Serial.print((int)myIMU.mx);
+        Serial.print(" my = "); Serial.print((int)myIMU.my);
+        Serial.print(" mz = "); Serial.print((int)myIMU.mz);
+        Serial.println(" mG");
+
+        Serial.print("q0 = ");  Serial.print(*getQ());
+        Serial.print(" qx = "); Serial.print(*(getQ() + 1));
+        Serial.print(" qy = "); Serial.print(*(getQ() + 2));
+        Serial.print(" qz = "); Serial.println(*(getQ() + 3));
+      }
 
 // Define output variables from updated quaternion---these are Tait-Bryan
 // angles, commonly used in aircraft orientation. In this coordinate system,
