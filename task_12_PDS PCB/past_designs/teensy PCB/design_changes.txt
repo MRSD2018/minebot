@@ -1,0 +1,102 @@
+PA0_ED  110	
+PA1_ED	109
+PA2_ED	115
+PA3_ED	114
+
+SDA_ED_1 20
+SCL_ED_1 19
+		new gp		new mraa	old gp		old mraa
+MOTOR_1_ED 	82  		40		14  		36
+D0_ED		44  		31		44 	 	31
+D1_ED		45  		45		165	 	15
+D2_ED		46 		32		45 		45
+D3_ED		47  		46		46		32
+D4_ED		48  		33		47  		46
+D5_ED		49  		47		48  		33
+D6_ED		15  		48		49  		47
+D7_ED		14  		36		15  		48
+
+SEL1_ED		83		41
+SEL2_ED		80		54
+OE-_COUNT_ED	13		14
+RST_COUNT_ED	182		0
+PWM_IN_ED	12		20
+
+
+The PCB should do:
+
+1) motor control 
+	- able to tune with everything plugged in
+	- motor_enable and motor_pwm
+
+2) power measurement - i2c
+
+3) magnetic encoder - SPI
+
+4) quadrature decoder - digital
+
+
+
+
+
+DONE 1) 5V power supply using USB is switched
+	- just use V_in?
+	- it will have to be battery to ensure stability
+	- change in eagle
+	- solder bridge to choose using Vsys or USB plug
+
+DONE 2) level shifters
+	- use premade ones, don't act cool
+	- 3.3 to 5 should be good enough
+	- use TXS0108PWR, which has leads even though it is slightly bigger, easier to handle
+	- change the eagle file
+	- follow the sparkfun GPIO_block schematic for level shifting, only capacitors, OE tied to 1.8v already
+	- 1.8v 1 cap each, reference also 1 cap each, 0.1uF
+	- OE just ties to 1.8V
+
+DONE 3) motor controller USB port
+	- make sure enough clearance, right now hits the encoder wires
+	- encoder wires keep near to front
+	- found a right-angled one, add it onto the PCB if have space
+	- switch it around so the connector is in front
+	
+DONE 4) output cables
+	- make all output cables face one direction
+
+DONE 5) test pads
+	- install more test pads
+	- 5V, OE_shifter, PWM, motor_enable, SPI, for oscilloscope in the future
+	NO TIME - test LEDs too, to show something is working
+
+DONE 6) testing
+	DONE - power measurement
+	
+	CMI - magnetic encoder
+	
+	DONE - quadrature decoder
+
+	DONE - motor
+
+DONE 7) hirose pins make them longer, can't place properly
+	- change the eagle file
+
+DONE 8) shift 16 way magnetic encoder to more center
+
+DONE 9) 	- if have time, increase TVS diode size in eagle
+
+DONE 10) quadrature decoder, do not attach channelI
+	- it drifts by a high number of counts
+	- change clock? 33Mhz
+	- unattach CHI
+	- add solder pads to join in case needed
+
+DONE 10) spi
+	- PA0 is missing
+	
+DONE 11) soldering
+	- capacitors might be shorted
+	
+
+
+
+	
