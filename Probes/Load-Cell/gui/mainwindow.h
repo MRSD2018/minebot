@@ -34,11 +34,9 @@ private slots:
 
     void realtimeDataSlot();
 
-
+    void logData(float data);
     void on_startLog_clicked();
-
     void on_stopLog_clicked();
-
     void on_logFileSelect_clicked();
 
 private:
@@ -50,6 +48,8 @@ private:
   QString serialIn;
   // Plotting Data
   float sensorValue;
+  // Logging Info
+  bool fileLogging = false;
 };
 
 #endif // MAINWINDOW_H

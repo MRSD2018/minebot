@@ -84,11 +84,12 @@ void MainWindow::readData()
         strCat = strCat.right(200);
 
         QStringList data = serialIn.split("_",QString::SkipEmptyParts);
-//        qDebug() << "Serial Data: " << data << endl;
+        qDebug() << "Serial Data: " << data << endl;
 
         if (data[0] == "X")
         {
             sensorValue = data[1].toFloat();
+            logData(sensorValue);
         }
     }
 }
@@ -141,30 +142,35 @@ void MainWindow::realtimeDataSlot()
   ui->plot->replot();
 }
 
+void MainWindow::logData(float data)
+{
+    if (fileLogging)
+    {
+        QFile logFile (ui->logPath->text());
+        if ( logFile.open(QIODevice::WriteOnly | QIODevice::Append) )
+        {
+            QTextStream stream( &logFile );
+            stream << data << endl;
+        }
+        logFile.close();
+    }
+}
 
 void MainWindow::on_startLog_clicked()
 {
-    QFile file( ui->logPath->text() );
-    if ( file.open(QIODevice::ReadWrite) )
-        qDebug() << "Beginning Data Log to " << ui->logPath->text() << endl;
-    else
-        qDebug() << "Log File Open Failed :(";
-
-    QTextStream stream( &file );
-    stream << "something!" << endl;
-
+    fileLogging = true;
+    qDebug() << "Beginning Data Log to " << ui->logPath->text() << endl;
 }
 
 void MainWindow::on_stopLog_clicked()
 {
-    qDebug() << "Stopping Data Log..." << endl;
+     fileLogging = false;
+     qDebug() << "Stopping Data Log to " << ui->logPath->text() << endl;
 }
 
 void MainWindow::on_logFileSelect_clicked()
 {
-    QString file1Name = QFileDialog::getSaveFileName()
-
-            getOpenFileName(this,
+    QString file1Name = QFileDialog::getSaveFileName(this,
         tr("Log File Destination"), "log.csv", tr("CSV Files (*.csv)"));
     ui->logPath->setText(file1Name);
 }
