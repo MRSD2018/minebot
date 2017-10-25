@@ -8,6 +8,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QDebug>
 #include <QStringRef>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,8 +20,6 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBar()->clearMessage();
 
     setupPlot();
-//    ui->plot->replot();
-
 }
 
 MainWindow::~MainWindow()
@@ -73,10 +72,11 @@ void MainWindow::writeData(const QByteArray &data)
 
 void MainWindow::readData()
 {
-    QByteArray read = serial->readAll();
+    QByteArray read = serial->readLine();
     strCat += read;
     QString search(strCat);
     QStringList searchList = search.split("\r\n",QString::SkipEmptyParts);
+
 
     if (searchList.size() > 1)
     {
@@ -84,8 +84,7 @@ void MainWindow::readData()
         strCat = strCat.right(200);
 
         QStringList data = serialIn.split("_",QString::SkipEmptyParts);
-
-        qDebug() << "Serial Data: " << data << endl;
+//        qDebug() << "Serial Data: " << data << endl;
 
         if (data[0] == "X")
         {
@@ -127,7 +126,6 @@ void MainWindow::setupPlot()
 void MainWindow::realtimeDataSlot()
 {
   static QTime time(QTime::currentTime());
-  // calculate two new data points:
   double key = time.elapsed()/1000.0; // time elapsed since start of demo, in seconds
   static double lastPointKey = 0;
   if (key-lastPointKey > 0.002) // at most add point every 2 ms
@@ -143,3 +141,30 @@ void MainWindow::realtimeDataSlot()
   ui->plot->replot();
 }
 
+
+void MainWindow::on_startLog_clicked()
+{
+    QFile file( ui->logPath->text() );
+    if ( file.open(QIODevice::ReadWrite) )
+        qDebug() << "Beginning Data Log to " << ui->logPath->text() << endl;
+    else
+        qDebug() << "Log File Open Failed :(";
+
+    QTextStream stream( &file );
+    stream << "something!" << endl;
+
+}
+
+void MainWindow::on_stopLog_clicked()
+{
+    qDebug() << "Stopping Data Log..." << endl;
+}
+
+void MainWindow::on_logFileSelect_clicked()
+{
+    QString file1Name = QFileDialog::getSaveFileName()
+
+            getOpenFileName(this,
+        tr("Log File Destination"), "log.csv", tr("CSV Files (*.csv)"));
+    ui->logPath->setText(file1Name);
+}

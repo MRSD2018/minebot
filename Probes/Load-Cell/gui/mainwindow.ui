@@ -104,6 +104,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="text">
+             <string>test.csv</string>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">

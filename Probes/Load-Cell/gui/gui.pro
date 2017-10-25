@@ -6,6 +6,7 @@
 
 QT       += core gui printsupport
 QT       += serialport
+QT       += widgets
 
 
 

@@ -35,6 +35,12 @@ private slots:
     void realtimeDataSlot();
 
 
+    void on_startLog_clicked();
+
+    void on_stopLog_clicked();
+
+    void on_logFileSelect_clicked();
+
 private:
   Ui::MainWindow *ui;
   QTimer dataTimer;
