@@ -1,4 +1,5 @@
 // Code for interfacing with Load Cell
+// Author: David Robinson
 
 #include "HX711.h"
 
