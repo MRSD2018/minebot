@@ -15,7 +15,7 @@ void setup() {
 }
 
 void loop() {
-  Serial.print("X_");
+//  Serial.print("X_");
   Serial.print(loadCell.get_units(1));
   Serial.println();
 }

@@ -50,6 +50,7 @@ private:
   float sensorValue;
   // Logging Info
   bool fileLogging = false;
+  double key;
 };
 
 #endif // MAINWINDOW_H

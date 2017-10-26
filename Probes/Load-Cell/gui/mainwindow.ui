@@ -95,26 +95,6 @@
           <string>Logging</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0">
-          <item row="1" column="0" colspan="2">
-           <widget class="QPushButton" name="startLog">
-            <property name="text">
-             <string>Start</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLineEdit" name="logPath">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>test.csv</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1">
            <widget class="QPushButton" name="logFileSelect">
             <property name="sizePolicy">
@@ -128,10 +108,30 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QPushButton" name="startLog">
+            <property name="text">
+             <string>Start Logging</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="logPath">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>5</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
           <item row="2" column="0" colspan="2">
            <widget class="QPushButton" name="stopLog">
             <property name="text">
-             <string>Stop</string>
+             <string>Stop Logging</string>
             </property>
            </widget>
           </item>

@@ -72,25 +72,21 @@ void MainWindow::writeData(const QByteArray &data)
 
 void MainWindow::readData()
 {
-    QByteArray read = serial->readLine();
+    QByteArray read(serial->readAll());
     strCat += read;
     QString search(strCat);
     QStringList searchList = search.split("\r\n",QString::SkipEmptyParts);
-
 
     if (searchList.size() > 1)
     {
         serialIn = searchList[searchList.size()-2]; // 2nd last member
         strCat = strCat.right(200);
 
-        QStringList data = serialIn.split("_",QString::SkipEmptyParts);
-        qDebug() << "Serial Data: " << data << endl;
+        sensorValue = serialIn.toFloat();
+        ui->plot->graph(0)->addData(key, sensorValue);
+        logData(sensorValue);
 
-        if (data[0] == "X")
-        {
-            sensorValue = data[1].toFloat();
-            logData(sensorValue);
-        }
+        qDebug() << "Serial Data: " << sensorValue << endl;
     }
 }
 
@@ -127,12 +123,12 @@ void MainWindow::setupPlot()
 void MainWindow::realtimeDataSlot()
 {
   static QTime time(QTime::currentTime());
-  double key = time.elapsed()/1000.0; // time elapsed since start of demo, in seconds
+  key = time.elapsed()/1000.0; // time elapsed since start of demo, in seconds
   static double lastPointKey = 0;
   if (key-lastPointKey > 0.002) // at most add point every 2 ms
   {
     // add data to lines:
-    ui->plot->graph(0)->addData(key, sensorValue);
+//    ui->plot->graph(0)->addData(key, sensorValue);
     // rescale value (vertical) axis to fit the current data:
     ui->plot->graph(0)->rescaleValueAxis(true);
     lastPointKey = key;
