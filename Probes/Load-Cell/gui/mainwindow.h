@@ -27,7 +27,6 @@ private slots:
     void openSerialPort(QString port);
     void closeSerialPort();
     void on_serialStart_clicked();
-    void on_serialStop_clicked();
     void writeData(const QByteArray &data);
     void readData();
     void handleError(QSerialPort::SerialPortError error);
@@ -36,7 +35,6 @@ private slots:
 
     void logData(float data);
     void on_startLog_clicked();
-    void on_stopLog_clicked();
     void on_logFileSelect_clicked();
 
 private:
@@ -46,6 +44,8 @@ private:
   QSerialPort *serial;
   QByteArray strCat;
   QString serialIn;
+
+  bool serialConnected = false;
   // Plotting Data
   float sensorValue;
   // Logging Info

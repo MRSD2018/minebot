@@ -56,12 +56,16 @@ void MainWindow::closeSerialPort()
 
 void MainWindow::on_serialStart_clicked()
 {
-    openSerialPort(ui->serialName->text());
-}
-
-void MainWindow::on_serialStop_clicked()
-{
-    closeSerialPort();
+    if (!serialConnected){
+        serialConnected = true;
+        ui->serialStart->setText("Stop");
+        openSerialPort(ui->serialName->text());
+    }
+    else {
+        serialConnected = false;
+        ui->serialStart->setText("Start");
+        closeSerialPort();
+    }
 }
 
 void MainWindow::writeData(const QByteArray &data)
@@ -154,14 +158,18 @@ void MainWindow::logData(float data)
 
 void MainWindow::on_startLog_clicked()
 {
-    fileLogging = true;
-    qDebug() << "Beginning Data Log to " << ui->logPath->text() << endl;
-}
-
-void MainWindow::on_stopLog_clicked()
-{
-     fileLogging = false;
-     qDebug() << "Stopping Data Log to " << ui->logPath->text() << endl;
+    if (!fileLogging)
+    {
+        fileLogging = true;
+        ui->startLog->setText("Stop Logging");
+        qDebug() << "Beginning Data Log to " << ui->logPath->text() << endl;
+    }
+    else
+    {
+        fileLogging = false;
+        ui->startLog->setText("Start Logging");
+        qDebug() << "Stopping Data Log to " << ui->logPath->text() << endl;
+    }
 }
 
 void MainWindow::on_logFileSelect_clicked()

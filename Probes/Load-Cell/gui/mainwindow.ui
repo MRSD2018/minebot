@@ -59,24 +59,17 @@
           <string>Serial</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_11">
-          <item row="1" column="0">
-           <widget class="QPushButton" name="serialStart">
-            <property name="text">
-             <string>Start</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QPushButton" name="serialStop">
-            <property name="text">
-             <string>Stop</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0">
            <widget class="QLineEdit" name="serialName">
             <property name="text">
              <string>COM9</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="serialStart">
+            <property name="text">
+             <string>Start</string>
             </property>
            </widget>
           </item>
@@ -94,7 +87,7 @@
          <property name="title">
           <string>Logging</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0">
+         <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0">
           <item row="0" column="1">
            <widget class="QPushButton" name="logFileSelect">
             <property name="sizePolicy">
@@ -125,13 +118,6 @@
             </property>
             <property name="text">
              <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QPushButton" name="stopLog">
-            <property name="text">
-             <string>Stop Logging</string>
             </property>
            </widget>
           </item>
