@@ -96,11 +96,7 @@ long HX711::read_average(byte times) {
 }
 
 double HX711::get_value(byte times) {
-	return read_average(times) - OFFSET;
-}
-
-float HX711::get_units(byte times) {
-	return get_value(times) / SCALE;
+	return read_average(times) / SCALE + OFFSET;
 }
 
 void HX711::tare(byte times) {
@@ -116,11 +112,11 @@ float HX711::get_scale() {
 	return SCALE;
 }
 
-void HX711::set_offset(long offset) {
+void HX711::set_offset(float offset) {
 	OFFSET = offset;
 }
 
-long HX711::get_offset() {
+float HX711::get_offset() {
 	return OFFSET;
 }
 

@@ -13,7 +13,7 @@ class HX711
 		byte PD_SCK;	// Power Down and Serial Clock Input Pin
 		byte DOUT;		// Serial Data Output Pin
 		byte GAIN;		// amplification factor
-		long OFFSET = 0;	// used for tare weight
+		float OFFSET = 0;	// used for tare weight
 		float SCALE = 1;	// used to return weight in grams, kg, ounces, whatever
 
 	public:
@@ -48,24 +48,20 @@ class HX711
 		// returns (read_average() - OFFSET), that is the current value without the tare weight; times = how many readings to do
 		double get_value(byte times = 1);
 
-		// returns get_value() divided by SCALE, that is the raw value divided by a value obtained via calibration
-		// times = how many readings to do
-		float get_units(byte times = 1);
-
 		// set the OFFSET value for tare weight; times = how many times to read the tare value
 		void tare(byte times = 10);
 
 		// set the SCALE value; this value is used to convert the raw data to "human readable" data (measure units)
-		void set_scale(float scale = 1.f);
+		void set_scale(float scale);
 
 		// get the current SCALE
 		float get_scale();
 
 		// set OFFSET, the value that's subtracted from the actual reading (tare weight)
-		void set_offset(long offset = 0);
+		void set_offset(float offset);
 
 		// get the current OFFSET
-		long get_offset();
+		float get_offset();
 
 		// puts the chip into power down mode
 		void power_down();

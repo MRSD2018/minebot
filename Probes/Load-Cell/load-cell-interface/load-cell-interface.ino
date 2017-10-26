@@ -9,11 +9,13 @@ HX711 loadCell(DOUT, CLK);
 
 void setup() {
   Serial.begin(9600);
-  loadCell.set_scale(1); // may need to set calibration adaptively ~ 7000
-  loadCell.set_offset(0);
+  
+  // Determine with Matlab Script
+  loadCell.set_scale(67590.7657); // 1/gain
+  loadCell.set_offset(-0.8384);
 }
 
 void loop() {
-  Serial.print(loadCell.get_units(1));
+  Serial.print(loadCell.get_value()); // kg
   Serial.println();
 }
