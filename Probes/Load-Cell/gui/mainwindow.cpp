@@ -110,10 +110,15 @@ void MainWindow::setupPlot()
   QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
   timeTicker->setTimeFormat("%s");
 
+  QFont font( "Arial", 12 );
   ui->plot->xAxis->setTicker(timeTicker);
   ui->plot->axisRect()->setupFullAxesBox();
   ui->plot->yAxis->setLabel("Sensor Data");
   ui->plot->xAxis->setLabel("Time (s)");
+  ui->plot->xAxis->setLabelFont(font);
+  ui->plot->yAxis->setLabelFont(font);
+  ui->plot->xAxis->setTickLabelFont(font);
+  ui->plot->yAxis->setTickLabelFont(font);
 
   // make left and bottom axes transfer their ranges to right and top axes:
   connect(ui->plot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->plot->xAxis2, SLOT(setRange(QCPRange)));
