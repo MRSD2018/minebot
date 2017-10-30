@@ -8,6 +8,8 @@
 #ifndef _MPU9250_H_
 #define _MPU9250_H_
 
+#include "Arduino.h"
+// #include "i2c_t3.h"  // I2C library
 #include <SPI.h>
 #include <Wire.h>
 

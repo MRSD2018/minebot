@@ -26,8 +26,8 @@
 
 //**THIS ONLY WORKS ON UNO, without the WIRE_T3 library integrated**
 
-#include "quaternionFilters_kris.h"
-#include "MPU9250_kris.h"
+#include "quaternionFilters_kris_uno.h"
+#include "MPU9250_kris_uno.h"
 //#include "ros.h"
 //#include <ros/tim/e.h>
 //#include <tf//tf.h>

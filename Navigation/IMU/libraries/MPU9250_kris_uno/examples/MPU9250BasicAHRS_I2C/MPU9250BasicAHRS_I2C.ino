@@ -3,13 +3,14 @@
  date: April 1, 2014
  license: Beerware - Use this code however you'd like. If you
  find it useful you can buy me a beer some time.
- Modified by Brent Wilkins January 9, 2016
+ Modified by Brent Wilkins July 19, 2016
 
  Demonstrate basic MPU-9250 functionality including parameterizing the register
  addresses, initializing the sensor, getting properly scaled accelerometer,
  gyroscope, and magnetometer data out. Added display functions to allow display
  to on breadboard monitor. Addition of 9 DoF sensor fusion using open source
- Madgwick and Mahony filter algorithms. Sketch runs on the 3.3 V 8 MHz Pro Mini.
+ Madgwick and Mahony filter algorithms. Sketch runs on the 3.3 V 8 MHz Pro Mini
+ and the Teensy 3.1.
 
  SDA and SCL should have external pull-up resistors (to 3.3V).
  10k resistors are on the EMSENSR-9250 breakout board.
@@ -23,8 +24,8 @@
  GND ---------------------- GND
  */
 
-#include "quaternionFilters_kris.h"
-#include "MPU9250_kris.h"
+#include "quaternionFilters_kris_uno.h"
+#include "MPU9250_kris_uno.h"
 
 #ifdef LCD
 #include <Adafruit_GFX.h>
@@ -40,37 +41,28 @@ Adafruit_PCD8544 display = Adafruit_PCD8544(9, 8, 7, 5, 6);
 #endif // LCD
 
 #define AHRS true         // Set to false for basic data read
-#define SERIAL_DEBUG true  // Set to true to get Serial output for debugging
+#define SerialDebug true  // Set to true to get Serial output for debugging
 
-MPU9250 myIMU = MPU9250(2); // Using digital pin to for chip select in demo
+// Pin definitions
+int intPin = 12;  // These can be changed, 2 and 3 are the Arduinos ext int pins
+int myLed  = 13;  // Set up pin 13 led for toggling
+
+MPU9250 myIMU;
 
 void setup()
 {
+  Wire.begin();
+  // TWBR = 12;  // 400 kbit/sec I2C speed
   Serial.begin(38400);
-  myIMU.begin();
 
-  myIMU.ak8963WhoAmI_SPI();
-
-Serial.println("Testing MPU9250::readBytes...");
-byte fc = 0;
-Serial.println( myIMU.readBytes(MPU9250_ADDRESS, WHO_AM_I_MPU9250, 1, &fc) );
-Serial.println(fc, HEX);
-// TODO BHW
-Serial.flush();
-abort();
-
-/*
-// Set slave address of AK8963 and set AK8963 for read
-myIMU.writeByteSPI(I2C_SLV0_ADDR, AK8963_ADDRESS | READ_FLAG);
-// Set address to start read from
-myIMU.writeByteSPI(I2C_SLV0_REG, WHO_AM_I_AK8963);
-*/
-byte fd = 0;
-myIMU.readBytes(AK8963_ADDRESS, WHO_AM_I_AK8963, 1, &fd);
-Serial.println(fd, HEX);
+  // Set up the interrupt pin, its set as active high, push-pull
+  pinMode(intPin, INPUT);
+  digitalWrite(intPin, LOW);
+  pinMode(myLed, OUTPUT);
+  digitalWrite(myLed, HIGH);
 
 #ifdef LCD
-  display.begin(); // Initialize the display
+  display.begin(); // Ini8ialize the display
   display.setContrast(58); // Set the contrast
 
   // Start device display with ID of sensor
@@ -86,8 +78,8 @@ Serial.println(fd, HEX);
 
   // Set up for data display
   display.setTextSize(1); // Set text size to normal, 2 is twice normal etc.
-  display.setTextColor(BLACK);  // Set pixel color; 1 on the monochrome screen
-  display.clearDisplay();       // Clears the screen and buffer
+  display.setTextColor(BLACK); // Set pixel color; 1 on the monochrome screen
+  display.clearDisplay();   // clears the screen and buffer
 #endif // LCD
 
   // Read the WHO_AM_I register, this is a good test of communication
@@ -96,9 +88,6 @@ Serial.println(fd, HEX);
   Serial.print(c, HEX);
   Serial.print(F(" I should be 0x"));
   Serial.println(0x71, HEX);
-// TODO BHW
-Serial.flush();
-abort();
 
 #ifdef LCD
   display.setCursor(20,0); display.print("MPU9250");
@@ -190,7 +179,8 @@ abort();
     // Initialize device for active mode read of magnetometer
     Serial.println("AK8963 initialized for active data mode....");
 
-#ifdef SERIAL_DEBUG
+    if (SerialDebug)
+    {
       //  Serial.println("Calibration values: ");
       Serial.print("X-Axis factory sensitivity adjustment value ");
       Serial.println(myIMU.factoryMagCalibration[0], 2);
@@ -198,7 +188,7 @@ abort();
       Serial.println(myIMU.factoryMagCalibration[1], 2);
       Serial.print("Z-Axis factory sensitivity adjustment value ");
       Serial.println(myIMU.factoryMagCalibration[2], 2);
-#endif  // SERIAL_DEBUG
+    }
 
 #ifdef LCD
     display.clearDisplay();
@@ -232,15 +222,16 @@ abort();
     Serial.println(myIMU.magScale[2]);
     delay(2000); // Add delay to see results before serial spew of data
 
-#ifdef SERIAL_DEBUG
-    Serial.println("Magnetometer:");
-    Serial.print("X-Axis sensitivity adjustment value ");
-    Serial.println(myIMU.factoryMagCalibration[0], 2);
-    Serial.print("Y-Axis sensitivity adjustment value ");
-    Serial.println(myIMU.factoryMagCalibration[1], 2);
-    Serial.print("Z-Axis sensitivity adjustment value ");
-    Serial.println(myIMU.factoryMagCalibration[2], 2);
-#endif  // SERIAL_DEBUG
+    if(SerialDebug)
+    {
+      Serial.println("Magnetometer:");
+      Serial.print("X-Axis sensitivity adjustment value ");
+      Serial.println(myIMU.factoryMagCalibration[0], 2);
+      Serial.print("Y-Axis sensitivity adjustment value ");
+      Serial.println(myIMU.factoryMagCalibration[1], 2);
+      Serial.print("Z-Axis sensitivity adjustment value ");
+      Serial.println(myIMU.factoryMagCalibration[2], 2);
+    }
 
 #ifdef LCD
     display.clearDisplay();
@@ -269,7 +260,6 @@ abort();
 
 void loop()
 {
-// TODO: Fix these comments not interrupt pin used
   // If intPin goes high, all data registers have new data
   // On interrupt, check if data ready interrupt
   if (myIMU.readByte(MPU9250_ADDRESS, INT_STATUS) & 0x01)
@@ -324,7 +314,8 @@ void loop()
     myIMU.delt_t = millis() - myIMU.count;
     if (myIMU.delt_t > 500)
     {
-#ifdef SERIAL_DEBUG
+      if(SerialDebug)
+      {
         // Print acceleration values in milligs!
         Serial.print("X-acceleration: "); Serial.print(1000 * myIMU.ax);
         Serial.print(" mg ");
@@ -355,7 +346,7 @@ void loop()
         // Print temperature in degrees Centigrade
         Serial.print("Temperature is ");  Serial.print(myIMU.temperature, 1);
         Serial.println(" degrees C");
-#endif  // SERIAL_DEBUG
+      }
 
 #ifdef LCD
       display.clearDisplay();
@@ -384,6 +375,7 @@ void loop()
 #endif // LCD
 
       myIMU.count = millis();
+      digitalWrite(myLed, !digitalRead(myLed));  // toggle led
     } // if (myIMU.delt_t > 500)
   } // if (!AHRS)
   else
@@ -394,7 +386,8 @@ void loop()
     // update LCD once per half-second independent of read rate
     if (myIMU.delt_t > 500)
     {
-#ifdef SERIAL_DEBUG
+      if(SerialDebug)
+      {
         Serial.print("ax = ");  Serial.print((int)1000 * myIMU.ax);
         Serial.print(" ay = "); Serial.print((int)1000 * myIMU.ay);
         Serial.print(" az = "); Serial.print((int)1000 * myIMU.az);
@@ -414,7 +407,7 @@ void loop()
         Serial.print(" qx = "); Serial.print(*(getQ() + 1));
         Serial.print(" qy = "); Serial.print(*(getQ() + 2));
         Serial.print(" qz = "); Serial.println(*(getQ() + 3));
-#endif  // SERIAL_DEBUG
+      }
 
 // Define output variables from updated quaternion---these are Tait-Bryan
 // angles, commonly used in aircraft orientation. In this coordinate system,
@@ -451,7 +444,8 @@ void loop()
       myIMU.yaw  -= 8.5;
       myIMU.roll *= RAD_TO_DEG;
 
-#ifdef SERIAL_DEBUG
+      if(SerialDebug)
+      {
         Serial.print("Yaw, Pitch, Roll: ");
         Serial.print(myIMU.yaw, 2);
         Serial.print(", ");
@@ -462,7 +456,7 @@ void loop()
         Serial.print("rate = ");
         Serial.print((float)myIMU.sumCount / myIMU.sum, 2);
         Serial.println(" Hz");
-#endif  // SERIAL_DEBUG
+      }
 
 #ifdef LCD
       display.clearDisplay();

@@ -1,3 +1,6 @@
+#include "Arduino.h"
+// #include "i2c_t3.h"  // I2C library
+#include "SPI.h"     // SPI Library
 #include "MPU9250_kris.h"
 
 //==============================================================================
