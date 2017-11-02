@@ -11860,6 +11860,11 @@ ultra fast</description>
 <part name="GND12" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="F7" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R1206W" package3d_urn="urn:adsk.eagle:package:26064/1" value="60VDC 20A"/>
+<part name="ENC_2" library="minebot_PDR" deviceset="ENCODER_AS5045B" device=""/>
+<part name="C1_3" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:26140/1" value="100nF"/>
+<part name="C1_4" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:26140/1" value="10uF"/>
+<part name="MAIN_2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X6" device="" package3d_urn="urn:adsk.eagle:package:22472/2"/>
+<part name="SUB_2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X6" device="" package3d_urn="urn:adsk.eagle:package:22472/2"/>
 </parts>
 <sheets>
 <sheet>
@@ -11868,9 +11873,8 @@ ultra fast</description>
 OVP, RVP, Reg</text>
 <text x="175.26" y="106.68" size="5.08" layer="97">DC Motor Out</text>
 <text x="-45.72" y="10.16" size="5.08" layer="97">5V Output</text>
-<text x="167.64" y="-96.52" size="5.08" layer="97">24V Output</text>
 <text x="281.94" y="109.22" size="5.08" layer="97">Rotary Encoder PCB 1</text>
-<text x="269.24" y="127" size="10.16" layer="97">**These 3 encoder PCBs will be cut out of the main board</text>
+<text x="269.24" y="127" size="10.16" layer="97">**This encoder PCBs will be cut out of the main board</text>
 <wire x1="-17.78" y1="20.32" x2="147.32" y2="20.32" width="0.1524" layer="97"/>
 <wire x1="147.32" y1="20.32" x2="147.32" y2="-71.12" width="0.1524" layer="97"/>
 <wire x1="147.32" y1="-71.12" x2="147.32" y2="-76.2" width="0.1524" layer="97"/>
@@ -11878,16 +11882,12 @@ OVP, RVP, Reg</text>
 <wire x1="-63.5" y1="-76.2" x2="-63.5" y2="20.32" width="0.1524" layer="97"/>
 <wire x1="-63.5" y1="20.32" x2="-17.78" y2="20.32" width="0.1524" layer="97"/>
 <wire x1="-17.78" y1="20.32" x2="-17.78" y2="114.3" width="0.1524" layer="97"/>
-<wire x1="-17.78" y1="114.3" x2="254" y2="114.3" width="0.1524" layer="97"/>
-<wire x1="254" y1="114.3" x2="254" y2="-71.12" width="0.1524" layer="97"/>
-<wire x1="254" y1="-71.12" x2="147.32" y2="-71.12" width="0.1524" layer="97"/>
-<wire x1="254" y1="-71.12" x2="368.3" y2="10.16" width="0.1524" layer="97"/>
-<wire x1="368.3" y1="10.16" x2="368.3" y2="-154.94" width="0.1524" layer="97"/>
-<wire x1="368.3" y1="-154.94" x2="147.32" y2="-154.94" width="0.1524" layer="97"/>
-<wire x1="147.32" y1="-154.94" x2="147.32" y2="-76.2" width="0.1524" layer="97"/>
-<wire x1="254" y1="114.3" x2="375.92" y2="114.3" width="0.1524" layer="97"/>
-<wire x1="375.92" y1="114.3" x2="375.92" y2="10.16" width="0.1524" layer="97"/>
-<wire x1="375.92" y1="10.16" x2="368.3" y2="10.16" width="0.1524" layer="97"/>
+<wire x1="-17.78" y1="114.3" x2="251.46" y2="114.3" width="0.1524" layer="97"/>
+<wire x1="251.46" y1="114.3" x2="251.46" y2="-71.12" width="0.1524" layer="97"/>
+<wire x1="251.46" y1="-71.12" x2="147.32" y2="-71.12" width="0.1524" layer="97"/>
+<wire x1="251.46" y1="-71.12" x2="375.92" y2="-71.12" width="0.1524" layer="97"/>
+<wire x1="251.46" y1="114.3" x2="375.92" y2="114.3" width="0.1524" layer="97"/>
+<wire x1="375.92" y1="114.3" x2="375.92" y2="-71.12" width="0.1524" layer="97"/>
 <text x="53.34" y="-309.88" size="12.7" layer="97">**The ERC will say that there are no pins on net 12V_REG3, 
 which I have not been able to find anywhere. 
 
@@ -12017,6 +12017,17 @@ I think it's a bug in EAGLE.</text>
 <instance part="GND12" gate="1" x="236.22" y="-38.1"/>
 <instance part="GND13" gate="1" x="167.64" y="-17.78" rot="R180"/>
 <instance part="F7" gate="G$1" x="198.12" y="-27.94"/>
+<instance part="ENC_2" gate="G$1" x="317.5" y="-38.1"/>
+<instance part="C1_3" gate="G$1" x="350.52" y="-20.32" smashed="yes" rot="R90">
+<attribute name="NAME" x="351.536" y="-15.621" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="359.156" y="-15.621" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="C1_4" gate="G$1" x="350.52" y="-25.4" smashed="yes" rot="R90">
+<attribute name="NAME" x="351.536" y="-28.321" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="359.156" y="-28.321" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="MAIN_2" gate="A" x="297.18" y="5.08"/>
+<instance part="SUB_2" gate="A" x="350.52" y="5.08"/>
 </instances>
 <busses>
 </busses>
@@ -12655,6 +12666,171 @@ I think it's a bug in EAGLE.</text>
 <pinref part="F7" gate="G$1" pin="2"/>
 <wire x1="203.2" y1="-27.94" x2="210.82" y2="-27.94" width="0.1524" layer="91"/>
 <junction x="210.82" y="-27.94"/>
+</segment>
+</net>
+<net name="N$29" class="0">
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="VDD3V3"/>
+<pinref part="C1_4" gate="G$1" pin="1"/>
+<wire x1="337.82" y1="-25.4" x2="347.98" y2="-25.4" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="VIN_2" class="0">
+<segment>
+<wire x1="294.64" y1="12.7" x2="284.48" y2="12.7" width="0.1524" layer="91"/>
+<label x="284.48" y="12.7" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="MAIN_2" gate="A" pin="1"/>
+</segment>
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="VDD5V"/>
+<pinref part="C1_3" gate="G$1" pin="1"/>
+<wire x1="337.82" y1="-20.32" x2="342.9" y2="-20.32" width="0.1524" layer="91"/>
+<wire x1="342.9" y1="-20.32" x2="347.98" y2="-20.32" width="0.1524" layer="91"/>
+<wire x1="342.9" y1="-20.32" x2="342.9" y2="-15.24" width="0.1524" layer="91"/>
+<junction x="342.9" y="-20.32"/>
+<label x="342.9" y="-15.24" size="1.778" layer="95" rot="R90" xref="yes"/>
+</segment>
+</net>
+<net name="CLK_2" class="0">
+<segment>
+<wire x1="294.64" y1="5.08" x2="271.78" y2="5.08" width="0.1524" layer="91"/>
+<label x="271.78" y="5.08" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="MAIN_2" gate="A" pin="4"/>
+</segment>
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="CLK"/>
+<wire x1="337.82" y1="-50.8" x2="345.44" y2="-50.8" width="0.1524" layer="91"/>
+<label x="345.44" y="-50.8" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="PWM_2" class="0">
+<segment>
+<pinref part="MAIN_2" gate="A" pin="6"/>
+<wire x1="294.64" y1="0" x2="271.78" y2="0" width="0.1524" layer="91"/>
+<label x="271.78" y="0" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="PWM"/>
+<wire x1="337.82" y1="-40.64" x2="345.44" y2="-40.64" width="0.1524" layer="91"/>
+<label x="345.44" y="-40.64" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="CSN_2" class="0">
+<segment>
+<wire x1="294.64" y1="7.62" x2="284.48" y2="7.62" width="0.1524" layer="91"/>
+<label x="284.48" y="7.62" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="MAIN_2" gate="A" pin="3"/>
+</segment>
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="CSN"/>
+<wire x1="337.82" y1="-45.72" x2="345.44" y2="-45.72" width="0.1524" layer="91"/>
+<label x="345.44" y="-45.72" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="DO_2" class="0">
+<segment>
+<wire x1="294.64" y1="2.54" x2="284.48" y2="2.54" width="0.1524" layer="91"/>
+<label x="284.48" y="2.54" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="MAIN_2" gate="A" pin="5"/>
+</segment>
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="DO"/>
+<wire x1="337.82" y1="-55.88" x2="345.44" y2="-55.88" width="0.1524" layer="91"/>
+<label x="345.44" y="-55.88" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="MAG_INC_N_2" class="0">
+<segment>
+<wire x1="347.98" y1="12.7" x2="337.82" y2="12.7" width="0.1524" layer="91"/>
+<label x="337.82" y="12.7" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="SUB_2" gate="A" pin="1"/>
+</segment>
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="MAG_INC_N"/>
+<wire x1="297.18" y1="-20.32" x2="289.56" y2="-20.32" width="0.1524" layer="91"/>
+<label x="289.56" y="-20.32" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="MAG_DEC_N_2" class="0">
+<segment>
+<label x="325.12" y="10.16" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="325.12" y1="10.16" x2="347.98" y2="10.16" width="0.1524" layer="91"/>
+<pinref part="SUB_2" gate="A" pin="2"/>
+</segment>
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="MAG_DEC_N"/>
+<wire x1="297.18" y1="-25.4" x2="289.56" y2="-25.4" width="0.1524" layer="91"/>
+<label x="289.56" y="-25.4" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="A_2" class="0">
+<segment>
+<wire x1="347.98" y1="7.62" x2="337.82" y2="7.62" width="0.1524" layer="91"/>
+<label x="337.82" y="7.62" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="SUB_2" gate="A" pin="3"/>
+</segment>
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="A"/>
+<wire x1="297.18" y1="-30.48" x2="289.56" y2="-30.48" width="0.1524" layer="91"/>
+<label x="289.56" y="-30.48" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="I_2" class="0">
+<segment>
+<wire x1="347.98" y1="2.54" x2="337.82" y2="2.54" width="0.1524" layer="91"/>
+<label x="337.82" y="2.54" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="SUB_2" gate="A" pin="5"/>
+</segment>
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="I"/>
+<wire x1="297.18" y1="-45.72" x2="289.56" y2="-45.72" width="0.1524" layer="91"/>
+<label x="289.56" y="-45.72" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="B_2" class="0">
+<segment>
+<label x="325.12" y="5.08" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="347.98" y1="5.08" x2="325.12" y2="5.08" width="0.1524" layer="91"/>
+<pinref part="SUB_2" gate="A" pin="4"/>
+</segment>
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="B"/>
+<wire x1="297.18" y1="-35.56" x2="289.56" y2="-35.56" width="0.1524" layer="91"/>
+<label x="289.56" y="-35.56" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="PDIO_2" class="0">
+<segment>
+<label x="325.12" y="0" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="325.12" y1="0" x2="347.98" y2="0" width="0.1524" layer="91"/>
+<pinref part="SUB_2" gate="A" pin="6"/>
+</segment>
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="PDIO"/>
+<wire x1="297.18" y1="-55.88" x2="289.56" y2="-55.88" width="0.1524" layer="91"/>
+<label x="289.56" y="-55.88" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="GND_2" class="0">
+<segment>
+<wire x1="294.64" y1="10.16" x2="271.78" y2="10.16" width="0.1524" layer="91"/>
+<label x="271.78" y="10.16" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="MAIN_2" gate="A" pin="2"/>
+</segment>
+<segment>
+<pinref part="ENC_2" gate="G$1" pin="VSS"/>
+<wire x1="297.18" y1="-50.8" x2="289.56" y2="-50.8" width="0.1524" layer="91"/>
+<label x="289.56" y="-50.8" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+<segment>
+<pinref part="C1_4" gate="G$1" pin="2"/>
+<wire x1="355.6" y1="-25.4" x2="358.14" y2="-25.4" width="0.1524" layer="91"/>
+<pinref part="C1_3" gate="G$1" pin="2"/>
+<wire x1="355.6" y1="-20.32" x2="358.14" y2="-20.32" width="0.1524" layer="91"/>
+<label x="363.22" y="-20.32" size="1.778" layer="95" xref="yes"/>
+<wire x1="358.14" y1="-20.32" x2="363.22" y2="-20.32" width="0.1524" layer="91"/>
+<wire x1="358.14" y1="-25.4" x2="358.14" y2="-20.32" width="0.1524" layer="91"/>
+<junction x="358.14" y="-20.32"/>
 </segment>
 </net>
 </nets>

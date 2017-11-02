@@ -11901,8 +11901,8 @@ I think it's a bug in EAGLE.</text>
 <instance part="GND3" gate="1" x="71.12" y="78.74" rot="R180"/>
 <instance part="C7" gate="G$1" x="-35.56" y="0"/>
 <instance part="C8" gate="G$1" x="45.72" y="5.08"/>
-<instance part="GND24" gate="1" x="-35.56" y="7.62" rot="R180"/>
-<instance part="GND25" gate="1" x="45.72" y="12.7" rot="R180"/>
+<instance part="GND24" gate="1" x="-35.56" y="2.54" rot="R180"/>
+<instance part="GND25" gate="1" x="45.72" y="7.62" rot="R180"/>
 <instance part="C1" gate="G$1" x="15.24" y="63.5" smashed="yes">
 <attribute name="NAME" x="9.144" y="61.341" size="1.778" layer="95"/>
 <attribute name="VALUE" x="6.604" y="58.801" size="1.778" layer="96"/>
@@ -12032,12 +12032,12 @@ I think it's a bug in EAGLE.</text>
 <segment>
 <pinref part="C7" gate="G$1" pin="1"/>
 <pinref part="GND24" gate="1" pin="GND"/>
-<wire x1="-35.56" y1="5.08" x2="-35.56" y2="2.54" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="0" x2="-35.56" y2="2.54" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="C8" gate="G$1" pin="1"/>
 <pinref part="GND25" gate="1" pin="GND"/>
-<wire x1="45.72" y1="10.16" x2="45.72" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="45.72" y1="5.08" x2="45.72" y2="7.62" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="C1" gate="G$1" pin="1"/>
@@ -12245,7 +12245,6 @@ I think it's a bug in EAGLE.</text>
 <pinref part="R3" gate="G$1" pin="1"/>
 <wire x1="210.82" y1="73.66" x2="228.6" y2="73.66" width="0.1524" layer="91"/>
 <wire x1="210.82" y1="66.04" x2="210.82" y2="73.66" width="0.1524" layer="91"/>
-<junction x="210.82" y="73.66"/>
 </segment>
 </net>
 <net name="N$22" class="0">
@@ -12270,7 +12269,6 @@ I think it's a bug in EAGLE.</text>
 <wire x1="208.28" y1="40.64" x2="208.28" y2="48.26" width="0.1524" layer="91"/>
 <pinref part="F4" gate="G$1" pin="2"/>
 <wire x1="203.2" y1="48.26" x2="208.28" y2="48.26" width="0.1524" layer="91"/>
-<junction x="208.28" y="48.26"/>
 </segment>
 </net>
 <net name="N$32" class="0">
@@ -12545,7 +12543,6 @@ I think it's a bug in EAGLE.</text>
 <wire x1="210.82" y1="15.24" x2="210.82" y2="22.86" width="0.1524" layer="91"/>
 <pinref part="F5" gate="G$1" pin="2"/>
 <wire x1="203.2" y1="22.86" x2="210.82" y2="22.86" width="0.1524" layer="91"/>
-<junction x="210.82" y="22.86"/>
 </segment>
 </net>
 <net name="12V_REG" class="0">
@@ -12589,8 +12586,6 @@ I think it's a bug in EAGLE.</text>
 <wire x1="157.48" y1="-27.94" x2="175.26" y2="-27.94" width="0.1524" layer="91"/>
 <wire x1="157.48" y1="-2.54" x2="157.48" y2="-27.94" width="0.1524" layer="91"/>
 <junction x="157.48" y="-2.54"/>
-<junction x="157.48" y="73.66"/>
-<junction x="157.48" y="48.26"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -12629,7 +12624,6 @@ I think it's a bug in EAGLE.</text>
 <wire x1="210.82" y1="-10.16" x2="210.82" y2="-2.54" width="0.1524" layer="91"/>
 <pinref part="F6" gate="G$1" pin="2"/>
 <wire x1="203.2" y1="-2.54" x2="210.82" y2="-2.54" width="0.1524" layer="91"/>
-<junction x="210.82" y="-2.54"/>
 </segment>
 </net>
 <net name="N$20" class="0">
@@ -12654,16 +12648,18 @@ I think it's a bug in EAGLE.</text>
 <wire x1="210.82" y1="-35.56" x2="210.82" y2="-27.94" width="0.1524" layer="91"/>
 <pinref part="F7" gate="G$1" pin="2"/>
 <wire x1="203.2" y1="-27.94" x2="210.82" y2="-27.94" width="0.1524" layer="91"/>
-<junction x="210.82" y="-27.94"/>
 </segment>
 </net>
 </nets>
 </sheet>
 </sheets>
 <errors>
-<approved hash="105,0,?,?,12V_REG3,,,,,"/>
 <approved hash="113,1,292.748,91.6661,MAIN_1,,,,,"/>
 <approved hash="113,1,345.677,91.6661,SUB_1,,,,,"/>
+<approved hash="113,1,424.828,91.6661,MAIN_2,,,,,"/>
+<approved hash="113,1,477.757,91.6661,SUB_2,,,,,"/>
+<approved hash="113,1,564.528,94.2061,MAIN_3,,,,,"/>
+<approved hash="113,1,617.457,94.2061,SUB_3,,,,,"/>
 </errors>
 </schematic>
 </drawing>
