@@ -32,41 +32,22 @@ void setup() {
   attachInterrupt(0, limitSwitch, RISING); //change State when B0 input is rising
 }
 
+//Change motor direction when limit switch is hit
 void limitSwitch(){
-  /*
-  stepper.disable();
-  dist = -1*dist;
-  button_interrupt_flag = 1;
-  Serial.println(dist);
-  */
-
+  //Debounce code
   int cur_time = millis();
   if ( (cur_time - last_switch_time) > debounce_timeout)
   {
     last_switch_time = cur_time;
-    dist *= -1;
+    dist *= -1; //change motor direction
     Serial.println(dist);
   }
 }
 
 void loop() 
 {
-  //maybe we can dynamically change the desired_steps, then within the if case choose direction.
-  
+  //move stepper in desired direction
     stepper.rotate(dist);
     Serial.println(dist);
-  
-//  if (button_interrupt_flag) {
-//    debounce(BUTTON);
-//    button_interrupt_flag = 0;
-//  }
 }
 
-void debounce(int button)
-{
-  unsigned long now = millis ();
-  while (digitalRead(button) == HIGH || (millis() - now) <= debounce_time)
-  {
-    if(digitalRead(button) == HIGH){now = millis();}
-  }
-}
