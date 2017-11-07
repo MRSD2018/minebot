@@ -482,6 +482,18 @@ wire to board 2.54 mm (0.100") pitch header</description>
 <text x="-6.35" y="2.54" size="1.778" layer="25">&gt;NAME</text>
 <text x="-6.35" y="-1.27" size="1.778" layer="27">&gt;VALUE</text>
 </package>
+<package name="NANO">
+<description>Nano
+LittleFuse Nano 463</description>
+<wire x1="-6.3" y1="-1.7515" x2="6.3" y2="-1.715" width="0.1524" layer="21"/>
+<wire x1="6.3" y1="-1.715" x2="6.3" y2="1.715" width="0.1524" layer="21"/>
+<wire x1="6.3" y1="1.715" x2="-6.3" y2="1.715" width="0.1524" layer="21"/>
+<wire x1="-6.3" y1="1.715" x2="-6.3" y2="-1.7515" width="0.1524" layer="21"/>
+<smd name="P$1" x="4.675" y="0" dx="3.25" dy="3.43" layer="1"/>
+<smd name="P$2" x="-4.675" y="0" dx="3.25" dy="3.43" layer="1"/>
+<text x="-6" y="5" size="1.778" layer="25">&gt;NAME</text>
+<text x="-6" y="3" size="1.778" layer="27">&gt;VALUE</text>
+</package>
 </packages>
 <symbols>
 <symbol name="TSV_DIODE">
@@ -492,8 +504,8 @@ wire to board 2.54 mm (0.100") pitch header</description>
 <wire x1="7.62" y1="5.08" x2="5.08" y2="5.08" width="0.254" layer="94"/>
 <wire x1="5.08" y1="5.08" x2="5.08" y2="-5.08" width="0.254" layer="94"/>
 <wire x1="5.08" y1="-5.08" x2="2.54" y2="-5.08" width="0.254" layer="94"/>
-<pin name="ANODE" x="-10.16" y="0" length="middle"/>
-<pin name="CATHODE" x="10.16" y="0" length="middle" rot="R180"/>
+<pin name="A" x="-10.16" y="0" length="middle"/>
+<pin name="C" x="10.16" y="0" length="middle" rot="R180"/>
 <text x="-5.08" y="10.16" size="1.778" layer="95">&gt;NAME</text>
 <text x="-5.08" y="7.62" size="1.778" layer="96">&gt;VALUE</text>
 </symbol>
@@ -511,6 +523,17 @@ wire to board 2.54 mm (0.100") pitch header</description>
 <text x="-5.08" y="17.78" size="1.778" layer="95">&gt;NAME</text>
 <text x="-5.08" y="15.24" size="1.778" layer="96">&gt;VALUE</text>
 </symbol>
+<symbol name="LITTLEFUSENANO463">
+<description>LittleFuse Nano 463</description>
+<wire x1="-7.62" y1="-2.54" x2="7.62" y2="-2.54" width="0.1524" layer="94"/>
+<wire x1="7.62" y1="-2.54" x2="7.62" y2="2.54" width="0.1524" layer="94"/>
+<wire x1="7.62" y1="2.54" x2="-7.62" y2="2.54" width="0.1524" layer="94"/>
+<wire x1="-7.62" y1="2.54" x2="-7.62" y2="-2.54" width="0.1524" layer="94"/>
+<pin name="IN" x="-12.7" y="0" length="middle"/>
+<pin name="OUT" x="12.7" y="0" length="middle" rot="R180"/>
+<text x="-7.62" y="7.62" size="1.778" layer="95">&gt;NAME</text>
+<text x="-7.62" y="5.08" size="1.778" layer="96">&gt;VALUE</text>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="SMAJ26A_TVS">
@@ -521,8 +544,8 @@ wire to board 2.54 mm (0.100") pitch header</description>
 <devices>
 <device name="SMA" package="DO-214AC">
 <connects>
-<connect gate="G$1" pin="ANODE" pad="2"/>
-<connect gate="G$1" pin="CATHODE" pad="1"/>
+<connect gate="G$1" pin="A" pad="2"/>
+<connect gate="G$1" pin="C" pad="1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -544,6 +567,23 @@ Variable Output Current</description>
 <connect gate="G$1" pin="PG" pad="PG"/>
 <connect gate="G$1" pin="VIN" pad="VIN"/>
 <connect gate="G$1" pin="VOUT" pad="VOUT"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="LITTLEFUSE_NANO">
+<description>LittleFuse Nano 463 Series</description>
+<gates>
+<gate name="G$1" symbol="LITTLEFUSENANO463" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="NANO">
+<connects>
+<connect gate="G$1" pin="IN" pad="P$2"/>
+<connect gate="G$1" pin="OUT" pad="P$1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -11260,15 +11300,6 @@ ultra fast</description>
 </library>
 <library name="minebot_PDR">
 <packages>
-<package name="NANO">
-<smd name="VIN+" x="-4.675" y="0" dx="3.25" dy="3.43" layer="1"/>
-<smd name="VIN-" x="4.675" y="0" dx="3.25" dy="3.43" layer="1"/>
-<wire x1="-2.92" y1="1.73" x2="2.87" y2="1.73" width="0.127" layer="21"/>
-<wire x1="2.87" y1="1.73" x2="2.87" y2="1.71" width="0.127" layer="21"/>
-<wire x1="-2.92" y1="-1.75" x2="2.92" y2="-1.75" width="0.127" layer="21"/>
-<text x="-3.19" y="3.28" size="1.27" layer="25">&gt;NAME</text>
-<text x="-3.48" y="-3.83" size="1.27" layer="27">&gt;VALUE</text>
-</package>
 <package name="SSOP16">
 <smd name="5" x="-4.08" y="-0.325" dx="2" dy="0.46" layer="1"/>
 <smd name="4" x="-4.08" y="0.325" dx="2" dy="0.46" layer="1"/>
@@ -11301,16 +11332,6 @@ ultra fast</description>
 </package>
 </packages>
 <symbols>
-<symbol name="FUSE">
-<pin name="VIN+" x="-12.7" y="0" length="middle"/>
-<pin name="VIN-" x="12.7" y="0" length="middle" rot="R180"/>
-<wire x1="-7.62" y1="-2.54" x2="-7.62" y2="2.54" width="0.254" layer="95"/>
-<wire x1="-7.62" y1="2.54" x2="7.62" y2="2.54" width="0.254" layer="95"/>
-<wire x1="7.62" y1="2.54" x2="7.62" y2="-2.54" width="0.254" layer="95"/>
-<wire x1="7.62" y1="-2.54" x2="-7.62" y2="-2.54" width="0.254" layer="95"/>
-<text x="-5.08" y="5.08" size="1.27" layer="95">&gt;NAME</text>
-<text x="-5.08" y="-5.08" size="1.27" layer="96">&gt;VALUE</text>
-</symbol>
 <symbol name="ENCODER_AS5045B">
 <pin name="B" x="-20.32" y="2.54" length="middle"/>
 <pin name="NC@5" x="-20.32" y="-2.54" length="middle"/>
@@ -11335,22 +11356,6 @@ ultra fast</description>
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="LITTLEFUSENANO463">
-<gates>
-<gate name="G$1" symbol="FUSE" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="NANO">
-<connects>
-<connect gate="G$1" pin="VIN+" pad="VIN+"/>
-<connect gate="G$1" pin="VIN-" pad="VIN-"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
 <deviceset name="ENCODER_AS5045B">
 <gates>
 <gate name="G$1" symbol="ENCODER_AS5045B" x="0" y="0"/>
@@ -11812,7 +11817,6 @@ ultra fast</description>
 <part name="RAIL_5V" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="GREEN"/>
 <part name="GND10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R10" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R1206" package3d_urn="urn:adsk.eagle:package:26062/1" value="150"/>
-<part name="F1" library="minebot_PDR" deviceset="LITTLEFUSENANO463" device="" value="60VDC 50A"/>
 <part name="GND2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND14" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -11840,31 +11844,32 @@ ultra fast</description>
 <part name="EN1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1"/>
 <part name="PG2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1"/>
 <part name="EN2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1"/>
-<part name="F2" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R1206W" package3d_urn="urn:adsk.eagle:package:26064/1" value="60VDC 20A"/>
-<part name="F3" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R1206W" package3d_urn="urn:adsk.eagle:package:26064/1" value="60VDC 20A"/>
-<part name="F4" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R1206W" package3d_urn="urn:adsk.eagle:package:26064/1" value="60VDC 20A"/>
-<part name="F5" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R1206W" package3d_urn="urn:adsk.eagle:package:26064/1" value="60VDC 20A"/>
-<part name="F9" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R1206W" package3d_urn="urn:adsk.eagle:package:26064/1" value="60VDC 5A"/>
-<part name="F8" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R1206W" package3d_urn="urn:adsk.eagle:package:26064/1" value="60VDC 3A"/>
+<part name="F2" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M1206" package3d_urn="urn:adsk.eagle:package:26088/1" value="60VDC 20A"/>
+<part name="F3" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M1206" package3d_urn="urn:adsk.eagle:package:26088/1" value="60VDC 20A"/>
+<part name="F4" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M1206" package3d_urn="urn:adsk.eagle:package:26088/1" value="60VDC 20A"/>
+<part name="F5" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M1206" package3d_urn="urn:adsk.eagle:package:26088/1" value="60VDC 20A"/>
+<part name="F9" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M1206" package3d_urn="urn:adsk.eagle:package:26088/1" value="60VDC 5A"/>
+<part name="F8" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M1206" package3d_urn="urn:adsk.eagle:package:26088/1" value="60VDC 3A"/>
 <part name="MOTOR_OUT_5" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="5566-2" device=""/>
 <part name="12V_5" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="GREEN"/>
 <part name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R1206" package3d_urn="urn:adsk.eagle:package:26062/1" value="470"/>
 <part name="RVP_5" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="BYT08P" device="" package3d_urn="urn:adsk.eagle:package:43373/2" value="15V"/>
 <part name="GND5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="F6" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R1206W" package3d_urn="urn:adsk.eagle:package:26064/1" value="60VDC 20A"/>
+<part name="F6" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M1206" package3d_urn="urn:adsk.eagle:package:26088/1" value="60VDC 20A"/>
 <part name="MOTOR_OUT_6" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="5566-2" device=""/>
 <part name="12V_6" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="GREEN"/>
 <part name="R7" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="R1206" package3d_urn="urn:adsk.eagle:package:26062/1" value="470"/>
 <part name="RVP_6" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="BYT08P" device="" package3d_urn="urn:adsk.eagle:package:43373/2" value="15V"/>
 <part name="GND12" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="F7" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R1206W" package3d_urn="urn:adsk.eagle:package:26064/1" value="60VDC 20A"/>
+<part name="F7" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M1206" package3d_urn="urn:adsk.eagle:package:26088/1" value="60VDC 20A"/>
 <part name="ENC_2" library="minebot_PDR" deviceset="ENCODER_AS5045B" device=""/>
 <part name="C1_3" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:26140/1" value="100nF"/>
 <part name="C1_4" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:26140/1" value="10uF"/>
 <part name="MAIN_2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X6" device="" package3d_urn="urn:adsk.eagle:package:22472/2"/>
 <part name="SUB_2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X6" device="" package3d_urn="urn:adsk.eagle:package:22472/2"/>
+<part name="F10" library="POWER_DISTRO" deviceset="LITTLEFUSE_NANO" device="" value="20V, 50A"/>
 </parts>
 <sheets>
 <sheet>
@@ -11960,7 +11965,6 @@ I think it's a bug in EAGLE.</text>
 <attribute name="NAME" x="105.41" y="-44.6786" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="105.41" y="-39.878" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="F1" gate="G$1" x="30.48" y="55.88"/>
 <instance part="GND2" gate="1" x="53.34" y="-55.88"/>
 <instance part="GND14" gate="1" x="55.88" y="-7.62"/>
 <instance part="GND15" gate="1" x="167.64" y="106.68" rot="R180"/>
@@ -12028,6 +12032,7 @@ I think it's a bug in EAGLE.</text>
 </instance>
 <instance part="MAIN_2" gate="A" x="297.18" y="5.08"/>
 <instance part="SUB_2" gate="A" x="350.52" y="5.08"/>
+<instance part="F10" gate="G$1" x="30.48" y="55.88"/>
 </instances>
 <busses>
 </busses>
@@ -12035,7 +12040,7 @@ I think it's a bug in EAGLE.</text>
 <net name="GND" class="0">
 <segment>
 <pinref part="PWR_IN" gate="-2" pin="S"/>
-<pinref part="TVS_1" gate="G$1" pin="ANODE"/>
+<pinref part="TVS_1" gate="G$1" pin="A"/>
 <wire x1="12.7" y1="76.2" x2="71.12" y2="76.2" width="0.1524" layer="91"/>
 <pinref part="GND3" gate="1" pin="GND"/>
 <junction x="71.12" y="76.2"/>
@@ -12204,9 +12209,9 @@ I think it's a bug in EAGLE.</text>
 <wire x1="15.24" y1="58.42" x2="15.24" y2="55.88" width="0.1524" layer="91"/>
 <pinref part="PWR_IN" gate="-1" pin="S"/>
 <wire x1="10.16" y1="55.88" x2="15.24" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="F1" gate="G$1" pin="VIN+"/>
 <wire x1="15.24" y1="55.88" x2="17.78" y2="55.88" width="0.1524" layer="91"/>
 <junction x="15.24" y="55.88"/>
+<pinref part="F10" gate="G$1" pin="IN"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -12561,7 +12566,7 @@ I think it's a bug in EAGLE.</text>
 </net>
 <net name="12V_REG" class="0">
 <segment>
-<pinref part="TVS_1" gate="G$1" pin="CATHODE"/>
+<pinref part="TVS_1" gate="G$1" pin="C"/>
 <label x="71.12" y="48.26" size="1.778" layer="95"/>
 <junction x="71.12" y="55.88"/>
 <wire x1="71.12" y1="55.88" x2="45.72" y2="55.88" width="0.1524" layer="91"/>
@@ -12575,7 +12580,6 @@ I think it's a bug in EAGLE.</text>
 <pinref part="12V_TEST" gate="G$1" pin="TP"/>
 <wire x1="106.68" y1="55.88" x2="106.68" y2="63.5" width="0.1524" layer="91"/>
 <wire x1="88.9" y1="55.88" x2="106.68" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="F1" gate="G$1" pin="VIN-"/>
 <wire x1="43.18" y1="55.88" x2="45.72" y2="55.88" width="0.1524" layer="91"/>
 <junction x="45.72" y="55.88"/>
 <wire x1="106.68" y1="55.88" x2="157.48" y2="55.88" width="0.1524" layer="91"/>
@@ -12602,6 +12606,7 @@ I think it's a bug in EAGLE.</text>
 <junction x="157.48" y="-2.54"/>
 <junction x="157.48" y="73.66"/>
 <junction x="157.48" y="48.26"/>
+<pinref part="F10" gate="G$1" pin="OUT"/>
 </segment>
 </net>
 <net name="N$2" class="0">
