@@ -87,9 +87,6 @@ void serialControl() {
   if (Serial.available() > 0) {
     String input = Serial.readString();
 
-    Serial.print("STRING RECIEVED: ");
-    Serial.println(input);
-
     switch (input.charAt(0))
     {
       case 'p':
@@ -113,26 +110,5 @@ void serialControl() {
 
 void errorMessage(String input) {
   Serial.println("\"" + input + "\" is an invalid input.");
-}
-
-// Legacy...
-void manualSetup()
-{
-  pinMode(STEP_DIR, OUTPUT); // Manual control setup
-  pinMode(STEP_PUL, OUTPUT);
-}
-
-void manualControl()
-{
-  int speed = 300;
-  if (digitalRead(LOWER_SWITCH_PIN) == 1)
-    digitalWrite(STEP_DIR, LOW);
-  else
-    digitalWrite(STEP_DIR, HIGH);
-
-  digitalWrite(STEP_PUL, LOW);
-  delayMicroseconds(speed);
-  digitalWrite(STEP_PUL, HIGH);
-  delayMicroseconds(speed);
 }
 
