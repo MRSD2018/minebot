@@ -12,22 +12,25 @@
 #define LOWER_SWITCH_PIN 6
 
 HX711 loadCell(DOUT, CLK);
-AccelStepper stepper(1, STEP_PUL, STEP_DIR);
+float tare = 0.0f;
+int tareSamples = 0;
 
-// State Machine
-// 0 = Start Up
-// 1 = Idle
-// 2 = Probe
-int state = 0; // initially set to zero state
+AccelStepper stepper(1, STEP_PUL, STEP_DIR);
+int motorDirection = -1;
+int speedScale = 30;
+float zeroPosition = 0;
+int countsPerRotation = 400;
+
+int state;    // state machine
+#define ZERO  0
+#define IDLE  1
+#define PROBE 2
 
 bool debug = true;
 
 void setup() {
 
-  // Determined with Matlab Script
-  loadCell.set_scale(67590.7657); // 1/gain
-  loadCell.set_offset(-0.8384);
-
+  setupLoadCell();
   setupMotor();
 
   // Setup Limit Switches
@@ -35,6 +38,8 @@ void setup() {
   pinMode(LOWER_SWITCH_PIN, INPUT);
 
   Serial.begin(9600);
+
+  setState(0); // initially set to zero state
 }
 
 void loop() {
@@ -43,43 +48,81 @@ void loop() {
 
   switch (state) // State Machine
   {
-    case 0: zero();
+    case ZERO: zero();
       break;
-    case 1: idle();
+    case IDLE: idle();
       break;
-    case 2: probe();
+    case PROBE: probe();
       break;
     default:
       break;
   }
 }
 
-void zero()
-{
+void setState(int s) {
+  switch (s) // State Machine
+  {
+    case ZERO:
+      state = ZERO;
+      enterZero();
+      break;
+    case IDLE:
+      state = IDLE;
+      enterIdle();
+      break;
+    case PROBE:
+      state = PROBE;
+      enterProbe();
+      break;
+    default:
+      break;
+  }
+}
+
+void enterZero() {
+  tare = 0;
+  tareSamples = 0;
+}
+
+void zero() {
+
   if (digitalRead(UPPER_SWITCH_PIN) == 0) {
     runMotor(-100); // retract
+
+    //    tare += getRawForce();
+    //    ++tareSamples;
   }
   else {
+    //    tare = tare / tareSamples;
+    tare = getRawForce(); // blocking tmp sln
+
     if (debug) {
       Serial.print("Limit Switch Found at ");
       Serial.print(getMotorPosition());
-      Serial.print(" counts");
+      Serial.print(" revs, Tare at ");
+      Serial.print(tare);
+      Serial.print(" kg(s)");
       Serial.println();
     }
+
     setMotorZero();
-    state = 1; // idle
+    setState(IDLE);
+
   }
 }
+
+void enterIdle() {}
 
 void idle()
 {
   //  if (debug) Serial.println("Idle State!");
+  Serial.println(getForce());
 }
+
+void enterProbe() {}
 
 void probe()
 {
-//  float force = loadCell.get_value(); // aquire force signal - affected by blocking steper calls
-
   if (digitalRead(LOWER_SWITCH_PIN) == 0) {
     runMotor(100);
   }
@@ -90,23 +133,36 @@ void probe()
       Serial.print(" counts");
       Serial.println();
     }
-    state = 1; // idle
+    setState(IDLE);
   }
 }
 
-// MOTOR FUNCTIONS
-int motorDirection = -1;
-int speedScale = 30;
-float zeroPosition = 0;
-int countsPerRotation = 400;
 
+// LOAD CELL FUNCTIONS
+
+void setupLoadCell() {
+  // Determined with Matlab Script
+  loadCell.set_scale(67590.7657); // 1/gain
+  loadCell.set_offset(-0.8384);
+}
+
+float getRawForce() {
+  return loadCell.get_value(); // kgs
+}
+
+float getForce() {
+  return getRawForce() - tare;
+}
+
+
+// MOTOR FUNCTIONS
 void setupMotor() {
   stepper.setMaxSpeed(3000);
   stepper.setAcceleration(1000);
 }
 
 void runMotor(int speed) {
-  stepper.setSpeed(speed*speedScale*motorDirection); 
+  stepper.setSpeed(speed * speedScale * motorDirection);
   stepper.runSpeed();
 }
 
@@ -114,8 +170,8 @@ void setMotorZero() {
   zeroPosition = getRawMotorPosition();
 }
 
-float getRawMotorPosition(){
-  return (float)stepper.currentPosition()*motorDirection/countsPerRotation;
+float getRawMotorPosition() {
+  return (float)stepper.currentPosition() * motorDirection / countsPerRotation;
 }
 
 float getMotorPosition() {
@@ -131,15 +187,15 @@ void serialControl() {
     switch (input.charAt(0))
     {
       case 'p':
-        state = 2; // probe
+        setState(PROBE);
         if (debug) Serial.println("Probe Command Received");
         break;
       case 's':
-        state = 1; // idle
+        setState(IDLE);
         if (debug) Serial.println("Stop Command Recieved");
         break;
       case 'z':
-        state = 0; // zero
+        setState(ZERO);
         if (debug) Serial.println("Zero Command Recieved");
         break;
       default:
