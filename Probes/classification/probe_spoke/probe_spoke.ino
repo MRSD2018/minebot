@@ -11,10 +11,11 @@ ros::Subscriber<std_msgs::Bool> probe_cmd_sub("begin_probe", probeCmdClbk);
 
 void probeCmdClbk(const std_msgs::Bool& msg)
 {
-  //  Serial.println("here1");
-  nh.loginfo("Program info");
-  probe_data.data = float(analogRead(A1));
-  probe_data_pub.publish(&probe_data);
+  if (msg.data) {
+    nh.loginfo("Program info");
+    probe_data.data = float(analogRead(A1));
+    probe_data_pub.publish(&probe_data);
+  }
 }
 
 void setup()
