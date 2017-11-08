@@ -8,9 +8,9 @@
 #define inidcatorLED 6
 
 //constants
-static int encoderTicksPerRotation = 48;
-static int teethPerRotation = 72;
-static int toothPitch = 2;
+static float encoderTicksPerRotation = 659.232/2;
+static float teethPerRotation = 72;
+static float toothPitch = .2;
 
 //encoder variables
 volatile bool channelAVal;
@@ -31,6 +31,7 @@ volatile int limitR;
 int dist;
 int posInTicks;
 float posInCM;
+int stopTicks;
 
 void setup() {
   Serial.begin(9600);
@@ -52,25 +53,41 @@ void loop() {
   //Initialization Step
   if (but_interrupt_flag){
     debounce(limitSwitch);
+    if (initCounter < 3) {
+      analogWrite(Speed, 0);
+    }
     if (initCounter == 1) {
       limitL = encoderTicks;
       Serial.print("Limit L = "); Serial.println(limitL);
     }
-    else if (initCounter == 2) {
+    if (initCounter == 2) {
       limitR = encoderTicks;
       Serial.print("Limit R = "); Serial.println(limitR);
+    }
+    if (initCounter > 3) {
+      stopTicks = encoderTicks;
     }
     initCounter++;
     Serial.println(initCounter);
     but_interrupt_flag = 0;
   }
 
-  //Positioning Step
-  if (initCounter ==3) {
+  //Run System
+  if (initCounter > 2) {
     dist = abs(limitL - limitR); 
     posInTicks = map(encoderTicks, 0, dist, limitL, limitR);
     posInCM = posInTicks*teethPerRotation*toothPitch/encoderTicksPerRotation;
-    Serial.print(posInTicks); Serial.print(" ==>  "); Serial.println(posInCM);
+    Serial.print(posInTicks); Serial.print("  ==>  "); Serial.println(posInCM);
+
+    //Sweeping Demo
+    if (initCounter = 3) {
+      if (posInCM < 10) {
+        analogWrite(Speed, 100);
+      }
+      if (posInCM > 70) {
+        analogWrite(Speed, 155);
+      }
+    }
   }
 }
 
