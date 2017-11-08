@@ -18,8 +18,6 @@ void setup() {
 }
 
 void loop() {
-  
   Serial.print(loadCell.get_value()); // kg
   Serial.println();
-  
 }
