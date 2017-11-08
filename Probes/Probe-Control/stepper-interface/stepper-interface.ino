@@ -32,7 +32,7 @@ void setup() {
 void loop() {
 
   serialControl(); // External Control
-  
+
   switch (state) // State Machine
   {
     case 0: zero();
@@ -48,37 +48,42 @@ void loop() {
 
 void zero()
 {
-  if (digitalRead(UPPER_SWITCH_PIN) == 0)
-  {
+  if (digitalRead(UPPER_SWITCH_PIN) == 0) {
     stepper.setSpeed(3000); // retract
     stepper.runSpeed();
   }
-  else
-  {
-    if (debug)
-    {
+  else {
+    if (debug) {
       Serial.print("Limit Switch Found at ");
       Serial.print(stepper.currentPosition ());
       Serial.print(" counts");
       Serial.println();
     }
     stepper.setCurrentPosition(0);
-    state = 1;
+    state = 1; // idle
   }
 }
 
 void idle()
 {
-  if (debug) Serial.println("Idle State!");
+//  if (debug) Serial.println("Idle State!");
 }
 
 void probe()
 {
-  if (debug)  Serial.println(stepper.currentPosition());
-  if (digitalRead(LOWER_SWITCH_PIN) == 0)
-  {
-    stepper.setSpeed(-2000); // extend
+
+  if (digitalRead(LOWER_SWITCH_PIN) == 0) {
+    stepper.setSpeed(-3000); // extend
     stepper.runSpeed();
+  }
+  else {
+    if (debug)  {
+      Serial.print("Probing State Exited at ");
+      Serial.print(stepper.currentPosition());
+      Serial.print(" counts");
+      Serial.println();
+    }
+    state = 1; // idle
   }
 }
 
