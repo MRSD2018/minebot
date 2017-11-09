@@ -13,7 +13,7 @@
 volatile bool channelAVal;
 volatile bool channelBVal;
 volatile int encoderTicks;
-
+volatile int counter =0;
 
 volatile int button_interrupt_flag = 0;
 const int debounce_time = 20;  //ms
@@ -31,7 +31,6 @@ void setup() {
 void loop() {
   // uncomment one or the other to get position or velocity control
   analogWrite(ANALOG, 512);
-  Serial.println(encoderTicks);
   
 }
 
@@ -42,6 +41,8 @@ void limitSwitch(){
   if ( (cur_time - last_switch_time) > debounce_timeout)
   {
     last_switch_time = cur_time;
+    counter++;
+    Serial.print(counter);
     digitalWrite(L1, !digitalRead(L1));
     digitalWrite(L2, !digitalRead(L2)); //change motor direction
   }
