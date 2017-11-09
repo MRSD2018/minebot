@@ -1,4 +1,4 @@
-// Code for interfacing with Load Cell
+// Code for Probe Linear Actuation System
 // Author: David Robinson
 
 #include "AccelStepper.h"
@@ -34,10 +34,9 @@ void setup() {
   pinMode(UPPER_SWITCH_PIN, INPUT);
   pinMode(LOWER_SWITCH_PIN, INPUT);
 
-  Serial.begin(2000000);
+  Serial.begin(115200);
 
   setState(0); // initially set to zero state
-
 }
 
 void loop() {
@@ -108,7 +107,7 @@ void zero() {
 }
 
 void enterIdle() {
-  Serial.println("Entered Idle State");
+  if (debug) Serial.println("Entered Idle State");
 }
 
 void idle()
@@ -117,7 +116,7 @@ void idle()
   //  Serial.println(getForce());
 }
 
-float forceLimit = 1.0f;
+float forceLimit = 35.0f; // safety
 
 void enterProbe() {}
 
@@ -126,13 +125,16 @@ void probe()
   float force = getForce();
   runMotor(100); // extend
 
-  //    Serial.print("Force: ");
-  //    Serial.print(getForce());
-  //    Serial.print("\tPosition: ");
-  //    Serial.print(getMotorPosition());
-  //    Serial.println();
+  if (debug)
+  {
+    // for output to logger!
+    Serial.print(getForce());
+    Serial.print("\t");
+    Serial.print(getMotorPosition());
+    Serial.println();
+  }
 
-  if (digitalRead(LOWER_SWITCH_PIN) == 1 || force > forceLimit) {
+  if (digitalRead(LOWER_SWITCH_PIN) == 1 || getRawForce() > forceLimit) {
     if (debug)  {
       Serial.print("Probing State Exited at ");
       Serial.print(getMotorPosition());
