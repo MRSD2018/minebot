@@ -16,10 +16,7 @@ float tare = 0.0f;
 int tareSamples = 0;
 
 AccelStepper stepper(1, STEP_PUL, STEP_DIR);
-int motorDirection = -1;
-int speedScale = 30;
-float zeroPosition = 0;
-int countsPerRotation = 400;
+
 
 int state;    // state machine
 #define ZERO  0
@@ -37,9 +34,10 @@ void setup() {
   pinMode(UPPER_SWITCH_PIN, INPUT);
   pinMode(LOWER_SWITCH_PIN, INPUT);
 
-  Serial.begin(9600);
+  Serial.begin(2000000);
 
   setState(0); // initially set to zero state
+
 }
 
 void loop() {
@@ -87,6 +85,7 @@ void enterZero() {
 void zero() {
 
   if (digitalRead(UPPER_SWITCH_PIN) == 0) {
+
     runMotor(-100); // retract
 
     //    tare += getRawForce();
@@ -95,7 +94,6 @@ void zero() {
   else {
     //    tare = tare / tareSamples;
     tare = getRawForce(); // blocking tmp sln
-
     if (debug) {
       Serial.print("Limit Switch Found at ");
       Serial.print(getMotorPosition());
@@ -104,33 +102,41 @@ void zero() {
       Serial.print(" kg(s)");
       Serial.println();
     }
-
     setMotorZero();
     setState(IDLE);
-
   }
 }
 
-void enterIdle() {}
+void enterIdle() {
+  Serial.println("Entered Idle State");
+}
 
 void idle()
 {
   //  if (debug) Serial.println("Idle State!");
-  Serial.println(getForce());
+  //  Serial.println(getForce());
 }
+
+float forceLimit = 1.0f;
 
 void enterProbe() {}
 
 void probe()
 {
-  if (digitalRead(LOWER_SWITCH_PIN) == 0) {
-    runMotor(100);
-  }
-  else {
+  float force = getForce();
+  runMotor(100); // extend
+
+  //    Serial.print("Force: ");
+  //    Serial.print(getForce());
+  //    Serial.print("\tPosition: ");
+  //    Serial.print(getMotorPosition());
+  //    Serial.println();
+
+  if (digitalRead(LOWER_SWITCH_PIN) == 1 || force > forceLimit) {
     if (debug)  {
       Serial.print("Probing State Exited at ");
       Serial.print(getMotorPosition());
-      Serial.print(" counts");
+      Serial.print(" revs");
       Serial.println();
     }
     setState(IDLE);
@@ -139,26 +145,35 @@ void probe()
 
 
 // LOAD CELL FUNCTIONS
-
 void setupLoadCell() {
   // Determined with Matlab Script
   loadCell.set_scale(67590.7657); // 1/gain
   loadCell.set_offset(-0.8384);
 }
 
+float loadValue = 0.0f;
 float getRawForce() {
-  return loadCell.get_value(); // kgs
+  if (loadCell.is_ready()) {
+    loadValue = loadCell.get_value();
+  }
+
+  return loadValue; // kgs
 }
 
 float getForce() {
   return getRawForce() - tare;
 }
 
-
 // MOTOR FUNCTIONS
+
+int motorDirection = -1;
+int speedScale = 30;
+float zeroPosition = 0;
+int countsPerRotation = 400;
+
 void setupMotor() {
   stepper.setMaxSpeed(3000);
-  stepper.setAcceleration(1000);
+  stepper.setAcceleration(3000);
 }
 
 void runMotor(int speed) {
