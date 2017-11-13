@@ -7,7 +7,7 @@ r = 1;
 c.x = .0;
 c.y = -0;
 
-npt = 4;
+npt = 5;
 [ points ] = generateRandomPts( r,c.x,c.y,npt );
 % [ points ] = generateFixedPts( r,c.x,c.y );
 [ center_x,center_y ] = initCircle( points );
@@ -15,9 +15,9 @@ npt = 4;
 figure
 plot(points.x,points.y,'.','MarkerSize',20)
 hold on
-plot(center_x,center_y,'.k','MarkerSize',20)
-plot(c.x,c.y,'.c','MarkerSize',20)
-rectangle('Position',[c.x-r c.y-r 2*r 2*r],'Curvature',[1 1],'EdgeColor','c','LineStyle','--')
+% plot(center_x,center_y,'.k','MarkerSize',20)
+% plot(c.x,c.y,'.c','MarkerSize',20)
+% rectangle('Position',[c.x-r c.y-r 2*r 2*r],'Curvature',[1 1],'EdgeColor','c','LineStyle','--')
 axis equal
 grid on
 
