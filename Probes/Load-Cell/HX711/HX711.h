@@ -42,6 +42,8 @@ class HX711
 		// waits for the chip to be ready and returns a reading
 		long read();
 
+		uint8_t shiftInSlow(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
+
 		// returns an average reading; times = how many times to read
 		long read_average(byte times = 10);
 

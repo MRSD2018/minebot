@@ -4,25 +4,23 @@
 #include "AccelStepper.h"
 #include "HX711.h"
 
-#define DOUT  3
-#define CLK   2
-#define STEP_PUL 9
-#define STEP_DIR 8
-#define UPPER_SWITCH_PIN 5
-#define LOWER_SWITCH_PIN 6
+#define DOUT  30
+#define CLK   29
+#define UPPER_SWITCH_PIN 20
+#define LOWER_SWITCH_PIN 21
 
 HX711 loadCell(DOUT, CLK);
 float tare = 0.0f;
 int tareSamples = 0;
 
-AccelStepper stepper(1, STEP_PUL, STEP_DIR);
+//AccelStepper stepper(1, STEP_PUL, STEP_DIR);
 
 int state;    // state machine
 #define ZERO  0
 #define IDLE  1
 #define PROBE 2
 
-bool debug = false;
+bool debug = true;
 bool logging = true;
 
 void setup() {
@@ -34,7 +32,7 @@ void setup() {
   pinMode(UPPER_SWITCH_PIN, INPUT);
   pinMode(LOWER_SWITCH_PIN, INPUT);
 
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   setState(0); // initially set to zero state
 }
@@ -154,7 +152,6 @@ void probe()
   }
 }
 
-
 // LOAD CELL FUNCTIONS
 void setupLoadCell() {
   // Determined with Matlab Script
@@ -183,14 +180,13 @@ int countsPerRotation = 400;
 int rads = 2 * PI;
 
 void setupMotor() {
-  stepper.setMaxSpeed(3000);
-  stepper.setAcceleration(3000);
+//  stepper.setMaxSpeed(3000);
+//  stepper.setAcceleration(3000);
 }
 
 void runMotor(int speed) { // Percentage
-  
-  stepper.setSpeed(speed * speedScale * motorDirection);
-  stepper.runSpeed();
+//  stepper.setSpeed(speed * speedScale * motorDirection);
+//  stepper.runSpeed();
 }
 
 void setMotorZero() {
@@ -198,7 +194,8 @@ void setMotorZero() {
 }
 
 float getRawMotorPosition() {
-  return (float)stepper.currentPosition() * motorDirection / countsPerRotation * rads;
+//  return (float)stepper.currentPosition() * motorDirection / countsPerRotation * rads;
+  return 0.0;
 }
 
 float getMotorPosition() {
