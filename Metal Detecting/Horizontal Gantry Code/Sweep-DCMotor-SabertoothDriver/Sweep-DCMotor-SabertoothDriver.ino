@@ -96,7 +96,7 @@ void loop() {
 //      delay(5000);
 //      digitalWrite(Enable, LOW);
 //      delay(5000);
-//      
+//
 //    }
     if (initCounter == 1) {
       limitL = encoderTicks;
@@ -105,7 +105,7 @@ void loop() {
     }
     if (initCounter == 2) {
       limitR = encoderTicks;
-      dist = abs(limitL - limitR); 
+      dist = abs(limitL - limitR);
       Serial.print("Limit R = "); Serial.println(limitR);
       digitalWrite(LED2, HIGH);
     }
@@ -162,14 +162,14 @@ void loop() {
       // calculate current time and timestep
       nowTime = millis();
       dt = double(nowTime - prevTime); // note this is in milliseconds still
-    
+
       // get current position
-      currentPos = (double)posInTicks; 
-    
+      currentPos = (double)posInTicks;
+
       // calculate errors
       positionError = newPos - currentPos;
       positionErrorSum += positionError * dt;
-    
+
       // calculate PWM
       pwmToWritePos =  kp * positionError
                     + kd * (positionError - prevPositionError) / dt
@@ -179,13 +179,13 @@ void loop() {
       if (motorInputScaledPos < 0){ motorInputScaledPos = 0; }
       analogWrite(Speed, motorInputScaledPos);
       Serial.println(motorInputScaledPos - 127);
-    
+
       // update values for next timestep
       prevPositionError = positionError;
       prevTime = nowTime;
     }
   }
-  
+
 }
 
 //debouncing
@@ -215,5 +215,3 @@ void encoderCount()
     encoderTicks--;
   }
 }
-
-

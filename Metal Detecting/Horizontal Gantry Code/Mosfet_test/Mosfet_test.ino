@@ -1,23 +1,40 @@
-#include "digitalWriteFast.h"
-
 #define PWM 30
-#define Switch 28
+
+#define stateSwitch 28
+#define nearLimit 27
+#define farLimit 26
 
 #define channelAPin 34
 #define channelBPin 33
 
-volatile int counter = 0;
+extern int STATE;
 
 //encoder variables
-volatile bool channelAVal;
-volatile bool channelBVal;
-volatile int encoderTicks;
+extern volatile bool channelAVal;
+extern volatile bool channelBVal;
+extern volatile int encoderTicks;
+int posInTicks;
+float posInCM;
+
+//encoder constants
+static float encoderTicksPerRotation = 659.232/2;
+static float teethPerRotation = 72;
+static float toothPitch = .2;
 
 //switch variables
-volatile int but_interrupt_flag = 0;
-const int debounce_time = 50;  //ms
-int last_switch_time = 0;
-const int debounce_timeout = 1000; // ms
+extern volatile int but_interrupt_flag;
+extern const int debounce_time;  //ms
+extern int last_switch_time;
+extern const int debounce_timeout; // ms
+
+//limit switches
+extern volatile int limitNear;
+extern volatile int limitFar;
+extern volatile int limitIndicator;
+
+//initialization 
+volatile int dist;
+volatile float distInCM;
 
 void setup() {
   // put your setup code here, to run once:
@@ -25,52 +42,24 @@ void setup() {
   pinMode(PWM, OUTPUT);
   digitalWrite(PWM, LOW);
 
-  pinMode(Switch, INPUT);
-  attachInterrupt(digitalPinToInterrupt(Switch), limit_switch, RISING);
-
-  pinMode(channelAPin, INPUT);
-  pinMode(channelBPin, INPUT);
-  attachInterrupt(digitalPinToInterrupt(channelAPin), encoderCount, CHANGE);
+  buttonSetup();
+  encoderSetup();
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   if (but_interrupt_flag){
-    debounce(Switch);
-    Serial.println(counter);
+    debounce(stateSwitch);
     but_interrupt_flag = 0;
   }
+  if (STATE == 1){
+    analogWrite(PWM, 177);
+    initialize();
+  }
+  if (STATE == 2){
+    sweep();
+  }
+    
 }
 
-//debouncing
-void debounce(int button){
-  int cur_time = millis();
-  if ( (cur_time - last_switch_time) > debounce_timeout){
-    last_switch_time = cur_time;
-  }
-}
-
-//Initialize the system
-void limit_switch() {
-  if (but_interrupt_flag == 0) {
-    but_interrupt_flag = 1;
-    counter++;
-  }
-}
-
-//Encoder Counts
-void encoderCount(){
-  channelAVal = digitalRead(channelAPin);
-  channelBVal = digitalRead(channelBPin);
-  if (channelAVal == channelBVal) {
-    encoderTicks++;
-  }
-  else {
-    encoderTicks--;
-  }
-  
-  Serial.print("B  -> "); Serial.println(channelBVal);
-  Serial.print("A  -> ");Serial.println(channelAVal);
-  Serial.println(encoderTicks);
-}
