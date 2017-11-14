@@ -20,5 +20,4 @@ void encoderCount(){
   else {
     encoderTicks--;
   }
-  Serial.println(encoderTicks);
 }

@@ -36,6 +36,26 @@ extern volatile int limitIndicator;
 volatile int dist;
 volatile float distInCM;
 
+//motor variables
+int zeroSpeed = 90;
+bool active = 0;
+
+//Contral variables
+int newPos;
+double nowTime;
+double prevTime=0;
+double dt;
+float kd = .3;
+float kp = .3;
+float ki = 0;
+int currentPos;
+int positionError;
+double positionErrorSum;
+double pwmToWritePos;
+int motorInputScaledPos;
+double prevPositionError;
+int newSpeed;
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
@@ -53,12 +73,20 @@ void loop() {
     debounce(stateSwitch);
     but_interrupt_flag = 0;
   }
+  if (STATE == 0) {
+    analogWrite(PWM, zeroSpeed);
+    limitIndicator = 0;
+  }
   if (STATE == 1){
-    analogWrite(PWM, 177);
+    analogWrite(PWM, zeroSpeed);
     initialize();
   }
   if (STATE == 2){
     sweep();
+  }
+  if (STATE ==3) {
+    if (!active) { analogWrite(PWM, zeroSpeed);}
+    posControl();
   }
     
 }

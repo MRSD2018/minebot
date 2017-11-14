@@ -49,6 +49,11 @@ void stateChange() {
           
         case 2:
           Serial.println("State: Position Control");
+          STATE = 3;
+          break;
+          
+        case 3:
+          Serial.println("State: WAITING");
           STATE = 0;
           break;
     }
@@ -63,6 +68,10 @@ void LimitNear() {
       Serial.print("Near Limit ==> "); Serial.println(limitNear);
       limitIndicator = 1;
     }
+    if (STATE != 1) {
+      analogWrite(PWM, 177);
+      STATE = 0;
+    }
     but_interrupt_flag = 1;
   }
 }
@@ -73,6 +82,10 @@ void LimitFar() {
       limitFar = encoderTicks;
       Serial.print("Far Limit ==> "); Serial.println(limitFar);
       limitIndicator = 2; 
+    }
+    if (STATE != 1) {
+      analogWrite(PWM, 177);
+      STATE = 0;
     }
     but_interrupt_flag = 1;
   }
