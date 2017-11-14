@@ -17,13 +17,13 @@ int tareSamples = 0;
 
 AccelStepper stepper(1, STEP_PUL, STEP_DIR);
 
-
 int state;    // state machine
 #define ZERO  0
 #define IDLE  1
 #define PROBE 2
 
-bool debug = true;
+bool debug = false;
+bool logging = true;
 
 void setup() {
 
@@ -116,21 +116,30 @@ void idle()
   //  Serial.println(getForce());
 }
 
-float forceLimit = 35.0f; // safety
+float forceLimit = 30.0f; // safety
 
 void enterProbe() {}
+
+int nominalMaxForce = 3;
+int speedReductionFactor = 5;
 
 void probe()
 {
   float force = getForce();
-  runMotor(100); // extend
 
-  if (debug)
+  float speedAdjustment = 1/(force*speedReductionFactor+1);  
+  runMotor(100*speedAdjustment); // extend
+
+  if (logging)
   {
     // for output to logger!
-    Serial.print(getForce());
+    Serial.print(millis());
     Serial.print("\t");
     Serial.print(getMotorPosition());
+    Serial.print("\t");
+    Serial.print(getForce());
+    Serial.print("\t");
+    Serial.print(speedAdjustment);
     Serial.println();
   }
 
@@ -167,18 +176,19 @@ float getForce() {
 }
 
 // MOTOR FUNCTIONS
-
 int motorDirection = -1;
 int speedScale = 30;
 float zeroPosition = 0;
 int countsPerRotation = 400;
+int rads = 2 * PI;
 
 void setupMotor() {
   stepper.setMaxSpeed(3000);
   stepper.setAcceleration(3000);
 }
 
-void runMotor(int speed) {
+void runMotor(int speed) { // Percentage
+  
   stepper.setSpeed(speed * speedScale * motorDirection);
   stepper.runSpeed();
 }
@@ -188,7 +198,7 @@ void setMotorZero() {
 }
 
 float getRawMotorPosition() {
-  return (float)stepper.currentPosition() * motorDirection / countsPerRotation;
+  return (float)stepper.currentPosition() * motorDirection / countsPerRotation * rads;
 }
 
 float getMotorPosition() {
