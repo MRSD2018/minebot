@@ -3,8 +3,8 @@
 
 #include "HX711.h"
 
-#define DOUT  3
-#define CLK   2
+#define DOUT  30
+#define CLK   29
 
 HX711 loadCell(DOUT, CLK);
 
@@ -18,6 +18,7 @@ void setup() {
 }
 
 void loop() {
+  Serial.print("VAL: ");
   Serial.print(loadCell.get_value()); // kg
   Serial.println();
 }
