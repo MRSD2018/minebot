@@ -5,12 +5,12 @@
 
 #define motorPWM 36
 #define motorDIR 37
-#define DOUT  34
+#define DAT  34
 #define CLK   35
 #define UPPER_SWITCH_PIN 18
 #define LOWER_SWITCH_PIN 21
 
-HX711 loadCell(DOUT, CLK);
+HX711 loadCell(DAT, CLK);
 float tare = 0.0f;
 int tareSamples = 0;
 
@@ -24,14 +24,17 @@ bool logging = true;
 
 void setup() {
 
-  setupLoadCell();
-  setupMotor();
+//  setupLoadCell();
+//  attachInterrupt(digitalPinToInterrupt(DAT), readForce, FALLING);
+  
+//  setupMotor();
+//
+//  // Setup Limit Switches
+//  pinMode(UPPER_SWITCH_PIN, INPUT);
+//  pinMode(LOWER_SWITCH_PIN, INPUT);
 
-  // Setup Limit Switches
-  pinMode(UPPER_SWITCH_PIN, INPUT);
-  pinMode(LOWER_SWITCH_PIN, INPUT);
-
-  Serial.begin(9600);
+  Serial.begin(38400);
+  Serial.println("System Initialized...");
 
   setState(0); // initially set to zero state
 }
@@ -121,10 +124,22 @@ void enterProbe() {}
 void probe()
 {
   float force = getForce();
-  if (force < 0) force = 0;
+  if (force < 0) force = 0; // Only Positive Values
 
   float speedAdjustment = 1/(force*speedReductionFactor+1);  
   runMotor(100*speedAdjustment); // extend
+
+  // Exit Conditions
+  if (digitalRead(LOWER_SWITCH_PIN) == 1) {
+    if (debug)
+      Serial.println("EVENT: Exited at end of linear travel");
+    setState(IDLE);
+  }
+  else if (getRawForce() > forceLimit) {
+    if (debug)
+      Serial.println("EVENT: Exited because safe load cell force exceeded");
+    setState(IDLE);
+  }
 
   if (logging)
   {
@@ -135,17 +150,9 @@ void probe()
     Serial.print("\t");
     Serial.print(getForce());
     Serial.print("\t");
+    Serial.print(getForceDerivative());
+    Serial.print("\t");
     Serial.print(speedAdjustment);
     Serial.println();
-  }
-
-  if (digitalRead(LOWER_SWITCH_PIN) == 1 || getRawForce() > forceLimit) {
-    if (debug)  {
-      Serial.print("Probing State Exited at ");
-      Serial.print(getMotorPosition());
-      Serial.print(" revs");
-      Serial.println();
-    }
-    setState(IDLE);
   }
 }
