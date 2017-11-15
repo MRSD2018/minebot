@@ -1,19 +1,18 @@
 // Code for Probe Linear Actuation System
 // Author: David Robinson
 
-#include "AccelStepper.h"
 #include "HX711.h"
 
-#define DOUT  30
-#define CLK   29
-#define UPPER_SWITCH_PIN 20
+#define motorPWM 36
+#define motorDIR 37
+#define DOUT  34
+#define CLK   35
+#define UPPER_SWITCH_PIN 18
 #define LOWER_SWITCH_PIN 21
 
 HX711 loadCell(DOUT, CLK);
 float tare = 0.0f;
 int tareSamples = 0;
-
-//AccelStepper stepper(1, STEP_PUL, STEP_DIR);
 
 int state;    // state machine
 #define ZERO  0
@@ -83,7 +82,7 @@ void zero() {
 
   if (digitalRead(UPPER_SWITCH_PIN) == 0) {
 
-    runMotor(-100); // retract
+    runMotor(-50); // retract at 50%
 
     //    tare += getRawForce();
     //    ++tareSamples;
@@ -110,20 +109,19 @@ void enterIdle() {
 
 void idle()
 {
-  //  if (debug) Serial.println("Idle State!");
-  //  Serial.println(getForce());
+  runMotor(0);  
 }
 
+// PROBE FUNCTIONS
 float forceLimit = 30.0f; // safety
+int speedReductionFactor = 2;
 
 void enterProbe() {}
-
-int nominalMaxForce = 3;
-int speedReductionFactor = 5;
 
 void probe()
 {
   float force = getForce();
+  if (force < 0) force = 0;
 
   float speedAdjustment = 1/(force*speedReductionFactor+1);  
   runMotor(100*speedAdjustment); // extend
@@ -151,85 +149,3 @@ void probe()
     setState(IDLE);
   }
 }
-
-// LOAD CELL FUNCTIONS
-void setupLoadCell() {
-  // Determined with Matlab Script
-  loadCell.set_scale(67590.7657); // 1/gain
-  loadCell.set_offset(-0.8384);
-}
-
-float loadValue = 0.0f;
-float getRawForce() {
-  if (loadCell.is_ready()) {
-    loadValue = loadCell.get_value();
-  }
-
-  return loadValue; // kgs
-}
-
-float getForce() {
-  return getRawForce() - tare;
-}
-
-// MOTOR FUNCTIONS
-int motorDirection = -1;
-int speedScale = 30;
-float zeroPosition = 0;
-int countsPerRotation = 400;
-int rads = 2 * PI;
-
-void setupMotor() {
-//  stepper.setMaxSpeed(3000);
-//  stepper.setAcceleration(3000);
-}
-
-void runMotor(int speed) { // Percentage
-//  stepper.setSpeed(speed * speedScale * motorDirection);
-//  stepper.runSpeed();
-}
-
-void setMotorZero() {
-  zeroPosition = getRawMotorPosition();
-}
-
-float getRawMotorPosition() {
-//  return (float)stepper.currentPosition() * motorDirection / countsPerRotation * rads;
-  return 0.0;
-}
-
-float getMotorPosition() {
-  return getRawMotorPosition() - zeroPosition;
-}
-
-// SERIAL INPUT FUINCTIONS
-void serialControl() {
-
-  if (Serial.available() > 0) {
-    String input = Serial.readString();
-
-    switch (input.charAt(0))
-    {
-      case 'p':
-        setState(PROBE);
-        if (debug) Serial.println("Probe Command Received");
-        break;
-      case 's':
-        setState(IDLE);
-        if (debug) Serial.println("Stop Command Recieved");
-        break;
-      case 'z':
-        setState(ZERO);
-        if (debug) Serial.println("Zero Command Recieved");
-        break;
-      default:
-        if (debug) errorMessage(input);
-        break;
-    }
-  }
-}
-
-void errorMessage(String input) {
-  Serial.println("\"" + input + "\" is an invalid input.");
-}
-
