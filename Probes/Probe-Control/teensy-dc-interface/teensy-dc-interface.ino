@@ -20,8 +20,12 @@ int state;    // state machine
 #define PROBE 2
 #define CALIB 3
 
-bool debug = true;
+bool debug = false;
 bool logging = true;
+
+// CALIB FUNCTIONS
+float maxCalibForce = 0.0f;
+bool calibrated = false;
 
 void setup() {
 
@@ -141,9 +145,19 @@ void idle()
 
 // PROBE FUNCTIONS
 float forceLimit = 30.0f; // safety
-float speedReductionFactor = 0.1f;
+float finalPWM = 0.3f;
+float speedReductionFactor = 0.0f;
 
-void enterProbe() {}
+void enterProbe() {
+
+  if (!calibrated) {
+    if (debug) Serial.println("System not calibrated...");
+      setState(IDLE);
+  }
+  else {
+    speedReductionFactor = (1 - finalPWM) / (finalPWM * maxCalibForce);  
+  }
+}
 
 void probe()
 {
@@ -172,20 +186,15 @@ void probe()
     Serial.print("\t");
     Serial.print(getMotorPosition());
     Serial.print("\t");
-    Serial.print(getMotorSpeed());
-    Serial.print("\t");
+    Serial.print(speedAdjustment);
+    Serial.println();
     Serial.print(getForce());
     Serial.print("\t");
     Serial.print(getForceDerivative());
     Serial.print("\t");
-    Serial.print(speedAdjustment);
-    Serial.println();
+
   }
 }
-
-// CALIB FUNCTIONS
-float maxCalibForce = 0.0f;
-bool calibrated = false;
 
 void enterCalibration() {
   maxCalibForce = 0.0f;
@@ -200,14 +209,17 @@ void calibration() {
   if (getForce() > maxCalibForce)
     maxCalibForce = getForce();
 
-  Serial.print("Max Force: ");
-  Serial.println(maxCalibForce);
-
+  if (debug) {
+    Serial.print("Max Force: ");
+    Serial.println(maxCalibForce);
+  }
   // Exit Conditions
+
   if (digitalRead(LOWER_SWITCH_PIN) == 1) {
-    if (debug)
+    if (debug) {
       Serial.print("Calibrated with Maximum Force of ");
       Serial.println(maxCalibForce);
+    }
     calibrated = true;
     setState(IDLE);
   }

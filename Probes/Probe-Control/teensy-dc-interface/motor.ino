@@ -5,7 +5,7 @@ float zeroPosition = 0;
 int countsPerRotation = 400;    // CHANGE WITH NEW ENCODER
 int rads = 2 * PI;
 
-int maxPWM = 200;
+int maxPWM = 230;
 int minPWM = 0;
 
 int retpwm = 0;
