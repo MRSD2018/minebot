@@ -18,30 +18,35 @@ int state;    // state machine
 #define ZERO  0
 #define IDLE  1
 #define PROBE 2
+#define CALIB 3
 
-bool debug = false;
+bool debug = true;
 bool logging = true;
 
 void setup() {
 
   setupLoadCell();
   attachInterrupt(digitalPinToInterrupt(DAT), readForce, FALLING);
-  
+
   setupMotor();
 
   // Setup Limit Switches
   pinMode(UPPER_SWITCH_PIN, INPUT);
   pinMode(LOWER_SWITCH_PIN, INPUT);
+  pinMode(13, OUTPUT);
 
   Serial.begin(9600);
-
-  setState(0); // initially set to zero state
-
-  pinMode(13, OUTPUT);
-  digitalWrite(13, HIGH);
 }
 
+int startupDelay = true;
 void loop() {
+
+  if (startupDelay) {
+    delay(1500);
+    digitalWrite(13, HIGH);
+    setState(0); // initially set to zero state
+    startupDelay = false;
+  }
 
   serialControl(); // External Control
 
@@ -53,6 +58,7 @@ void loop() {
       break;
     case PROBE: probe();
       break;
+    case CALIB: calibration();
     default:
       break;
   }
@@ -73,38 +79,54 @@ void setState(int s) {
       state = PROBE;
       enterProbe();
       break;
+    case CALIB:
+      state = CALIB;
+      enterCalibration();
     default:
       break;
   }
 }
 
+// ZERO FUNCTIONS
+long unsigned int zeroTime = 0;
+unsigned int maxZeroTime = 500; //ms
+bool recordTime = false;
+
 void enterZero() {
+  if (debug) Serial.println("Entered Zero State");
   tare = 0;
   tareSamples = 0;
+  recordTime = false;
 }
 
 void zero() {
-
   if (digitalRead(UPPER_SWITCH_PIN) == 0) {
-
-    runMotor(-75); // retract at 50%
-
-    //    tare += getRawForce();
-    //    ++tareSamples;
+    runMotor(-75); // retract at 75%
   }
   else {
-    //    tare = tare / tareSamples;
-    tare = getRawForce(); // blocking tmp sln
-    if (debug) {
-      Serial.print("Limit Switch Found at ");
-      Serial.print(getMotorPosition());
-      Serial.print(" revs, Tare at ");
-      Serial.print(tare);
-      Serial.print(" kg(s)");
-      Serial.println();
+    runMotor(0);
+
+    if (!recordTime) {
+      zeroTime = millis();
+      recordTime = true;
     }
-    setMotorZero();
-    setState(IDLE);
+
+    tare += getRawForce();
+    ++tareSamples;
+
+    if ( (millis() - zeroTime) > maxZeroTime) {
+      tare = tare / tareSamples;
+      if (debug) {
+        Serial.print("Limit Switch Found at ");
+        Serial.print(getMotorPosition());
+        Serial.print(" revs, Tare at ");
+        Serial.print(tare);
+        Serial.print(" kg(s)");
+        Serial.println();
+      }
+      setMotorZero();
+      setState(IDLE);
+    }
   }
 }
 
@@ -114,7 +136,7 @@ void enterIdle() {
 
 void idle()
 {
-  runMotor(0);  
+  runMotor(0);
 }
 
 // PROBE FUNCTIONS
@@ -128,8 +150,8 @@ void probe()
   float force = getForce();
   if (force < 0) force = 0; // Only Positive Values
 
-  float speedAdjustment = 1/(force*speedReductionFactor+1);  
-  runMotor(100*speedAdjustment); // extend
+  float speedAdjustment = 1 / (force * speedReductionFactor + 1);
+  runMotor(100 * speedAdjustment); // extend
 
   // Exit Conditions
   if (digitalRead(LOWER_SWITCH_PIN) == 1) {
@@ -160,3 +182,41 @@ void probe()
     Serial.println();
   }
 }
+
+// CALIB FUNCTIONS
+float maxCalibForce = 0.0f;
+bool calibrated = false;
+
+void enterCalibration() {
+  maxCalibForce = 0.0f;
+  calibrated = false;
+  if (debug) Serial.println("Entered Calibration State");
+}
+
+void calibration() {
+
+  runMotor(50);
+
+  if (getForce() > maxCalibForce)
+    maxCalibForce = getForce();
+
+  Serial.print("Max Force: ");
+  Serial.println(maxCalibForce);
+
+  // Exit Conditions
+  if (digitalRead(LOWER_SWITCH_PIN) == 1) {
+    if (debug)
+      Serial.print("Calibrated with Maximum Force of ");
+      Serial.println(maxCalibForce);
+    calibrated = true;
+    setState(IDLE);
+  }
+  else if (getRawForce() > forceLimit) {
+    if (debug)
+      Serial.println("EVENT: Exited because safe load cell force exceeded, Try Again!");
+    setState(IDLE);
+  }
+}
+
+
+

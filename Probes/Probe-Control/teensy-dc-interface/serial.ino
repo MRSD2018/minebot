@@ -8,15 +8,15 @@ void serialControl() {
     {
       case 'p':
         setState(PROBE);
-        if (debug) Serial.println("Probe Command Received");
         break;
       case 's':
         setState(IDLE);
-        if (debug) Serial.println("Stop Command Recieved");
         break;
       case 'z':
         setState(ZERO);
-        if (debug) Serial.println("Zero Command Recieved");
+        break;
+      case 'c':
+        setState(CALIB);
         break;
       default:
         if (debug) errorMessage(input);
