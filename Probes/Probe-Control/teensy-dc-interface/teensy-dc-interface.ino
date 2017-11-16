@@ -19,24 +19,26 @@ int state;    // state machine
 #define IDLE  1
 #define PROBE 2
 
-bool debug = true;
+bool debug = false;
 bool logging = true;
 
 void setup() {
 
-//  setupLoadCell();
-//  attachInterrupt(digitalPinToInterrupt(DAT), readForce, FALLING);
+  setupLoadCell();
+  attachInterrupt(digitalPinToInterrupt(DAT), readForce, FALLING);
   
-//  setupMotor();
-//
-//  // Setup Limit Switches
-//  pinMode(UPPER_SWITCH_PIN, INPUT);
-//  pinMode(LOWER_SWITCH_PIN, INPUT);
+  setupMotor();
 
-  Serial.begin(38400);
-  Serial.println("System Initialized...");
+  // Setup Limit Switches
+  pinMode(UPPER_SWITCH_PIN, INPUT);
+  pinMode(LOWER_SWITCH_PIN, INPUT);
+
+  Serial.begin(9600);
 
   setState(0); // initially set to zero state
+
+  pinMode(13, OUTPUT);
+  digitalWrite(13, HIGH);
 }
 
 void loop() {
@@ -85,7 +87,7 @@ void zero() {
 
   if (digitalRead(UPPER_SWITCH_PIN) == 0) {
 
-    runMotor(-50); // retract at 50%
+    runMotor(-75); // retract at 50%
 
     //    tare += getRawForce();
     //    ++tareSamples;
@@ -117,7 +119,7 @@ void idle()
 
 // PROBE FUNCTIONS
 float forceLimit = 30.0f; // safety
-int speedReductionFactor = 2;
+float speedReductionFactor = 0.1f;
 
 void enterProbe() {}
 
@@ -147,6 +149,8 @@ void probe()
     Serial.print(millis());
     Serial.print("\t");
     Serial.print(getMotorPosition());
+    Serial.print("\t");
+    Serial.print(getMotorSpeed());
     Serial.print("\t");
     Serial.print(getForce());
     Serial.print("\t");

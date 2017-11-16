@@ -1,5 +1,5 @@
 // MOTOR FUNCTIONS
-int motorDirection = -1;
+int motorDirection = 1;
 int speedScale = 30;            // TUNE
 float zeroPosition = 0;
 int countsPerRotation = 400;    // CHANGE WITH NEW ENCODER
@@ -7,6 +7,8 @@ int rads = 2 * PI;
 
 int maxPWM = 200;
 int minPWM = 0;
+
+int retpwm = 0;
 
 int setPWM(float pwm) {  
 
@@ -34,6 +36,7 @@ void runMotor(float speed) { // Percentage
     digitalWrite(motorDIR, HIGH);
   
   // Set direciton
+  retpwm = setPWM(speed);
   analogWrite(motorPWM, setPWM(speed));
 }
 
@@ -49,3 +52,10 @@ float getRawMotorPosition() { // UPDATE WITH ENCODER
 float getMotorPosition() {
   return getRawMotorPosition() - zeroPosition;
 }
+
+float getMotorSpeed() {
+  return retpwm;  
+}
+
+
+

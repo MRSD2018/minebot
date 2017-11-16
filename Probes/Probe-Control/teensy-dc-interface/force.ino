@@ -15,18 +15,21 @@ void readForce() { // ISR
   long int time = millis();
   double dt = (time - lastTime);
 
-  float newValue = loadCell.get_value();
-  dloadValuedt = (newValue - loadValue)/(dt)*1000;
-  loadValue = newValue;
+  if (dt > 10) { // reject false readings from DATA pin
 
-  lastTime = time;
-  
-//  Serial.print(loadValue);
-//  Serial.print("\t");
-//  Serial.print(dt);
-//  Serial.print("\t");
-//  Serial.print(dloadValuedt);
-//  Serial.println("");
+    float newValue = loadCell.get_value();
+    dloadValuedt = (newValue - loadValue) / (dt) * 1000;
+    loadValue = newValue;
+
+    lastTime = time;
+
+//    Serial.print(loadValue);
+//    Serial.print("\t");
+//    Serial.print(dt);
+//    Serial.print("\t");
+//    Serial.print(dloadValuedt);
+//    Serial.println("");
+  }
 }
 
 float getRawForce() {
