@@ -10,7 +10,10 @@ float loadValue = 0.0f;
 float dloadValuedt = 0.0f;
 long int lastTime = 0;
 
+
 void readForce() { // ISR
+
+  newValue = true; // For logging
 
   long int time = millis();
   double dt = (time - lastTime);
@@ -22,13 +25,6 @@ void readForce() { // ISR
     loadValue = newValue;
 
     lastTime = time;
-
-//    Serial.print(loadValue);
-//    Serial.print("\t");
-//    Serial.print(dt);
-//    Serial.print("\t");
-//    Serial.print(dloadValuedt);
-//    Serial.println("");
   }
 }
 
@@ -44,3 +40,6 @@ float getForceDerivative() {
   return dloadValuedt; // kg/s
 }
 
+float getNormalizedForceDerivative() {
+  return dloadValuedt/speedAdjustment; // kg/s
+}

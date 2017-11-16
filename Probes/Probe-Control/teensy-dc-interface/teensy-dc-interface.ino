@@ -20,8 +20,9 @@ int state;    // state machine
 #define PROBE 2
 #define CALIB 3
 
-bool debug = false;
+bool debug = true;
 bool logging = true;
+bool newValue = false;
 
 // CALIB FUNCTIONS
 float maxCalibForce = 0.0f;
@@ -147,15 +148,18 @@ void idle()
 float forceLimit = 30.0f; // safety
 float finalPWM = 0.3f;
 float speedReductionFactor = 0.0f;
+float speedAdjustment;
+
+float classificationThreshold = 30.0f;
 
 void enterProbe() {
 
   if (!calibrated) {
     if (debug) Serial.println("System not calibrated...");
-      setState(IDLE);
+    setState(IDLE);
   }
   else {
-    speedReductionFactor = (1 - finalPWM) / (finalPWM * maxCalibForce);  
+    speedReductionFactor = (1 - finalPWM) / (finalPWM * maxCalibForce);
   }
 }
 
@@ -164,22 +168,27 @@ void probe()
   float force = getForce();
   if (force < 0) force = 0; // Only Positive Values
 
-  float speedAdjustment = 1 / (force * speedReductionFactor + 1);
+  speedAdjustment = 1 / (force * speedReductionFactor + 1);
   runMotor(100 * speedAdjustment); // extend
 
   // Exit Conditions
-  if (digitalRead(LOWER_SWITCH_PIN) == 1) {
+  if (getNormalizedForceDerivative() > classificationThreshold) {
+    if (debug)
+      Serial.println("EVENT: Landmine (maybe) found!");
+    setState(ZERO);
+  }
+  else if (digitalRead(LOWER_SWITCH_PIN) == 1) {
     if (debug)
       Serial.println("EVENT: Exited at end of linear travel");
-    setState(IDLE);
+    setState(ZERO);
   }
   else if (getRawForce() > forceLimit) {
     if (debug)
       Serial.println("EVENT: Exited because safe load cell force exceeded");
-    setState(IDLE);
+    setState(ZERO);
   }
 
-  if (logging)
+  if (logging && newValue)
   {
     // for output to logger!
     Serial.print(millis());
@@ -187,12 +196,13 @@ void probe()
     Serial.print(getMotorPosition());
     Serial.print("\t");
     Serial.print(speedAdjustment);
-    Serial.println();
+    Serial.print("\t");
     Serial.print(getForce());
     Serial.print("\t");
     Serial.print(getForceDerivative());
     Serial.print("\t");
-
+    Serial.println(getNormalizedForceDerivative());
+    newValue = false;
   }
 }
 
@@ -221,12 +231,12 @@ void calibration() {
       Serial.println(maxCalibForce);
     }
     calibrated = true;
-    setState(IDLE);
+    setState(ZERO);
   }
   else if (getRawForce() > forceLimit) {
     if (debug)
       Serial.println("EVENT: Exited because safe load cell force exceeded, Try Again!");
-    setState(IDLE);
+    setState(ZERO);
   }
 }
 

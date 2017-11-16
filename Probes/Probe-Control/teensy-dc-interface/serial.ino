@@ -18,6 +18,9 @@ void serialControl() {
       case 'c':
         setState(CALIB);
         break;
+      case 'd':
+        debug = !debug;
+        break;
       default:
         if (debug) errorMessage(input);
         break;
