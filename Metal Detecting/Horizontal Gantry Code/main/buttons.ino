@@ -11,7 +11,14 @@ volatile int limitNear;
 volatile int limitFar;
 volatile int limitIndicator = 0;
 
-//Setup buttons
+/**************************************************************************/
+/*
+    Setup buttons
+    *State change button
+    *Near limit switch
+    *Far limit switch
+*/
+/**************************************************************************/
 void buttonSetup() {
   STATE = 0;
   
@@ -25,7 +32,11 @@ void buttonSetup() {
   attachInterrupt(digitalPinToInterrupt(farLimit), LimitFar, RISING);
 }
 
-//debouncing
+/**************************************************************************/
+/*
+    Debounce button
+*/
+/**************************************************************************/
 void debounce(int button){
   int cur_time = millis();
   if ( (cur_time - last_switch_time) > debounce_timeout){
@@ -33,7 +44,11 @@ void debounce(int button){
   }
 }
 
-//Change States
+/**************************************************************************/
+/*
+    State machine for determining gantry state.
+*/
+/**************************************************************************/
 void stateChange() {
   if (but_interrupt_flag == 0) {
     switch(STATE) {
@@ -61,6 +76,15 @@ void stateChange() {
   }
 }
 
+
+/**************************************************************************/
+/*
+    IF STATE == Initialize
+    *Set current position as the system "length"
+    ELSE
+    *Stop system 
+*/
+/**************************************************************************/
 void LimitNear() {
   if (but_interrupt_flag == 0) {
     if (STATE == 1 && limitIndicator == 0) {
@@ -69,13 +93,21 @@ void LimitNear() {
       limitIndicator = 1;
     }
     if (STATE != 1) {
-      analogWrite(PWM, 177);
       STATE = 0;
     }
-    but_interrupt_flag = 1;
+    but_interrupt_flag = 2;
   }
 }
 
+
+/**************************************************************************/
+/*
+    IF STATE == Initialize
+    *Set current position as the system "zero"
+    ELSE
+    *Stop system 
+*/
+/**************************************************************************/
 void LimitFar() {
   if (but_interrupt_flag == 0) {
     if (STATE == 1 && limitIndicator == 1) {
@@ -87,7 +119,7 @@ void LimitFar() {
       analogWrite(PWM, 177);
       STATE = 0;
     }
-    but_interrupt_flag = 1;
+    but_interrupt_flag = 3;
   }
 }
 

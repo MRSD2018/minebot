@@ -1,12 +1,29 @@
+//ROS message publishing
+#include <ros.h>
+#include <ros/time.h>
+#include <std_msgs/String.h>
+#include <geometry_msgs/Point32.h>
+
+/*Define Pins*/
+//motor
 #define PWM 30
 
+//switches
 #define stateSwitch 28
 #define nearLimit 27
 #define farLimit 26
 
+//encoder
 #define channelAPin 34
 #define channelBPin 33
 
+/*Variables*/
+//ROS Message publisher
+ros::NodeHandle nh;
+geometry_msgs::Point32 gantry_status;
+ros::Publisher gantryStatPub("gantryStat", &gantry_status);
+
+//Gantry state
 extern int STATE;
 
 //encoder variables
@@ -38,7 +55,6 @@ volatile float distInCM;
 
 //motor variables
 int zeroSpeed = 90;
-bool active = 0;
 
 //Contral variables
 int newPos;
@@ -56,23 +72,46 @@ int motorInputScaledPos;
 double prevPositionError;
 int newSpeed;
 
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-  pinMode(PWM, OUTPUT);
-  digitalWrite(PWM, LOW);
 
+/**************************************************************************/
+/*
+    Arduino setup function (automatically called at startup)
+*/
+/**************************************************************************/
+void setup() {
+  rosSetup();
+  
+//  Serial.begin(9600);
+
+  motorSetup();
   buttonSetup();
   encoderSetup();
-
+  
+  
+  Serial.print("System Ready");
+ 
 }
 
+/**************************************************************************/
+/*
+    Arduino loop function, called once 'setup' is complete 
+*/
+/**************************************************************************/
 void loop() {
+  //ROS gantry_status message publisher
+  readyGantryStatus();
+  gantryStatPub.publish(&gantry_status);
+  nh.spinOnce();  
+
   // put your main code here, to run repeatedly:
   if (but_interrupt_flag){
-    debounce(stateSwitch);
+    if (but_interrupt_flag == 1) {debounce(stateSwitch);}
+    if (but_interrupt_flag == 2) {debounce(nearLimit);}
+    if (but_interrupt_flag == 3) {debounce(farLimit);}
     but_interrupt_flag = 0;
   }
+  
+  //State 0 
   if (STATE == 0) {
     analogWrite(PWM, zeroSpeed);
     limitIndicator = 0;
@@ -85,7 +124,6 @@ void loop() {
     sweep();
   }
   if (STATE ==3) {
-    if (!active) { analogWrite(PWM, zeroSpeed);}
     posControl();
   }
     
