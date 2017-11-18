@@ -11,7 +11,8 @@ volatile int encoderTicks;
 void encoderSetup() {
   pinMode(channelAPin, INPUT);
   pinMode(channelBPin, INPUT);
-  attachInterrupt(digitalPinToInterrupt(channelAPin), encoderCount, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(channelBPin), encoderCount, CHANGE);
+  Serial.print("encoder ready");
 }
 
 /**************************************************************************/
@@ -22,6 +23,8 @@ void encoderSetup() {
 void encoderCount(){
   channelAVal = digitalRead(channelAPin);
   channelBVal = digitalRead(channelBPin);
+  
+//  Serial.print(channelBVal); Serial.print(channelAVal); Serial.println(encoderTicks);
   if (channelAVal == channelBVal) {
     encoderTicks++;
   }

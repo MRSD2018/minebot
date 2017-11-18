@@ -45,11 +45,12 @@ void sweep() {
 
   //If gantry plate is too close to end-stops, swich motor direction
   if (posInTicks < 100) {
-    analogWrite(PWM, 255);
+    analogWrite(PWM, 200);
+    Serial.println("FORWARD");
   }
-
   if (posInTicks > (dist-100)) {
-    analogWrite(PWM, 50);
+    Serial.println("BACKWARD");
+    analogWrite(PWM, 10);
   }
 }
 
@@ -84,9 +85,9 @@ void posControl() {
 
     // calculate PWM
     
-    pwmToWritePos =  kp * positionError;
-//                  + kd * (positionError - prevPositionError) / dt
-//                  + ki * (positionErrorSum);
+    pwmToWritePos =  kp * positionError
+                  + kd * (positionError - prevPositionError) / dt
+                  + ki * (positionErrorSum);
     motorInputScaledPos = zeroSpeed + pwmToWritePos; //Calcualte PWM as a reference to the zero speed PWM for Sabertooth Driver
 
     //Truncate PWMs above and below limits
@@ -101,6 +102,9 @@ void posControl() {
     prevPositionError = positionError;
 //    delay(1); //delay to ensure a difference between prevTime and nowTime
     prevTime = nowTime;
+  }
+  else {
+    analogWrite(PWM, zeroSpeed);
   }
 }
 

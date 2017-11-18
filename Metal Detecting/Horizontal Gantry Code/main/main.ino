@@ -8,14 +8,19 @@
 //motor
 #define PWM 30
 
+//LEDs
+#define LED1 26
+#define LED2 24
+#define LED3 25
+
 //switches
-#define stateSwitch 28
-#define nearLimit 27
-#define farLimit 26
+#define stateSwitch 33
+#define nearLimit 34
+#define farLimit 35
 
 //encoder
-#define channelAPin 34
-#define channelBPin 33
+#define channelAPin 38
+#define channelBPin 39
 
 /*Variables*/
 //ROS Message publisher
@@ -54,15 +59,15 @@ volatile int dist;
 volatile float distInCM;
 
 //motor variables
-int zeroSpeed = 90;
+int zeroSpeed = 75;
 
 //Contral variables
 int newPos;
 double nowTime;
 double prevTime=0;
 double dt;
-float kd = .3;
-float kp = .3;
+float kd = .8;
+float kp = .5;
 float ki = 0;
 int currentPos;
 int positionError;
@@ -79,9 +84,16 @@ int newSpeed;
 */
 /**************************************************************************/
 void setup() {
-  rosSetup();
+  //rosSetup();
   
-//  Serial.begin(9600);
+  Serial.begin(9600);
+
+  pinMode(LED1, OUTPUT);
+  digitalWrite(LED1, HIGH);
+  pinMode(LED2, OUTPUT);
+  digitalWrite(LED2, HIGH);
+  pinMode(LED3, OUTPUT);
+  digitalWrite(LED3,HIGH);
 
   motorSetup();
   buttonSetup();
@@ -99,9 +111,9 @@ void setup() {
 /**************************************************************************/
 void loop() {
   //ROS gantry_status message publisher
-  readyGantryStatus();
-  gantryStatPub.publish(&gantry_status);
-  nh.spinOnce();  
+//  readyGantryStatus();
+//  gantryStatPub.publish(&gantry_status);
+//  nh.spinOnce();  
 
   // put your main code here, to run repeatedly:
   if (but_interrupt_flag){
@@ -117,13 +129,20 @@ void loop() {
     limitIndicator = 0;
   }
   if (STATE == 1){
+    digitalWrite(LED1, HIGH);
     analogWrite(PWM, zeroSpeed);
     initialize();
   }
   if (STATE == 2){
+    digitalWrite(LED1, LOW);
+    digitalWrite(LED2, HIGH);
+    digitalWrite(LED3, LOW);
     sweep();
   }
   if (STATE ==3) {
+    digitalWrite(LED1, LOW);
+    digitalWrite(LED2, LOW);
+    digitalWrite(LED3, HIGH);
     posControl();
   }
     
