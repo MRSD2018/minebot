@@ -12,7 +12,6 @@ void encoderSetup() {
   pinMode(channelAPin, INPUT);
   pinMode(channelBPin, INPUT);
   attachInterrupt(digitalPinToInterrupt(channelBPin), encoderCount, CHANGE);
-  Serial.print("encoder ready");
 }
 
 /**************************************************************************/

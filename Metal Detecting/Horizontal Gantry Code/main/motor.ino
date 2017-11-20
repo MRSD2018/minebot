@@ -44,13 +44,13 @@ void sweep() {
   Serial.print(dist); Serial.print("  ==>  ");Serial.print(posInTicks); Serial.print("  ==>  "); Serial.println(posInCM);
 
   //If gantry plate is too close to end-stops, swich motor direction
-  if (posInTicks < 100) {
+  if (posInTicks < 200) {
     analogWrite(PWM, 200);
     Serial.println("FORWARD");
   }
-  if (posInTicks > (dist-100)) {
+  if (posInTicks > (dist-200)) {
     Serial.println("BACKWARD");
-    analogWrite(PWM, 10);
+    analogWrite(PWM, 30);
   }
 }
 
@@ -86,21 +86,21 @@ void posControl() {
     // calculate PWM
     
     pwmToWritePos =  kp * positionError
-                  + kd * (positionError - prevPositionError) / dt
-                  + ki * (positionErrorSum);
+                  + kd * (positionError - prevPositionError) / dt;
+//                  + ki * (positionErrorSum);
     motorInputScaledPos = zeroSpeed + pwmToWritePos; //Calcualte PWM as a reference to the zero speed PWM for Sabertooth Driver
 
     //Truncate PWMs above and below limits
     if (motorInputScaledPos > 255){ motorInputScaledPos = 255; }
     if (motorInputScaledPos < 0){ motorInputScaledPos = 0; }
 
-    //Drive Motor
+    // calculate current time and timestepive Motor
     analogWrite(PWM, motorInputScaledPos);
     Serial.print(currentPos); Serial.print("   ===>    "); Serial.print(newPos); Serial.print("   ===>    "); Serial.println(pwmToWritePos);
 
     // update values for next timestep
     prevPositionError = positionError;
-//    delay(1); //delay to ensure a difference between prevTime and nowTime
+    delay(1); //delay to ensure a difference between prevTime and nowTime
     prevTime = nowTime;
   }
   else {
