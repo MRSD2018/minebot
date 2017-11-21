@@ -2,19 +2,22 @@
 // Author: David Robinson
 
 #include "HX711.h"
+#include <Encoder.h>
 
-#define motorPWM 36
-#define motorDIR 37
-#define DAT  34
-#define CLK   35
-#define UPPER_SWITCH_PIN 18
-#define LOWER_SWITCH_PIN 21
+#define motorPWM 35
+#define motorDIR 34
+#define DAT   37 // 34
+#define CLK   36 // 35
+#define UPPER_SWITCH_PIN 33
+#define LOWER_SWITCH_PIN 31
 
+Encoder enc(19, 18);
 HX711 loadCell(DAT, CLK);
 float tare = 0.0f;
 int tareSamples = 0;
 
 int state;    // state machine
+static int initialState = 0;
 #define ZERO  0
 #define IDLE  1
 #define PROBE 2
@@ -49,7 +52,7 @@ void loop() {
   if (startupDelay) {
     delay(1500);
     digitalWrite(13, HIGH);
-    setState(0); // initially set to zero state
+    setState(initialState);
     startupDelay = false;
   }
 
