@@ -24,8 +24,6 @@ void readForce() { // ISR
     dloadValuedt = (incoming - loadValue) / (dt) * 1000;
     loadValue = incoming;
 
-//    Serial.println(loadValue);
-
     lastTime = time;
   }
 }
