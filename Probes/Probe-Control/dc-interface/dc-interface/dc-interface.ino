@@ -1,37 +1,25 @@
-
-// MIN PWM: 20
-// MAX PWM: 200 - 3.5A spike, might need acceleration
-
-#define motorPWM 10
-#define motorDIR 9
+#define UPPER_SWITCH_PIN 33
+#define LOWER_SWITCH_PIN 18 //31
 
 void setup() {
-  // put your setup code here, to run once:
-  pinMode(motorPWM, OUTPUT);
-  pinMode(motorDIR, OUTPUT);
+  pinMode(UPPER_SWITCH_PIN, INPUT);
+  pinMode(LOWER_SWITCH_PIN, INPUT);
+  pinMode(13, OUTPUT);
+  Serial.begin(38400);
 }
 
-int pwm = 100;
-
 void loop() {
-  // put your main code here, to run repeatedly:
-    digitalWrite(motorDIR, LOW);
-    analogWrite(motorPWM, pwm);
-    delay(2000);
-    analogWrite(motorPWM, 0);
-    delay(1000);
-    digitalWrite(motorDIR, HIGH);
-    analogWrite(motorPWM, pwm);
-    delay(2000);
-    analogWrite(motorPWM, 0);
-    delay(1000);
 
-    if (Serial.available() > 0)
-    {
-      pwm = Serial.readString().toInt();
-      Serial.print("PWM: ");
-      Serial.println(pwm);
-    }
-      
+  Serial.println("TEST");
 
+  if (digitalRead(LOWER_SWITCH_PIN) == 1)
+    digitalWrite(13, HIGH);  
+  else
+    digitalWrite(13, LOW);
+
+//  Serial.print(digitalRead(LOWER_SWITCH_PIN));
+//  Serial.print(" ");
+//  Serial.print(digitalRead(UPPER_SWITCH_PIN));
+//  Serial.println(" ");
+ 
 }

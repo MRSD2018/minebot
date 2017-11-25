@@ -1,4 +1,3 @@
-// LOAD CELL FUNCTIONS
 
 void setupLoadCell() {
   // Determined with Matlab Script
@@ -20,9 +19,9 @@ void readForce() { // ISR
 
   if (dt > 10) { // reject false readings from DATA pin
 
-    float newValue = loadCell.get_value();
-    dloadValuedt = (newValue - loadValue) / (dt) * 1000;
-    loadValue = newValue;
+    float incoming = loadCell.get_value();
+    dloadValuedt = (incoming - loadValue) / (dt) * 1000;
+    loadValue = incoming;
 
     lastTime = time;
   }
