@@ -3,6 +3,7 @@
 #include <ros/time.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/Point32.h>
+#include <std_msgs/Int16MultiArray.h>
 
 /*Define Pins*/
 //motor
@@ -25,18 +26,24 @@
 /*Variables*/
 //ROS Message publisher
 ros::NodeHandle nh;
-geometry_msgs::Point32 gantry_status;
-ros::Publisher gantryStatPub("gantryStat", &gantry_status);
+std_msgs::Int16MultiArray gantry_stat;
+ros::Publisher pub_gantry( "gantryStat", &gantry_stat);
+
+//Subscriber variables
+int probeStat = 0;
+int desiredPos;
 
 //Gantry state
 extern int STATE;
+int Initialized;
+int posDesiredArrived;
 
 //encoder variables
 extern volatile bool channelAVal;
 extern volatile bool channelBVal;
 extern volatile int encoderTicks;
 int posInTicks;
-float posInCM;
+float posInMM;
 
 //encoder constants
 static float encoderTicksPerRotation = 659.232/2;
@@ -54,9 +61,9 @@ extern volatile int limitNear;
 extern volatile int limitFar;
 extern volatile int limitIndicator;
 
-//initialization 
+//initialization constants
 volatile int dist;
-volatile float distInCM;
+volatile float distInMM;
 
 //motor variables
 int zeroSpeed = 75;
@@ -66,10 +73,10 @@ int newPos;
 double nowTime;
 double prevTime=0;
 double dt;
-float kd = 1;
+float kd = .1;
 float kp = .5;
 float ki = 0;
-int currentPos;
+//int currentPos;
 int positionError;
 double positionErrorSum;
 double pwmToWritePos;
@@ -88,6 +95,10 @@ void setup() {
   
 //  Serial.begin(9600);
 
+  //Initialize indicator LEDs
+  Initialized = 0;
+  posDesiredArrived = 0;
+  desiredPos = 0;
   pinMode(LED1, OUTPUT);
   digitalWrite(LED1, HIGH);
   pinMode(LED2, OUTPUT);
@@ -112,32 +123,53 @@ void setup() {
 void loop() {
   //ROS gantry_status message publisher
   readyGantryStatus();
-  gantryStatPub.publish(&gantry_status);
   nh.spinOnce();  
 
-  // put your main code here, to run repeatedly:
+  // debounce appropriate switch
   if (but_interrupt_flag){
     if (but_interrupt_flag == 1) {debounce(stateSwitch);}
     if (but_interrupt_flag == 2) {debounce(nearLimit);}
     if (but_interrupt_flag == 3) {debounce(farLimit);}
   }
   
-  //State 0 
+/**************************************************************************/
+/*
+    State 0 ==> System "waiting". Motor speed set to 0. Initiazization reset.
+*/
+/**************************************************************************/
   if (STATE == 0) {
     analogWrite(PWM, zeroSpeed);
     limitIndicator = 0;
   }
+  
+/**************************************************************************/
+/*
+    State 1 ==> Initialize by flipping motor-side, then far-side limit switches
+*/
+/**************************************************************************/
   if (STATE == 1){
     digitalWrite(LED1, HIGH);
     analogWrite(PWM, zeroSpeed);
     initialize();
   }
+
+/**************************************************************************/
+/*
+    State 2 ==> Sweep motor WARNING: Motor will move immediately if powered
+*/
+/**************************************************************************/
   if (STATE == 2){
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, HIGH);
     digitalWrite(LED3, LOW);
     sweep();
   }
+
+/**************************************************************************/
+/*
+    State 3 ==> Position control
+*/
+/**************************************************************************/
   if (STATE ==3) {
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
