@@ -1,4 +1,3 @@
-// LOAD CELL FUNCTIONS
 
 void setupLoadCell() {
   // Determined with Matlab Script

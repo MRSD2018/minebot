@@ -35,14 +35,8 @@ void setup() {
 
   setupLoadCell();
   attachInterrupt(digitalPinToInterrupt(DAT), readForce, FALLING);
-  attachInterrupt(digitalPinToInterrupt(LOWER_SWITCH_PIN), lowerPin, RISING);
-  attachInterrupt(digitalPinToInterrupt(UPPER_SWITCH_PIN), upperPin, RISING);
-
   setupMotor();
-
-  // Setup Limit Switches
-  pinMode(UPPER_SWITCH_PIN, INPUT);
-  pinMode(LOWER_SWITCH_PIN, INPUT);
+  setupSwitches();
   pinMode(13, OUTPUT);
 
   Serial.begin(9600);
@@ -58,13 +52,8 @@ void loop() {
     startupDelay = false;
   }
 
-  // DEBUGING
-  if (digitalRead(LOWER_SWITCH_PIN) == 1)
-    digitalWrite(13, LOW);
-  else
-    digitalWrite(13, HIGH);
-
   serialControl(); // External Control
+  readSwitches();
 
   switch (state) // State Machine
   {
@@ -116,8 +105,8 @@ void enterZero() {
 }
 
 void zero() {
-  if (digitalRead(UPPER_SWITCH_PIN) == 0) {
-    runMotor(-75); // retract at 75%
+  if (!upperSwitch()) {
+    runMotor(-100); // retract at 75%
   }
   else {
     runMotor(0);
@@ -161,7 +150,7 @@ float finalPWM = 0.3f;
 float speedReductionFactor = 0.0f;
 float speedAdjustment;
 
-float classificationThreshold = 10.0f;
+float classificationThreshold = 20.0f;
 float maxCalibForceMultiplier = 1.5f;
 
 void enterProbe() {
@@ -197,7 +186,7 @@ void probe()
     setState(ZERO);
     logValues();
   }
-  else if (digitalRead(LOWER_SWITCH_PIN) == 1) {
+  else if (lowerSwitch()) {
     if (debug)
       Serial.println("EVENT: Exited at end of linear travel");
     setState(ZERO);
@@ -235,16 +224,6 @@ void enterCalibration() {
   if (debug) Serial.println("Entered Calibration State");
 }
 
-void lowerPin() {
-  Serial.println("LOWER SWITCH PRESSED");
-  digitalWrite(13, LOW);
-}
-
-void upperPin() {
-  Serial.println("UPPER SWITCH PRESSED");
-  digitalWrite(13, HIGH);
-}
-
 void calibration() {
 
   runMotor(50);
@@ -257,7 +236,7 @@ void calibration() {
     Serial.println(maxCalibForce);
   }
   // Exit Conditions
-  if (digitalRead(LOWER_SWITCH_PIN) == 1) {
+  if (lowerSwitch()) {
     if (debug) {
       Serial.print("Calibrated with Maximum Force of ");
       Serial.println(maxCalibForce);

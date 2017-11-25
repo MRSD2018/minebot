@@ -1,11 +1,10 @@
-// MOTOR FUNCTIONS
+
 int motorDirection = 1;
-int speedScale = 30;            // TUNE
 float zeroPosition = 0;
 int countsPerRotation = 400;    // CHANGE WITH NEW ENCODER
 int rads = 2 * PI;
 
-int maxPWM = 150;//230;
+int maxPWM = 230;
 int minPWM = 0;
 
 int retpwm = 0;
