@@ -11,8 +11,7 @@ ros::Subscriber<std_msgs::Int16MultiArray> sub_probe("gantry_cmd_send", &gantryC
     Setup ROS messanger
 */
 /**************************************************************************/
-void rosSetup(void)
-{
+void rosSetup(){
 
   delay(1000);
 
@@ -49,7 +48,7 @@ void readyGantryStatus()
   gantry_stat.data[1] = Initialized;
   gantry_stat.data[2] = posDesiredArrived;
   gantry_stat.data[3] = posInMM;
-  gantry_stat.data[4] = desiredPos; 
+  gantry_stat.data[4] = count;  //wheelEncoderDist; 
   pub_gantry.publish(&gantry_stat);
   delay(10);
   nh.spinOnce();

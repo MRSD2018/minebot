@@ -46,7 +46,7 @@ void sweep() {
 
   //If gantry plate is too close to end-stops, swich motor direction
   if (posInTicks < 200) {
-    analogWrite(PWM, zeroSpeed+50);
+    analogWrite(PWM, zeroSpeed+60);
     Serial.println("FORWARD");
   }
   if (posInTicks > (dist-200)) {
@@ -71,15 +71,19 @@ void posControl() {
   if (probeStat == 1){
     newPos = desiredPos;
     posDesiredArrived = 0;
+    count = 0;
+  }
+  
+  if (probeStat == 0) {
+    analogWrite(PWM, zeroSpeed);
   }
 
   //Move gantry plate if position command is valid.
   if (newPos < dist && newPos > 0){
+    
     // calculate current time and timestep
     nowTime = millis();
     dt = (double)(nowTime - prevTime); // note this is in milliseconds still
-
-    
 
     // calculate errors
     positionError = newPos - posInMM;
@@ -93,23 +97,24 @@ void posControl() {
     motorInputScaledPos = zeroSpeed + pwmToWritePos; //Calcualte PWM as a reference to the zero speed PWM for Sabertooth Driver
 
     //Truncate PWMs above and below limits
-    if (motorInputScaledPos > 200){ motorInputScaledPos = 200; }
-    if (motorInputScaledPos < 50){ motorInputScaledPos = 50; }
+    if (motorInputScaledPos > zeroSpeed+60){ motorInputScaledPos = zeroSpeed+60; }
+    if (motorInputScaledPos < zeroSpeed-50){ motorInputScaledPos = zeroSpeed-50; }
 
     // calculate current time and timestepive Motor
     analogWrite(PWM, motorInputScaledPos);
     Serial.print(posInMM); Serial.print("   ===>    "); Serial.print(newPos); Serial.print("   ===>    "); Serial.println(pwmToWritePos);
 
     //If gantry is within the position error and not moving, set that the desired position has been reached
-    if ((abs(positionError) <= 10) && (prevPositionError == positionError)){ posDesiredArrived = 1; }
+    if ((abs(positionError) <= 5) && (prevPositionError == positionError)){ 
+      count += 1;
+      if (count <= 50) {posDesiredArrived = 1;}
+      if (count > 50) {posDesiredArrived = 0;}
+    }
     
     // update values for next timestep
     prevPositionError = positionError;
     delay(1); //delay to ensure a difference between prevTime and nowTime
     prevTime = nowTime;
-  }
-  if (probeStat == 0) {
-    analogWrite(PWM, zeroSpeed);
   }
 }
 
