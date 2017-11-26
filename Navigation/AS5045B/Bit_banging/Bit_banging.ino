@@ -25,7 +25,7 @@ extern int debug; // SET THIS TO 0 TO DISABLE PRINTING OF ERROR CODES
 int parse = 0;
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   setup_rotary_encoder();
   calibrate_rotary_encoder();
 }
