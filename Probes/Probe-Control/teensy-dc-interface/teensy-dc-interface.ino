@@ -2,19 +2,22 @@
 // Author: David Robinson
 
 #include "HX711.h"
+#include <Encoder.h>
 
-#define motorPWM 36
-#define motorDIR 37
-#define DAT  34
-#define CLK   35
-#define UPPER_SWITCH_PIN 18
-#define LOWER_SWITCH_PIN 21
+#define motorPWM 36 //35
+#define motorDIR 35 //34
+#define DAT   32 //37
+#define CLK   31 //36
+#define UPPER_SWITCH_PIN 20 //33
+#define LOWER_SWITCH_PIN 23 //31
 
+Encoder enc(15, 14);
 HX711 loadCell(DAT, CLK);
 float tare = 0.0f;
 int tareSamples = 0;
 
 int state;    // state machine
+static int initialState = 0;
 #define ZERO  0
 #define IDLE  1
 #define PROBE 2
@@ -32,12 +35,8 @@ void setup() {
 
   setupLoadCell();
   attachInterrupt(digitalPinToInterrupt(DAT), readForce, FALLING);
-
   setupMotor();
-
-  // Setup Limit Switches
-  pinMode(UPPER_SWITCH_PIN, INPUT);
-  pinMode(LOWER_SWITCH_PIN, INPUT);
+  setupSwitches();
   pinMode(13, OUTPUT);
 
   Serial.begin(9600);
@@ -49,11 +48,12 @@ void loop() {
   if (startupDelay) {
     delay(1500);
     digitalWrite(13, HIGH);
-    setState(0); // initially set to zero state
+    setState(initialState);
     startupDelay = false;
   }
 
   serialControl(); // External Control
+  readSwitches();
 
   switch (state) // State Machine
   {
@@ -105,8 +105,8 @@ void enterZero() {
 }
 
 void zero() {
-  if (digitalRead(UPPER_SWITCH_PIN) == 0) {
-    runMotor(-75); // retract at 75%
+  if (!upperSwitch()) {
+    runMotor(-100); // retract at 75%
   }
   else {
     runMotor(0);
@@ -145,12 +145,13 @@ void idle()
 }
 
 // PROBE FUNCTIONS
-float forceLimit = 30.0f; // safety
+float forceLimit = 10.0f; // safety
 float finalPWM = 0.3f;
 float speedReductionFactor = 0.0f;
 float speedAdjustment;
 
-float classificationThreshold = 30.0f;
+float classificationThreshold = 20.0f;
+float maxCalibForceMultiplier = 1.5f;
 
 void enterProbe() {
 
@@ -159,6 +160,7 @@ void enterProbe() {
     setState(IDLE);
   }
   else {
+    if (debug) Serial.println("Entering Probe State");
     speedReductionFactor = (1 - finalPWM) / (finalPWM * maxCalibForce);
   }
 }
@@ -174,13 +176,21 @@ void probe()
   // Exit Conditions
   if (getNormalizedForceDerivative() > classificationThreshold) {
     if (debug)
-      Serial.println("EVENT: Landmine (maybe) found!");
+      Serial.println("EVENT: Force Derivative Limit Exceeded, Landmine (maybe) found!");
     setState(ZERO);
+    logValues();
   }
-  else if (digitalRead(LOWER_SWITCH_PIN) == 1) {
+  else if (force > (maxCalibForce * maxCalibForceMultiplier)) {
+    if (debug)
+      Serial.println("EVENT: Max Calibration Force Exceeded, Landmine (maybe) found!");
+    setState(ZERO);
+    logValues();
+  }
+  else if (lowerSwitch()) {
     if (debug)
       Serial.println("EVENT: Exited at end of linear travel");
     setState(ZERO);
+    logValues();
   }
   else if (getRawForce() > forceLimit) {
     if (debug)
@@ -190,20 +200,22 @@ void probe()
 
   if (logging && newValue)
   {
-    // for output to logger!
-    Serial.print(millis());
-    Serial.print("\t");
-    Serial.print(getMotorPosition());
-    Serial.print("\t");
-    Serial.print(speedAdjustment);
-    Serial.print("\t");
-    Serial.print(getForce());
-    Serial.print("\t");
-    Serial.print(getForceDerivative());
-    Serial.print("\t");
-    Serial.println(getNormalizedForceDerivative());
+    logValues();
     newValue = false;
   }
+}
+
+void logValues() {
+  // for output to logger!
+  Serial.print(millis());
+  Serial.print("\t");
+  Serial.print(getMotorPosition());
+  Serial.print("\t");
+  Serial.print(speedAdjustment);
+  Serial.print("\t");
+  Serial.print(getForce());
+  Serial.print("\t");
+  Serial.println(getNormalizedForceDerivative());
 }
 
 void enterCalibration() {
@@ -224,8 +236,7 @@ void calibration() {
     Serial.println(maxCalibForce);
   }
   // Exit Conditions
-
-  if (digitalRead(LOWER_SWITCH_PIN) == 1) {
+  if (lowerSwitch()) {
     if (debug) {
       Serial.print("Calibrated with Maximum Force of ");
       Serial.println(maxCalibForce);

@@ -4,7 +4,7 @@ int STATE;
 volatile int but_interrupt_flag = 0;
 const int debounce_time = 50;  //ms
 int last_switch_time = 0;
-const int debounce_timeout = 1000; // ms
+const int debounce_timeout = 500; // ms
 
 //limit switches
 volatile int limitNear;
@@ -39,8 +39,12 @@ void buttonSetup() {
 /**************************************************************************/
 void debounce(int button){
   int cur_time = millis();
+  if (digitalRead(button) == HIGH){
+    last_switch_time = millis();
+  }
   if ( (cur_time - last_switch_time) > debounce_timeout){
     last_switch_time = cur_time;
+    but_interrupt_flag = 0;
   }
 }
 

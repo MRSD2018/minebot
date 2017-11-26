@@ -31,12 +31,14 @@ void setup() {
 }
 
 void loop(){
-  delay(1000);
-  if(Serial.available()>0)
-  {  
-    parse = Serial.parseInt();
-    if(parse == 0){calibrate_rotary_encoder();}
-    if(parse == 1){rotary_data();}
-  }
+  delay(200);
+//  if(Serial.available()>0)
+//  {  
+//    parse = Serial.parseInt();
+//    if(parse == 0){calibrate_rotary_encoder();}
+//    if(parse == 1){rotary_data();}
+//  }
+  float answer = rotary_data();
+  Serial.println(answer);
 }
 

@@ -66,7 +66,7 @@ int newPos;
 double nowTime;
 double prevTime=0;
 double dt;
-float kd = .8;
+float kd = 1;
 float kp = .5;
 float ki = 0;
 int currentPos;
@@ -84,9 +84,9 @@ int newSpeed;
 */
 /**************************************************************************/
 void setup() {
-  //rosSetup();
+  rosSetup();
   
-  Serial.begin(9600);
+//  Serial.begin(9600);
 
   pinMode(LED1, OUTPUT);
   digitalWrite(LED1, HIGH);
@@ -111,16 +111,15 @@ void setup() {
 /**************************************************************************/
 void loop() {
   //ROS gantry_status message publisher
-//  readyGantryStatus();
-//  gantryStatPub.publish(&gantry_status);
-//  nh.spinOnce();  
+  readyGantryStatus();
+  gantryStatPub.publish(&gantry_status);
+  nh.spinOnce();  
 
   // put your main code here, to run repeatedly:
   if (but_interrupt_flag){
     if (but_interrupt_flag == 1) {debounce(stateSwitch);}
     if (but_interrupt_flag == 2) {debounce(nearLimit);}
     if (but_interrupt_flag == 3) {debounce(farLimit);}
-    but_interrupt_flag = 0;
   }
   
   //State 0 

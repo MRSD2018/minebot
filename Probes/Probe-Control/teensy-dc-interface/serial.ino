@@ -1,4 +1,4 @@
-// SERIAL INPUT FUINCTIONS
+
 void serialControl() {
 
   if (Serial.available() > 0) {
