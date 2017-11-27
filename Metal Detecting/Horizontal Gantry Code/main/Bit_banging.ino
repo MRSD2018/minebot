@@ -6,6 +6,5 @@ void rotaryEncoderSetup() {
 
 void rotary_encoder(){
   wheelEncoderDist= int(rotary_data());
-;
 }
 

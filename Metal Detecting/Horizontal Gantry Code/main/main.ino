@@ -129,12 +129,9 @@ void setup() {
 //  Serial.begin(9600);
 
   //Initialize indicator LEDs
-  Initialized = 1;
+  Initialized = 0;  //CHANGE FOR PROBE
   posDesiredArrived = 0;
-  stateReq =3;
-  dist = 1700;
-  limitNear = 0;
-  limitFar = -1700;
+  stateReq =1;
   pinMode(LED1, OUTPUT);
   digitalWrite(LED1, HIGH);
   pinMode(LED2, OUTPUT);
@@ -181,7 +178,6 @@ void loop() {
   if (stateReq == 0) {
     analogWrite(PWM, zeroSpeed);
     limitIndicator = 0;
-    
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, LOW);
@@ -198,6 +194,8 @@ void loop() {
     digitalWrite(LED3, LOW);
     analogWrite(PWM, zeroSpeed);
     initialize();
+    posInTicks = map(encoderTicks, 0, dist, limitNear, limitFar);
+    posInMM = 10*posInTicks*teethPerRotation*toothPitch/encoderTicksPerRotation; // calculate current position in mm
   }
 
 /**************************************************************************/

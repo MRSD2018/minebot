@@ -1,4 +1,4 @@
-int STATE;
+//int STATE;
 
 //switch variables
 volatile int but_interrupt_flag = 0;
@@ -20,7 +20,7 @@ volatile int limitIndicator = 0;
 */
 /**************************************************************************/
 void buttonSetup() {
-  STATE = 0;
+//  STATE = 0;
   
   pinMode(stateSwitch, INPUT);
 //  attachInterrupt(digitalPinToInterrupt(stateSwitch), stateChange, RISING);
@@ -112,7 +112,6 @@ void LimitNear() {
     }
     if (stateReq != 1) {
       analogWrite(PWM, zeroSpeed);
-      STATE = 0;
     }
     but_interrupt_flag = 2;
   }
@@ -137,7 +136,6 @@ void LimitFar() {
     }
     if (stateReq != 1) {
       analogWrite(PWM, zeroSpeed);
-      STATE = 0;
     }
     but_interrupt_flag = 3;
   }

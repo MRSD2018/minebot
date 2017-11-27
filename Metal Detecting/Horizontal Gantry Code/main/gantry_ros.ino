@@ -29,6 +29,7 @@ void rosSetup(){
   nh.advertise(pub_gantry);
 
   nh.subscribe(sub_probe);
+  nh.subscribe(sub_probe_hack);
 
 }
 
@@ -49,17 +50,16 @@ void readyGantryStatus()
   gantry_stat.data[1] = Initialized;
   gantry_stat.data[2] = posDesiredArrived;
   gantry_stat.data[3] = posInMM;
-  gantry_stat.data[4] = dist;//encoderTicks;//wheelEncoderDist;  //wheelEncoderDist; 
+  gantry_stat.data[4] = wheelEncoderDist;  //wheelEncoderDist; 
   pub_gantry.publish(&gantry_stat);
-  delay(10);
-  nh.spinOnce();
+  delay(50);
 }
 
 
 /**************************************************************************/
 /*
     SUBSCRIBER
-    Assign values to gantry_status messages
+    Assign values to gantry_cmd_send messages
    * gantry_cmd_send.data[0] ==> Ready signal
    * gantry_cmd_send.data[1] ==> Desired Position
 */
@@ -72,11 +72,11 @@ void gantryCommands( const std_msgs::Int16MultiArray &gantry_cmd_send){
 /**************************************************************************/
 /*
     SUBSCRIBER - gantry/gantry_cmd_hack_send
-    Assign values to gantry_status messages
+    Assign values to gantry_cmd_hack_send messages
    * gantry_cmd_send.data[0] ==> Ready signal
    * gantry_cmd_send.data[1] ==> Desired Position
 */
 /**************************************************************************/
-void gantryCommandsHack( const std_msgs::Int16 &gantry_cmd_hack_send){
+void gantryCommandsHack(const std_msgs::Int16 &gantry_cmd_hack_send){
   stateReq = gantry_cmd_hack_send.data;
 }
