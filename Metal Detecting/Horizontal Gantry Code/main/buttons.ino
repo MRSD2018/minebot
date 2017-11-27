@@ -23,7 +23,7 @@ void buttonSetup() {
   STATE = 0;
   
   pinMode(stateSwitch, INPUT);
-  attachInterrupt(digitalPinToInterrupt(stateSwitch), stateChange, RISING);
+//  attachInterrupt(digitalPinToInterrupt(stateSwitch), stateChange, RISING);
 
   pinMode(nearLimit, INPUT);
   attachInterrupt(digitalPinToInterrupt(nearLimit), LimitNear, RISING);
@@ -53,44 +53,45 @@ void debounce(int button){
     State machine for determining gantry state.
 */
 /**************************************************************************/
-void stateChange() {
-  if (but_interrupt_flag == 0) {
-    switch(STATE) {
-        case 0:
-          Serial.println("State: Initialize");
-          digitalWrite(LED1, HIGH);
-          digitalWrite(LED2, LOW);
-          digitalWrite(LED3, LOW);
-          STATE = 1;
-          break;
-          
-        case 1:
-          Serial.println("State: Sweep");
-          digitalWrite(LED1, LOW);
-          digitalWrite(LED2, HIGH);
-          digitalWrite(LED3, LOW);
-          STATE = 2;
-          break;
-          
-        case 2:
-          Serial.println("State: Position Control");
-          digitalWrite(LED1, LOW);
-          digitalWrite(LED2, LOW);
-          digitalWrite(LED3, HIGH);
-          STATE = 3;
-          break;
-          
-        case 3:
-          Serial.println("State: WAITING");
-          digitalWrite(LED1, HIGH);
-          digitalWrite(LED2, HIGH);
-          digitalWrite(LED3, HIGH);
-          STATE = 0;
-          break;
-    }
-    but_interrupt_flag = 1;
-  }
-}
+//void stateChange() {
+//  if (but_interrupt_flag == 0) {
+//    switch(STATE) {
+//        case 0:
+//          Serial.println("State: Initialize");
+//          digitalWrite(LED1, HIGH);
+//          digitalWrite(LED2, LOW);
+//          digitalWrite(LED3, LOW);
+//          STATE = 1;
+//          break;
+//          
+//        case 1:
+//          Serial.println("State: Sweep");
+//          digitalWrite(LED1, LOW);
+//          digitalWrite(LED2, HIGH);
+//          digitalWrite(LED3, LOW);
+//          STATE = 2;
+//          break;
+//          
+//        case 2:
+//          Serial.println("State: Position Control");
+//          digitalWrite(LED1, LOW);
+//          digitalWrite(LED2, LOW);
+//          digitalWrite(LED3, HIGH);
+//          STATE = 3;
+//          break;
+//          
+//        case 3:
+//          STATE = 3;
+////          Serial.println("State: WAITING");
+////          digitalWrite(LED1, HIGH);
+////          digitalWrite(LED2, HIGH);
+////          digitalWrite(LED3, HIGH);
+////          STATE = 0;
+//          break;
+//    }
+//    but_interrupt_flag = 1;
+//  }
+//}
 
 
 /**************************************************************************/
@@ -103,13 +104,14 @@ void stateChange() {
 /**************************************************************************/
 void LimitNear() {
   if (but_interrupt_flag == 0) {
-    if (STATE == 1 && limitIndicator == 0) {
+    if (stateReq == 1 && limitIndicator == 0) {
       limitNear = encoderTicks;
       Serial.print("Near Limit ==> "); Serial.println(limitNear);
       limitIndicator = 1;
       digitalWrite(LED2, HIGH);
     }
-    if (STATE != 1) {
+    if (stateReq != 1) {
+      analogWrite(PWM, zeroSpeed);
       STATE = 0;
     }
     but_interrupt_flag = 2;
@@ -127,14 +129,14 @@ void LimitNear() {
 /**************************************************************************/
 void LimitFar() {
   if (but_interrupt_flag == 0) {
-    if (STATE == 1 && limitIndicator == 1) {
+    if (stateReq == 1 && limitIndicator == 1) {
       limitFar = encoderTicks;
       Serial.print("Far Limit ==> "); Serial.println(limitFar);
       limitIndicator = 2; 
       digitalWrite(LED3, HIGH);
     }
-    if (STATE != 1) {
-      analogWrite(PWM, 177);
+    if (stateReq != 1) {
+      analogWrite(PWM, zeroSpeed);
       STATE = 0;
     }
     but_interrupt_flag = 3;

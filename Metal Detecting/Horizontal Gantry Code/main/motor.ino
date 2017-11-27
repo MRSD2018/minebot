@@ -71,7 +71,7 @@ void posControl() {
   if (probeStat == 1){
     newPos = desiredPos;
     posDesiredArrived = 0;
-    count = 0;
+//    count = 0;
   }
   
   if (probeStat == 0) {
@@ -105,10 +105,11 @@ void posControl() {
     Serial.print(posInMM); Serial.print("   ===>    "); Serial.print(newPos); Serial.print("   ===>    "); Serial.println(pwmToWritePos);
 
     //If gantry is within the position error and not moving, set that the desired position has been reached
-    if ((abs(positionError) <= 5) && (prevPositionError == positionError)){ 
-      count += 1;
-      if (count <= 50) {posDesiredArrived = 1;}
-      if (count > 50) {posDesiredArrived = 0;}
+    if ((abs(positionError) <= 10) && (prevPositionError == positionError)){ 
+      posDesiredArrived = 1;
+//      count += 1;
+//      if (count <= 50) {posDesiredArrived = 1;}
+//      if (count > 50) {posDesiredArrived = 0;}
     }
     
     // update values for next timestep

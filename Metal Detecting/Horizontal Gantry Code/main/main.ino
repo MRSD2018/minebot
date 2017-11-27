@@ -4,6 +4,7 @@
 #include <std_msgs/String.h>
 #include <geometry_msgs/Point32.h>
 #include <std_msgs/Int16MultiArray.h>
+#include <std_msgs/Int16.h>
 
 /*Define Pins*/
 //motor
@@ -28,10 +29,12 @@
 ros::NodeHandle nh;
 std_msgs::Int16MultiArray gantry_stat;
 ros::Publisher pub_gantry( "gantryStat", &gantry_stat);
+long loopTime; //For calculating publish rate
 
 //Subscriber variables
 int probeStat = 0;
 int desiredPos;
+int stateReq;
 
 //Gantry state
 extern int STATE;
@@ -126,9 +129,12 @@ void setup() {
 //  Serial.begin(9600);
 
   //Initialize indicator LEDs
-  Initialized = 0;
+  Initialized = 1;
   posDesiredArrived = 0;
-  desiredPos = 0;
+  stateReq =3;
+  dist = 1700;
+  limitNear = 0;
+  limitFar = -1700;
   pinMode(LED1, OUTPUT);
   digitalWrite(LED1, HIGH);
   pinMode(LED2, OUTPUT);
@@ -150,13 +156,16 @@ void setup() {
 */
 /**************************************************************************/
 void loop() {
+
+  loopTime = millis();
+  
   //ROS gantry_status message publisher
   readyGantryStatus();
   nh.spinOnce();  
 
   // debounce appropriate switch
   if (but_interrupt_flag){
-    if (but_interrupt_flag == 1) {debounce(stateSwitch);}
+//    if (but_interrupt_flag == 1) {debounce(stateSwitch);}
     if (but_interrupt_flag == 2) {debounce(nearLimit);}
     if (but_interrupt_flag == 3) {debounce(farLimit);}
   }
@@ -169,9 +178,13 @@ void loop() {
     State 0 ==> System "waiting". Motor speed set to 0. Initiazization reset.
 */
 /**************************************************************************/
-  if (STATE == 0) {
+  if (stateReq == 0) {
     analogWrite(PWM, zeroSpeed);
     limitIndicator = 0;
+    
+    digitalWrite(LED1, LOW);
+    digitalWrite(LED2, LOW);
+    digitalWrite(LED3, LOW);
   }
   
 /**************************************************************************/
@@ -179,8 +192,10 @@ void loop() {
     State 1 ==> Initialize by flipping motor-side, then far-side limit switches
 */
 /**************************************************************************/
-  if (STATE == 1){
+  if (stateReq == 1){
     digitalWrite(LED1, HIGH);
+    digitalWrite(LED2, LOW);
+    digitalWrite(LED3, LOW);
     analogWrite(PWM, zeroSpeed);
     initialize();
   }
@@ -190,7 +205,7 @@ void loop() {
     State 2 ==> Sweep motor WARNING: Motor will move immediately if powered
 */
 /**************************************************************************/
-  if (STATE == 2){
+  if (stateReq == 2){
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, HIGH);
     digitalWrite(LED3, LOW);
@@ -202,12 +217,14 @@ void loop() {
     State 3 ==> Position control
 */
 /**************************************************************************/
-  if (STATE ==3) {
+  if (stateReq == 3) {
     digitalWrite(LED1, LOW);
     digitalWrite(LED2, LOW);
     digitalWrite(LED3, HIGH);
     posControl();
   }
+
+//  delay(100 -  (millis() - loopTime));
     
 }
 
