@@ -1,6 +1,6 @@
-int clock_pin = 16; // output to clock
-int CSn_pin = 17; // output to chip select
-int input_pin = 15; // read AS5045
+int clock_pin = 27; // output to clock
+int CSn_pin = 29; // output to chip select
+int input_pin = 28; // read AS5045
 int input_stream = 0; // one bit read from pin
 long packed_data = 0; // two bytes concatenated from inputstream
 long angle = 0; // holds processed angle value
@@ -14,6 +14,12 @@ float starting_angle = 0.0;
 long printing_angle = 0;
 long angle_mask = 262080; // 0x111111111111000000: mask to obtain first 12 digits with position info
 int debug;
+
+const float diam = 100.5;
+float true_rad;
+int cnt = 0;
+float prev_rad;
+float true_dist;
 
 long angle_temp = 0;
 
@@ -61,11 +67,23 @@ float rotary_data()
   angle_temp = round((angle_float - resting_angle + 360.0) * 10000);
   angle_temp = angle_temp % (360*10000);
   true_angle = angle_temp / 10000.0;
- 
-  if (true_angle > 180.0)
-  {
-    true_angle = - (360.0 - true_angle);
+
+  //Convert angle to rad.
+  true_rad = 3.1415*true_angle / 180;
+
+  //Count rotations 
+  if (true_rad - prev_rad > 4) {
+    cnt = cnt-1;
   }
+  if (true_rad - prev_rad < -4) {
+    cnt = cnt+1;
+  }
+
+  Serial.println(cnt);
+
+  true_dist = diam*(cnt*3.1415 + true_rad/(2));
+   
+  prev_rad = true_rad;
   
-  return true_angle;
+  return true_dist;
 }

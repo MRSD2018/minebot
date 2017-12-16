@@ -20,12 +20,13 @@ void initialize() {
   //limit indicator value signifies that both limit switches have been activated in the correct order
   if (limitIndicator == 2){
     dist = abs(limitFar - limitNear); //calculate the distance between the limit switches in encoder ticks
-    distInCM = dist*teethPerRotation*toothPitch/encoderTicksPerRotation; //calculate the distance in cm
+    distInMM = 10*dist*teethPerRotation*toothPitch/encoderTicksPerRotation; //calculate the distance in mm
     
     Serial.println("Initialization Complete!");
-    Serial.print("Distance in cm ==> "); Serial.println(distInCM);
+    Serial.print("Distance in mm ==> "); Serial.println(distInMM);
     
     limitIndicator = 3; //update to push limit switches into error mode
+    Initialized = 1; //Set inidcator to initialized 
   }
 }
 
@@ -40,17 +41,17 @@ void sweep() {
 
   //map current gantry plate position
   posInTicks = map(encoderTicks, 0, dist, limitNear, limitFar); //calculate current position in encoder ticks
-  posInCM = posInTicks*teethPerRotation*toothPitch/encoderTicksPerRotation; // calculate current position in cm
-  Serial.print(dist); Serial.print("  ==>  ");Serial.print(posInTicks); Serial.print("  ==>  "); Serial.println(posInCM);
+  posInMM = 10*posInTicks*teethPerRotation*toothPitch/encoderTicksPerRotation; // calculate current position in mm
+  Serial.print(dist); Serial.print("  ==>  ");Serial.print(posInTicks); Serial.print("  ==>  "); Serial.println(posInMM);
 
   //If gantry plate is too close to end-stops, swich motor direction
   if (posInTicks < 200) {
-    analogWrite(PWM, 200);
+    analogWrite(PWM, zeroSpeed+60);
     Serial.println("FORWARD");
   }
   if (posInTicks > (dist-200)) {
     Serial.println("BACKWARD");
-    analogWrite(PWM, 30);
+    analogWrite(PWM, zeroSpeed-50);
   }
 }
 
@@ -64,23 +65,28 @@ void posControl() {
 
   //map current gantry plate position
   posInTicks = map(encoderTicks, 0, dist, limitNear, limitFar);
+  posInMM = 10*posInTicks*teethPerRotation*toothPitch/encoderTicksPerRotation; // calculate current position in mm
 
   //wait for serial position command. Integer. 
-  if (Serial.available() > 0){
-    newPos = Serial.readString().toInt();
+  if (probeStat == 1){
+    newPos = desiredPos;
+    posDesiredArrived = 0;
+//    count = 0;
+  }
+  
+  if (probeStat == 0) {
+    analogWrite(PWM, zeroSpeed);
   }
 
   //Move gantry plate if position command is valid.
   if (newPos < dist && newPos > 0){
+    
     // calculate current time and timestep
     nowTime = millis();
     dt = (double)(nowTime - prevTime); // note this is in milliseconds still
 
-    // get current position
-    currentPos = (double)posInTicks;
-
     // calculate errors
-    positionError = newPos - currentPos;
+    positionError = newPos - posInMM;
     positionErrorSum += positionError * dt;
 
     // calculate PWM
@@ -91,20 +97,25 @@ void posControl() {
     motorInputScaledPos = zeroSpeed + pwmToWritePos; //Calcualte PWM as a reference to the zero speed PWM for Sabertooth Driver
 
     //Truncate PWMs above and below limits
-    if (motorInputScaledPos > 255){ motorInputScaledPos = 255; }
-    if (motorInputScaledPos < 0){ motorInputScaledPos = 0; }
+    if (motorInputScaledPos > zeroSpeed+60){ motorInputScaledPos = zeroSpeed+60; }
+    if (motorInputScaledPos < zeroSpeed-50){ motorInputScaledPos = zeroSpeed-50; }
 
     // calculate current time and timestepive Motor
     analogWrite(PWM, motorInputScaledPos);
-    Serial.print(currentPos); Serial.print("   ===>    "); Serial.print(newPos); Serial.print("   ===>    "); Serial.println(pwmToWritePos);
+    Serial.print(posInMM); Serial.print("   ===>    "); Serial.print(newPos); Serial.print("   ===>    "); Serial.println(pwmToWritePos);
 
+    //If gantry is within the position error and not moving, set that the desired position has been reached
+    if ((abs(positionError) <= 10) && (prevPositionError == positionError)){ 
+      posDesiredArrived = 1;
+//      count += 1;
+//      if (count <= 50) {posDesiredArrived = 1;}
+//      if (count > 50) {posDesiredArrived = 0;}
+    }
+    
     // update values for next timestep
     prevPositionError = positionError;
     delay(1); //delay to ensure a difference between prevTime and nowTime
     prevTime = nowTime;
-  }
-  else {
-    analogWrite(PWM, zeroSpeed);
   }
 }
 
