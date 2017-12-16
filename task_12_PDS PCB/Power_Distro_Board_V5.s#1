@@ -11947,9 +11947,9 @@ I think it's a bug in EAGLE.</text>
 <attribute name="NAME" x="133.35" y="-57.785" size="1.778" layer="95"/>
 <attribute name="VALUE" x="128.27" y="-48.26" size="1.778" layer="96"/>
 </instance>
-<instance part="RPI_5V" gate="G$1" x="111.76" y="7.62" smashed="yes" rot="R90">
-<attribute name="NAME" x="118.872" y="11.176" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="118.872" y="13.335" size="1.778" layer="96" rot="R180"/>
+<instance part="RPI_5V" gate="G$1" x="101.6" y="-2.54" smashed="yes" rot="R90">
+<attribute name="NAME" x="108.712" y="1.016" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="108.712" y="3.175" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="GND9" gate="1" x="119.38" y="7.62" rot="R90"/>
 <instance part="R9" gate="G$1" x="104.14" y="7.62" smashed="yes" rot="R180">
@@ -12087,6 +12087,7 @@ I think it's a bug in EAGLE.</text>
 <segment>
 <pinref part="RPI_5V" gate="G$1" pin="C"/>
 <pinref part="GND9" gate="1" pin="GND"/>
+<wire x1="106.68" y1="-2.54" x2="116.84" y2="7.62" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="RAIL_5V" gate="G$1" pin="C"/>
@@ -12316,6 +12317,7 @@ I think it's a bug in EAGLE.</text>
 <segment>
 <pinref part="RPI_5V" gate="G$1" pin="A"/>
 <pinref part="R9" gate="G$1" pin="1"/>
+<wire x1="99.06" y1="-2.54" x2="109.22" y2="7.62" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="5V_REG3" class="0">
