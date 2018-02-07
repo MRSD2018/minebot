@@ -1,0 +1,42 @@
+Sub-Assembly,PART NUMBER (SKU),DESCRIPTION,QTY., Price  ,Notes
+Horizontal Motion,,,,,
+,922-pack,Low Profile Screw M5 x 15,6,$3.30 ,Pack of 25
+,130-pack,Low Profile Screw M5 x 35,4,$4.25 ,
+,20-pack,Low Profile Screw M5 x 25,1, In Stock ,Pack of 25
+,946-pack,Low Profile Screw M5 x 8,4, In Stock ,Pack of 25
+,,Button Head Socket Cap Screw M3 x 10,4, In Stock ,
+,60,Double Tee Nut,2,$0.65 ,
+,536-pack,Tee Nut,2,$4.95 ,Pack of 25
+,200-LP,  V-Slot 20x60x1000 Linear Rail,1,$15.50 ,
+,621,  V-Slot Gantry Plate 20-80mm,1,$12.00 ,
+,580,  Spacer Block,2,$3.95 ,
+,480,  Solid V Wheel Kit,4,$4.85 ,
+,570,  Idler Pulley Plate,1,$6.95 ,
+,550,  Smooth Idler Pulley Kit,1,$5.45 ,
+,479-By-The-Foot,GT2 Timing Belt,1, In Stock ,
+,90,Aluminum Spacer 6mm,4,$0.20 ,
+,225,Aluminum Spacer 9mm,2,$0.25 ,
+,,,,,
+,575,  Motor Mount Plate Nema 17,1,$6.95 ,
+,200,  GT2 Timing Pulley 30 Tooth,1,$6.95 ,
+,,    Nylon Insert Lock Nut M5,1, In Stock ,
+,75,Timing Belt Torsion Spring,1,$0.80 ,
+,730,Belt Clamp Crimp Style,4,$0.60 ,
+Legs (x2),,,2,,
+,615,  Joining Plate T,2,$4.65 ,
+,200-LP,  V-Slot 20x20x1000 Linear Rail,1,$15.50 ,In Stock
+,490,  Cast Corner Bracket,2,$1.50 ,
+,595626,  Skate Wheel (Servo City 595626),2,$4.99 ,
+,535034,  ball bearing 22x8 (Servo City 535034),4,$1.99 ,Pack of 2 
+,536-pack,Tee Nut,6,$4.95 ,Pack of 25
+,825,  Aluminum Spacer .125in,2,$0.15 ,
+,60,Double Tee Nut,4,$0.65 ,
+,946-pack,Low Profile Screw M5 x 8,8, In Stock ,Pack of 25
+,130-pack,Low Profile Screw M5 x 35,4,$4.25 ,
+Testing Bed,,"2""x4""x8'",2,,
+Electronics,,,,,
+,,Nema 17 Stepper Motor,1, In Stock ,
+,,Limit Switches,2,In Stock,
+,,Arduino,,In Stock,
+,,Battery,,?,
+,,Stepper Driver,,In Stock,
