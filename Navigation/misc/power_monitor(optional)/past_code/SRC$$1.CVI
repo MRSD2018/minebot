@@ -1,0 +1,86 @@
+#include "declare.h"
+#include "energy_thread.h"
+
+void calculate_energy(void)
+{
+	uint8_t send;
+	uint8_t data;
+	
+	char volt[2] = {0x00, 0x00};
+	char curr[2] = {0x00, 0x00};
+	
+	uint8_t write_address = 0x40; // find using i2cdetect -y 1
+	
+	char config_write[3] = {0x00, 0x29, 0x9F};  // first byte is address, next two are data
+	char calib_write[3] = {0x05, 0x10, 0x00};   // for value 0x1000 the current LSB = 2 e-3 A.
+	
+	char voltage_read[1] = {0x05};		 // voltage register address
+	char current_read[1] = {0x04};
+	
+	int volt_read = 0;
+	float voltage  = 0;
+	float current = 0;
+	
+	printf("Energy thread started.\n");
+	
+	while(start == 0)
+	{}
+	
+	while(1)
+	{
+		if(sample_energy)
+		{
+			bcm2835_i2c_begin();  // I2C begin
+			bcm2835_i2c_set_baudrate(100000);	
+
+    		bcm2835_i2c_setSlaveAddress(write_address);		 //write
+    		bcm2835_i2c_setClockDivider(BCM2835_I2C_CLOCK_DIVIDER_626);
+	
+			//data = 0x01;  // shunt voltage register
+			send = bcm2835_i2c_write(config_write, 3);
+			send = bcm2835_i2c_write(calib_write, 3);
+//			send = bcm2835_i2c_read(volt, 2);
+//			send = bcm2835_i2c_write_read_rs(volt_cmds, 1, volt, 2);
+			send = bcm2835_i2c_read_register_rs(voltage_read, volt, 2);
+			send = bcm2835_i2c_read_register_rs(current_read, curr, 2);
+			
+			
+			int volt_16 = (volt[0]<<8)|(volt[1]);
+		
+			if(volt[0] > 127)		   // if sign bit is 1
+			{
+				volt_read = volt_16 - 0x10000;  //(~volt_16 & 0x0000FFFF) + 0x01 ;
+//				printf("Inverted\n");
+			}
+			else
+			{
+				volt_read = (volt_16);
+			}
+			
+			/*
+			default value of voltage resolution is 320 mV.
+			So, we will have to convert the voltage reading to actual voltage value.
+			*/			
+			voltage =  (float)volt_read / 100.0;  // in mV  // this conversio is given in datasheet
+			current = voltage / 0.01;  // in mA // the shunt resistance is 0.01 ohm
+			
+			
+//			printf("pow: volt_16 = %X,  %d\n", volt_16, volt_read);
+			printf("pow: Voltage register value = %X%X \n", volt[0], volt[1]);
+			
+			power = pow((voltage/1000.0),2.0) / 0.01;   //  V^2 / R
+			
+			float energy = discrete_intg(power, dT_PD);
+			
+			printf("1's complement of volt[0] = %X -> %.2X\n", volt[0], (~volt[0]& 0x000000FF)); 
+//			printf("pow: V, I, P, E = %f, %f, %f, %f \n",voltage, current, power, energy);
+//			printf("pow: power = %f \n",power);
+//			printf("pow: Measures Power = %f \n",pow_meas);
+			
+			bcm2835_i2c_end(); // I2C end
+			
+			sample_energy = 0;
+			
+		}
+	}
+}
