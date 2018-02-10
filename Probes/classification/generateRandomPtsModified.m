@@ -34,7 +34,7 @@ function [ pointsTrue, pointsFalse ] = generateRandomPts( r,cx,cy,npt,aoa,noise,
     else
         for i = 1:npt
 
-            line = -r*noise*5:r/50:r*noise*5;
+            line = -r*noise*3:r/50:r*noise*3;
             line = line + r;
 
             vector.x = cx+line*sind(angles(i));
@@ -48,7 +48,13 @@ function [ pointsTrue, pointsFalse ] = generateRandomPts( r,cx,cy,npt,aoa,noise,
 
             points.x(i) = vector.x(randIndex);
             points.y(i) = vector.y(randIndex);
-            points.target(i) = randi([0 1]);
+            
+            points.target(i) = 0;
+            if (sum(points.target) < 3)
+                points.target(i) = 1;
+            else
+                points.target(i) = randi([0 1]);
+            end
 
         end
     end
