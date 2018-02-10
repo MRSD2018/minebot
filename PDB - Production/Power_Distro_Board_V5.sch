@@ -9372,9 +9372,9 @@ Source: AVX .. aphvc.pdf</description>
 <part name="GND3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C7" library="eagle-ltspice" library_urn="urn:adsk.eagle:library:217" deviceset="C" device="C1210" package3d_urn="urn:adsk.eagle:package:13278/1" value="10uF"/>
 <part name="GND24" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C1" library="SparkFun-Capacitors" deviceset="ALUM_ELEC_RADIAL" device="" value="150uF"/>
+<part name="C1" library="eagle-ltspice" library_urn="urn:adsk.eagle:library:217" deviceset="C" device="C1210" package3d_urn="urn:adsk.eagle:package:13278/1" value="150uF"/>
 <part name="GND28" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C2" library="SparkFun-Capacitors" deviceset="ALUM_ELEC_RADIAL" device="" value="100nF"/>
+<part name="C2" library="SparkFun-Capacitors" deviceset="ALUM_ELEC_RADIAL" device="" value="250uF"/>
 <part name="GND29" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="POWER" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SML1206" package3d_urn="urn:adsk.eagle:package:15829/1" value="GREEN"/>
 <part name="GND6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -9458,6 +9458,8 @@ Source: AVX .. aphvc.pdf</description>
 <part name="GND14" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="F10" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M1206" package3d_urn="urn:adsk.eagle:package:26088/1" value="20A"/>
 <part name="DCDC" library="con-molex-2" deviceset="555X-2" device="V"/>
+<part name="C3" library="eagle-ltspice" library_urn="urn:adsk.eagle:library:217" deviceset="C" device="C1210" package3d_urn="urn:adsk.eagle:package:13278/1" value="100nF"/>
+<part name="GND25" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9484,11 +9486,11 @@ OVP, RVP, Reg</text>
 <instance part="GND3" gate="1" x="71.12" y="78.74" rot="R180"/>
 <instance part="C7" gate="G$1" x="15.24" y="0"/>
 <instance part="GND24" gate="1" x="15.24" y="5.08" rot="R180"/>
-<instance part="C1" gate="G$1" x="15.24" y="58.42" smashed="yes" rot="R180">
-<attribute name="NAME" x="21.336" y="60.579" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="23.876" y="63.119" size="1.778" layer="96" rot="R180"/>
+<instance part="C1" gate="G$1" x="20.32" y="58.42" smashed="yes" rot="R180">
+<attribute name="NAME" x="26.416" y="60.579" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="28.956" y="63.119" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="GND28" gate="1" x="15.24" y="66.04" rot="R180"/>
+<instance part="GND28" gate="1" x="20.32" y="66.04" rot="R180"/>
 <instance part="C2" gate="G$1" x="88.9" y="58.42" rot="R180"/>
 <instance part="GND29" gate="1" x="88.9" y="66.04" rot="R180"/>
 <instance part="POWER" gate="G$1" x="45.72" y="35.56"/>
@@ -9591,6 +9593,8 @@ OVP, RVP, Reg</text>
 <instance part="F10" gate="G$1" x="205.74" y="-109.22"/>
 <instance part="DCDC" gate="-1" x="233.68" y="96.52"/>
 <instance part="DCDC" gate="-2" x="233.68" y="104.14"/>
+<instance part="C3" gate="G$1" x="10.16" y="60.96"/>
+<instance part="GND25" gate="1" x="10.16" y="66.04" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -9734,7 +9738,7 @@ OVP, RVP, Reg</text>
 </segment>
 <segment>
 <pinref part="GND28" gate="1" pin="GND"/>
-<pinref part="C1" gate="G$1" pin="-"/>
+<pinref part="C1" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <pinref part="GND29" gate="1" pin="GND"/>
@@ -9744,6 +9748,10 @@ OVP, RVP, Reg</text>
 <pinref part="DCDC" gate="-2" pin="S"/>
 <pinref part="GND15" gate="1" pin="GND"/>
 <wire x1="231.14" y1="104.14" x2="167.64" y2="104.14" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="C3" gate="G$1" pin="1"/>
+<pinref part="GND25" gate="1" pin="GND"/>
 </segment>
 </net>
 <net name="12V_REG_TVS" class="0">
@@ -9763,10 +9771,13 @@ OVP, RVP, Reg</text>
 <pinref part="PWR_IN" gate="G$1" pin="-1"/>
 <wire x1="0" y1="71.12" x2="5.08" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="5.08" y1="71.12" x2="5.08" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="5.08" y1="55.88" x2="15.24" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="C1" gate="G$1" pin="+"/>
-<wire x1="15.24" y1="55.88" x2="25.4" y2="55.88" width="0.1524" layer="91"/>
-<junction x="15.24" y="55.88"/>
+<wire x1="5.08" y1="55.88" x2="10.16" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="C1" gate="G$1" pin="1"/>
+<wire x1="10.16" y1="55.88" x2="20.32" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="20.32" y1="55.88" x2="25.4" y2="55.88" width="0.1524" layer="91"/>
+<junction x="20.32" y="55.88"/>
+<pinref part="C3" gate="G$1" pin="2"/>
+<junction x="10.16" y="55.88"/>
 </segment>
 </net>
 <net name="N$1" class="0">
