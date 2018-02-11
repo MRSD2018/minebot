@@ -5,7 +5,7 @@ function draw( gantry_pos, probe_pos, contactPoint,  i )
     children = get(gca, 'children');
     delete(children(1));
     
-    title(sprintf('probe iteration %d',i));
+    title(sprintf('Probe Iteration #%d',i));
     if (~isempty(contactPoint))
         plot3(contactPoint(1),contactPoint(2),contactPoint(3),'r.', 'MarkerSize',25);
     end

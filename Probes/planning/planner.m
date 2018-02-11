@@ -10,7 +10,6 @@ mine.h = 5;
 %% render
 f = figure; movegui(f,'northwest');
 axis equal; grid on; hold on; 
-
 az = 45; el = 45;
 view(az, el);
 
@@ -19,18 +18,16 @@ X = X + mine.pos(1);
 Y = Y + mine.pos(2);
 Z = Z*mine.h + mine.pos(3);
 
-% surf(X,Y,Z,'FaceAlpha',0.25)
-% plot3([0 0], [0 5],[0 0], 'r-', 'LineWidth', 2);  %x-axis
-% plot3([0 5], [0 0],[0 0], 'g-', 'LineWidth', 2);  %y-axis
+surf(X,Y,Z,'FaceAlpha',0.25)
+plot3([0 0], [0 3],[0 0], 'g-', 'LineWidth', 2);  %x-axis
+plot3([0 3], [0 0],[0 0], 'r-', 'LineWidth', 2);  %y-axis
 
 %% simulate metal detector input
-md.u_x = mine.pos(1);
-md.u_y = mine.pos(2); 
-md.sigma_x = mine.d; % Not so sure about this?
+md.sigma_x = mine.d/5; % Not so sure about this?
 md.sigma_y = md.sigma_x;
-
+md.u_x = normrnd(mine.pos(1),md.sigma_x);
+md.u_y = normrnd(mine.pos(2),md.sigma_y);
 plot3(md.u_x, md.u_x, 0, 'gx', 'MarkerSize', 20);
-rectangle('Position',[md.u_x-md.sigma_x md.u_y-md.sigma_y 2*md.sigma_x 2*md.sigma_y],'Curvature',[1 1],'EdgeColor','g')
 
 %% gantry
 % PARAMS
@@ -40,33 +37,35 @@ gantry.pos = [0; 0; 0];
 %% probe
 % PARAMS
 probe.angle = 30; % deg
-probe.length = 50;
+probe.length = 20;
 % END PARAMS
 
 %%%%%%%%%%%%%%%%
 %% SIMULATION %%
 %%%%%%%%%%%%%%%%
 
-%% INITIAL SEARCH
-
 % search parameters
-SearchSF = 1.5;
+SearchSF = 1;
 maxForwardSearch = cosd(probe.angle)*mine.h*(1/SearchSF);
+angleRange = 130; % degrees
+noiseFactor = 0.5;
 
+%% INITIAL SEARCH
 % set position/yaw
-probe.pos = [md.u_x; md.u_y - md.sigma_y*SearchSF; -15];
+probe.pos = [md.u_x; md.u_y - mine.d*SearchSF; -15];
 gantry.yaw = 0;
 
-i = 1; probeSequence;
+contactPoints.x = []; contactPoints.y = []; contactPoints.z = [];
+i = 1; 
+probeSequence;
 
-%% INFO MAX SERACH
-
+%% INFO MAX SEARCH
 % find extrema of possible mine centres
 th = linspace( pi/2, -pi/2, 3);
-x = mine.d/2*sin(th) + contactPoint(1);
-y = mine.d/2*cos(th) + contactPoint(2);
-z = zeros(1,length(x)) + contactPoint(3);
-plot3(x,y,z,'bx');
+x = mine.d/2*sin(th) + contact(1);
+y = mine.d/2*cos(th) + contact(2);
+z = zeros(1,length(x)) + contact(3);
+% plot3(x,y,z,'bx');
 
 if mine.pos(2) <= 0
     worst_case.x = x(1); % go for right point
@@ -83,11 +82,20 @@ probe.pos = [ worst_case.x + sind(gantry.yaw) * mine.d/2*SearchSF; ...
               -15];
 probeSequence; % perform probe!
 
-%% Begin hough-based search
+%% BEGIN HOUGH BASED SEARCH
+az = 0; el = 90; % change view
+view(az, el);
 
+houghCalculation;
 
+while(length(contactPoints.x) < 5 || circleFitError > 2)
 
-
-
-
+    getHoughProbe;
+    probe.pos = [cosd(newAngle)*mine.d/2*0.9; sind(newAngle)*mine.d/2*0.9; mean(contactPoints.z)];
+    gantry.yaw = newAngle + 90;
+    probeSequence; % perform probe!
+    
+    houghCalculation;
+    
+end
 
