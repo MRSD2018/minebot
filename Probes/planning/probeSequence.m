@@ -18,8 +18,9 @@ while(isempty(contact))
     contact = normrnd(contact,noiseFactor);
     
     %% render
-    draw( gantry.pos, probe.pos, contact,  i );
-
+    draw( f, n, gantry.pos, probe.pos, contact,  i );
+    n = n + 1;
+    
     %% update gantry position
     probe.pos = probe.pos + search;
     gantry.pos = gantryPosition( probe.pos, probe.angle, probe.length, gantry.yaw );

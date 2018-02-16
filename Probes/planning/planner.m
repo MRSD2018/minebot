@@ -1,4 +1,5 @@
 clear all; close all; clc;
+n = 1;
 
 %% generate target 
 % PARAMS
@@ -48,7 +49,7 @@ probe.length = 20;
 SearchSF = 1;
 maxForwardSearch = cosd(probe.angle)*mine.h*(1/SearchSF);
 angleRange = 130; % degrees
-noiseFactor = 0.5;
+noiseFactor = 0.25;
 
 %% INITIAL SEARCH
 % set position/yaw

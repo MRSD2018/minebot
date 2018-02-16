@@ -1,4 +1,4 @@
-function draw( gantry_pos, probe_pos, contactPoint,  i )
+function draw( f, n, gantry_pos, probe_pos, contactPoint,  i )
 %DRAW Summary of this function goes here
 %   Detailed explanation goes here
     %% Rendering
@@ -14,7 +14,16 @@ function draw( gantry_pos, probe_pos, contactPoint,  i )
           [gantry_pos(2) probe_pos(2)], ...
           [gantry_pos(3) probe_pos(3)], 'r-')
       
-    pause(0.5)
+%     pause(0.75)
+    
+    % Capture the plot as an image 
+    frame = getframe(f); 
+    im = frame2im(frame); 
+    [imind,cm] = rgb2ind(im,256); 
+    % Write to the GIF File 
+    filename = ['img ' num2str(n,'%d') '.png'];
+    imwrite(imind,cm,filename,'png'); 
+
 
 end
 
