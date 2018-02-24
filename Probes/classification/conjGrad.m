@@ -2,19 +2,24 @@ clc
 clear
 close all
 
-r = 1;
-
-c.x = .0;
-c.y = -0;
-
-npt = 5;
-[ points ] = generateRandomPts( r,c.x,c.y,npt );
+% landmine simulation
+r = 9; % cm
+c.x = 0; c.y = 0;
+% probe simulation
+noise = 0.2; % 0.1 is reasonable assumption
+aoa = 180; % probe angle of attack in degrees
+n = 9; % number of points
+[ points ] = generateRandomPtsModified( r,c.x,c.y,n,aoa,noise,true );
 % [ points ] = generateFixedPts( r,c.x,c.y );
-[ center_x,center_y ] = initCircle( points );
 
 figure
-plot(points.x,points.y,'.','MarkerSize',20)
 hold on
+plot(c.x,c.y,'.blue','MarkerSize',20)
+rectangle('Position',[c.x-r c.y-r 2*r 2*r],'Curvature',[1 1],'EdgeColor','blue')
+
+[ center_x,center_y ] = initCircle( points );
+
+plot(points.x,points.y,'.','MarkerSize',20)
 % plot(center_x,center_y,'.k','MarkerSize',20)
 % plot(c.x,c.y,'.c','MarkerSize',20)
 % rectangle('Position',[c.x-r c.y-r 2*r 2*r],'Curvature',[1 1],'EdgeColor','c','LineStyle','--')
