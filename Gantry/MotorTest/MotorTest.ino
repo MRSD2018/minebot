@@ -32,8 +32,8 @@ int Y_encoderTicks = 0;
 #define LED3 26
 
 //Motor Variables
-int zeroSpeed = 75;
-int speed_X = 115;
+int zeroSpeed = 90;
+int speed_X = 50;
 int speed_Y = zeroSpeed;
 
 //Timing Variables
@@ -60,9 +60,9 @@ void setup() {
 
   //Motor Init
   pinMode(X_Motor, OUTPUT);
-  analogWrite(X_Motor, 115);
+  analogWrite(X_Motor, speed_X);
   pinMode(Y_Motor, OUTPUT);
-  analogWrite(Y_Motor, zeroSpeed);
+  analogWrite(Y_Motor, speed_Y);
 
   //Encoder Init
   //X
@@ -125,23 +125,23 @@ void buttonPress(){
 void buttonState() {
   if (button_interrupt_flag) {
     if (digitalRead(limSwitch1) == HIGH) {
-      speed_X =115;
+      speed_X =125;
       analogWrite(X_Motor, speed_X);
       debounce(limSwitch1);
       button_interrupt_flag = 0;
-      X_counts = abs(X_encoderTicks);
+      X_encoderTicks = 0;
       state = state + 1; 
     }
     if (digitalRead(limSwitch2) == HIGH) {
-      speed_X = 30;
+      speed_X = 50;
       analogWrite(X_Motor, speed_X);
       debounce(limSwitch2);
       button_interrupt_flag = 0;
-      X_encoderTicks = 0;
+      X_counts = abs(X_encoderTicks);
       state = state + 1;
     }
     if (digitalRead(limSwitch3) == HIGH) {
-      speed_Y =115;
+      speed_Y =50;
       analogWrite(Y_Motor, speed_Y);
       debounce(limSwitch3);
       button_interrupt_flag = 0;
@@ -149,7 +149,7 @@ void buttonState() {
       state = state + 1; 
     }
     if (digitalRead(limSwitch4) == HIGH) {
-      speed_Y =40;
+      speed_Y =125;
       analogWrite(Y_Motor, speed_Y);
       debounce(limSwitch4);
       button_interrupt_flag = 0;
@@ -177,13 +177,14 @@ void loop() {
   if (state == 2) {
     if (X_encoderTicks <= X_counts/2){
       speed_X =zeroSpeed; analogWrite(X_Motor, speed_X);
-      speed_Y = 30; analogWrite(Y_Motor, speed_Y);
+      speed_Y = 50; analogWrite(Y_Motor, speed_Y);
       } 
   }
   if (state >= 4) {
     if (Y_encoderTicks <= Y_counts/2){
       speed_Y =zeroSpeed; analogWrite(Y_Motor, speed_Y);
-      analogWrite(X_Motor, zeroSpeed);
+      speed_X = zeroSpeed;
+      analogWrite(X_Motor, speed_X);
       } 
   }
   Serial.print("X speed:  "); Serial.print(speed_X);Serial.print("  Y speed:  "); Serial.println(speed_Y);
