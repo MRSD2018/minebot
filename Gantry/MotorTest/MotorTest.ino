@@ -49,6 +49,12 @@ int state = 0;
 int X_counts = 0;
 int Y_counts = 0;
 
+//Positioning Variables
+int X_goal = 0;
+int Y_goal = 0;
+double posError = 0;
+double kp = 0.4;
+
 void setup() {
   Serial.begin(9600);
 
@@ -125,7 +131,7 @@ void buttonPress(){
 void buttonState() {
   if (button_interrupt_flag) {
     if (digitalRead(limSwitch1) == HIGH) {
-      speed_X =125;
+      speed_X =140;
       analogWrite(X_Motor, speed_X);
       debounce(limSwitch1);
       button_interrupt_flag = 0;
@@ -141,7 +147,7 @@ void buttonState() {
       state = state + 1;
     }
     if (digitalRead(limSwitch3) == HIGH) {
-      speed_Y =50;
+      speed_Y =20;
       analogWrite(Y_Motor, speed_Y);
       debounce(limSwitch3);
       button_interrupt_flag = 0;
@@ -149,7 +155,7 @@ void buttonState() {
       state = state + 1; 
     }
     if (digitalRead(limSwitch4) == HIGH) {
-      speed_Y =125;
+      speed_Y =180;
       analogWrite(Y_Motor, speed_Y);
       debounce(limSwitch4);
       button_interrupt_flag = 0;
@@ -175,17 +181,21 @@ void loop() {
   // put your main code here, to run repeatedly:
   buttonPress();
   if (state == 2) {
-    if (X_encoderTicks <= X_counts/2){
+    if (abs(X_encoderTicks) <= abs(X_counts/2)){
       speed_X =zeroSpeed; analogWrite(X_Motor, speed_X);
-      speed_Y = 50; analogWrite(Y_Motor, speed_Y);
+      speed_Y = 20; analogWrite(Y_Motor, speed_Y);
       } 
   }
-  if (state >= 4) {
-    if (Y_encoderTicks <= Y_counts/2){
+  if (state == 4) {
+    if (abs(Y_encoderTicks) <= abs(Y_counts/2)){
       speed_Y =zeroSpeed; analogWrite(Y_Motor, speed_Y);
       speed_X = zeroSpeed;
       analogWrite(X_Motor, speed_X);
+      state = state+1;
       } 
+  }
+  if (state >= 5) {
+    goToLoc();
   }
   Serial.print("X speed:  "); Serial.print(speed_X);Serial.print("  Y speed:  "); Serial.println(speed_Y);
   Serial.print("X axis:  "); Serial.print(X_encoderTicks);Serial.print("  Y axis:  "); Serial.println(Y_encoderTicks);
@@ -193,8 +203,30 @@ void loop() {
   delay(10);
 }
 
-//SwitchIST
 
+void goToLoc() {
+  if (state == 5) {
+    X_goal = 300; Y_goal = 300;
+  }
+  if (state == 6) {
+    X_goal = X_counts -300; Y_goal = Y_counts - 300;
+  }
+  if (state >= 7) {
+    X_goal = X_counts/2; Y_goal = Y_counts/2;
+  }
 
-
-
+  if (abs(X_encoderTicks) < X_counts && abs(X_encoderTicks) > 0) {
+    posError = X_goal - abs(X_encoderTicks);
+    speed_X = kp*posError + zeroSpeed;
+    if (speed_X > 140){speed_X = 140;}
+    if (speed_X < 50){speed_X = 50;}
+  }
+  if (abs(Y_encoderTicks) < Y_counts && abs(Y_encoderTicks) > 0) {
+    posError = Y_goal - abs(Y_encoderTicks);
+    speed_Y = kp*posError + zeroSpeed;
+    if (speed_X > 180){speed_X = 180;}
+    if (speed_X < 20){speed_X = 20;}
+  }
+  analogWrite(X_Motor, speed_X);
+  analogWrite(Y_Motor, speed_Y);
+}
