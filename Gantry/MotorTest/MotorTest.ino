@@ -206,13 +206,13 @@ void loop() {
 
 void goToLoc() {
   if (state == 5) {
-    X_goal = 300; Y_goal = 300;
+    X_goal = 300; Y_goal = 1000;
   }
   if (state == 6) {
-    X_goal = X_counts -300; Y_goal = Y_counts - 300;
+    X_goal = abs(X_counts) - 300; Y_goal = abs(Y_counts) - 1000;
   }
   if (state >= 7) {
-    X_goal = X_counts/2; Y_goal = Y_counts/2;
+    X_goal = abs(X_counts)/2; Y_goal = abs(Y_counts)/2;
   }
 
   if (abs(X_encoderTicks) < X_counts && abs(X_encoderTicks) > 0) {
@@ -224,9 +224,10 @@ void goToLoc() {
   if (abs(Y_encoderTicks) < Y_counts && abs(Y_encoderTicks) > 0) {
     posError = Y_goal - abs(Y_encoderTicks);
     speed_Y = kp*posError + zeroSpeed;
-    if (speed_X > 180){speed_X = 180;}
-    if (speed_X < 20){speed_X = 20;}
+    if (speed_Y > 180){speed_Y = 180;}
+    if (speed_Y < 20){speed_Y = 20;}
   }
+  else { speed_X = zeroSpeed; speed_Y = zeroSpeed;}
   analogWrite(X_Motor, speed_X);
   analogWrite(Y_Motor, speed_Y);
 }
