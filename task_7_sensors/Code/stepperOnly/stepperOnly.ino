@@ -4,8 +4,8 @@
 #define RPM 120
 #define MICROSTEPS 16
 
-#define DIR 10
-#define STEP 8
+#define DIR 17
+#define STEP 18
 #define ENABLE 11
 
 #include "DRV8834.h"

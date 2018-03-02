@@ -33,7 +33,7 @@ int Y_encoderTicks = 0;
 
 //Motor Variables
 int zeroSpeed = 90;
-int speed_X = 50;
+int speed_X = 20;
 int speed_Y = zeroSpeed;
 
 //Timing Variables
@@ -131,7 +131,7 @@ void buttonPress(){
 void buttonState() {
   if (button_interrupt_flag) {
     if (digitalRead(limSwitch1) == HIGH) {
-      speed_X =140;
+      speed_X =180;
       analogWrite(X_Motor, speed_X);
       debounce(limSwitch1);
       button_interrupt_flag = 0;
@@ -139,7 +139,7 @@ void buttonState() {
       state = state + 1; 
     }
     if (digitalRead(limSwitch2) == HIGH) {
-      speed_X = 50;
+      speed_X = 30;
       analogWrite(X_Motor, speed_X);
       debounce(limSwitch2);
       button_interrupt_flag = 0;
@@ -218,8 +218,8 @@ void goToLoc() {
   if (abs(X_encoderTicks) < X_counts && abs(X_encoderTicks) > 0) {
     posError = X_goal - abs(X_encoderTicks);
     speed_X = kp*posError + zeroSpeed;
-    if (speed_X > 140){speed_X = 140;}
-    if (speed_X < 50){speed_X = 50;}
+    if (speed_X > 180){speed_X = 180;}
+    if (speed_X < 20){speed_X = 20;}
   }
   if (abs(Y_encoderTicks) < Y_counts && abs(Y_encoderTicks) > 0) {
     posError = Y_goal - abs(Y_encoderTicks);
