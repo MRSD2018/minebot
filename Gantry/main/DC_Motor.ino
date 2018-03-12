@@ -96,16 +96,22 @@ Serial.print("   X_Max:  "); Serial.println(X_max);
 Serial.print("   state:  "); Serial.println(init_state);
   //Serial.println("   Y-axis Init");
   if (init_state == 0) {
+    digitalWrite(relay_X, LOW);
+    digitalWrite(relay_Y, HIGH);
     Y_encoderTicks = 0;
     speed_Y = Right;
     analogWrite(Y_Motor, speed_Y);
   }
   else if (init_state == 1) {
+    digitalWrite(relay_X, LOW);
+    digitalWrite(relay_Y, HIGH);
     Y_max = abs(Y_encoderTicks);
     speed_Y = Left;
     analogWrite(Y_Motor, speed_Y);
   }
   else if (init_state == 2) {
+    digitalWrite(relay_X, LOW);
+    digitalWrite(relay_Y, HIGH);
     Y_center = (Y_max)/2;
     speed_Y = Right;
     analogWrite(Y_Motor, speed_Y);
@@ -114,15 +120,21 @@ Serial.print("   state:  "); Serial.println(init_state);
       speed_X = Backward;
       analogWrite(Y_Motor, speed_Y);
       analogWrite(X_Motor, speed_X);
+      digitalWrite(relay_X, HIGH);
+      digitalWrite(relay_Y, LOW);
       X_encoderTicks = 0;
     }
   }
   else if (init_state == 3){
+    digitalWrite(relay_X, HIGH);
+    digitalWrite(relay_Y, LOW);
     X_max = abs(X_encoderTicks);
     speed_X = Forward;
     analogWrite(X_Motor, speed_X);
   }
   else if (init_state ==4) {
+    digitalWrite(relay_X, HIGH);
+    digitalWrite(relay_Y, LOW);
     X_center = (X_max)/2;
     speed_X = Backward;
     analogWrite(X_Motor, speed_X);
@@ -131,9 +143,13 @@ Serial.print("   state:  "); Serial.println(init_state);
       speed_X = zeroSpeed;
       analogWrite(Y_Motor, speed_Y);
       analogWrite(X_Motor, speed_X);
+      digitalWrite(relay_X, LOW);
+      digitalWrite(relay_Y, LOW);
     }
   }
   else {
+    digitalWrite(relay_X, LOW);
+    digitalWrite(relay_Y, LOW);
     speed_Y = zeroSpeed;
     speed_X = zeroSpeed;
     analogWrite(Y_Motor, speed_Y);

@@ -1,8 +1,8 @@
 //******** Define Variables ********//
 
 //Relays
-#define relay_Y 3
-#define relay_X 6
+#define relay_Y 6
+#define relay_X 3
 
 //Switches
 #define state_but 33
@@ -47,6 +47,10 @@ void loop() {
 //State Machine
   if (STATE == 2) {
     initialize();
+  }
+  else{
+    digitalWrite(relay_X, LOW);
+    digitalWrite(relay_Y, LOW);
   }
   delay(10);
 }
