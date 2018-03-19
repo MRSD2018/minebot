@@ -20,8 +20,8 @@ extern volatile int Y_encoderTicks = 0;
 //Speeds
 extern volatile int speed_X = zeroSpeed;
 extern volatile int speed_Y = zeroSpeed;
-int Right = 40;
-int Left = 160;
+int Right = 20;
+int Left = 180;
 int Forward = 180;
 int Backward = 20;
 
@@ -177,7 +177,6 @@ void initialize() {
     speed_X = zeroSpeed;
     analogWrite(Y_Motor, speed_Y);
     analogWrite(X_Motor, speed_X);
-    
     stepper_rot.runToNewPosition(800);
     stepper_rot.runToNewPosition(-800);
     init_state = 7;
