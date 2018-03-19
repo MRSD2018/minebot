@@ -17,6 +17,17 @@ AccelStepper stepper_rot(1, 20, 17) ;
 
 //Switches
 #define state_but 33
+//Limit Switches
+//Y axis switches
+#define limSwitch1 34 //Y_max
+#define limSwitch2 35 //Y_min
+//X_max axis switches
+#define limSwitch3 14
+#define limSwitch4 7
+//X_min axis switches
+#define limSwitch5 8
+//#define limSwitch6 22
+
 extern volatile int but_interrupt_flag = 1;
 
 //LEDs 
@@ -25,7 +36,7 @@ extern volatile int but_interrupt_flag = 1;
 #define LED3 26
 
 //State
-int STATE = 0; //Start in a Hold state
+extern volatile int STATE = 0; //Start in a Hold state
 extern volatile bool arrived_X = false;
 extern volatile bool arrived_Y = false;
 extern volatile int init_state = 0;
@@ -41,6 +52,8 @@ void setup() {
   Serial.begin(9600);
 
   motor_setup();
+
+  switch_setup();
 
   //Relays
   pinMode(relay_X, OUTPUT);
