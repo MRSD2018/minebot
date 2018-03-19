@@ -76,7 +76,7 @@ void setup() {
 }
 
 void loop() {
-  if (STATE != 2 && STATE != 3) {
+  if (STATE != 2 && STATE != 3 && STATE !=4) {
     digitalWrite(relay_X, LOW);
     digitalWrite(relay_Y, LOW);
     analogWrite(X_Motor, zeroSpeed);
@@ -89,6 +89,12 @@ void loop() {
   
   if (STATE == 3) {
     sweep();
+  }
+
+  if (STATE == 4) {
+    PIDControl_Y(1000);
+    PIDControl_X(500);
+    Serial.print(arrived_Y); Serial.print(arrived_X);
   }
   
   delay(10);
@@ -122,6 +128,11 @@ void stateChange() {
           break;
           
         case 3:
+          Serial.println("State: PID");
+          STATE = 4;
+          break;
+
+        case 4:
           Serial.println("State: WAITING");
           STATE = 0;
           break;

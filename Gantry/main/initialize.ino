@@ -26,11 +26,11 @@ double pwmToWritePos_Y = 0;
 
 //Constants
 //X
-double kp_X = 0.1;
-double kd_X = 0;
+double kp_X = 2;
+double kd_X = .5;
 //Y
-double kp_Y = 0.1;
-double kd_Y = 0;
+double kp_Y = 2;
+double kd_Y = .5;
 
 /*****************************************************************/
 /* POSITION CONTROL
@@ -40,17 +40,15 @@ double kd_Y = 0;
  /*****************************************************************/
 bool PIDControl_X(int X_goal) {
 
-  Serial.println("PID CONTROL");
-
   //Move gantry plate if position command is valid.
-  if (X_goal < X_max && X_goal > 0){
+  if (X_goal < X_max && X_goal > 0 && Initialization_Flag){
     
     // calculate current time and timestep
     nowTime_X = millis();
     dt_X = (double)(nowTime_X - prevTime_X); // note this is in milliseconds still
 
     // calculate errors
-    positionError_X = X_encoderTicks - X_goal;
+    positionError_X = X_goal - X_encoderTicks;
     positionErrorSum_X += positionError_X * dt_X;
 
     // calculate PWM
@@ -85,17 +83,15 @@ bool PIDControl_X(int X_goal) {
 
 bool PIDControl_Y(int Y_goal) {
 
-  Serial.println("PID CONTROL");
-
   //Move gantry plate if position command is valid.
-  if (Y_goal < X_max && X_goal > 0){
+  if (Y_goal < Y_max && Y_goal > 0 && Initialization_Flag){
     
     // calculate current time and timestep
     nowTime_Y = millis();
     dt_Y = (double)(nowTime_Y - prevTime_Y); // note this is in milliseconds still
 
     // calculate errors
-    positionError_Y = Y_encoderTicks - Y_goal;
+    positionError_Y = Y_goal - Y_encoderTicks ;
     positionErrorSum_Y += positionError_Y * dt_Y;
 
     // calculate PWM
@@ -111,7 +107,7 @@ bool PIDControl_Y(int Y_goal) {
 
     // calculate current time and timestepive Motor
     analogWrite(Y_Motor, speed_Y);
-    Serial.print(Y_encoderTicks); Serial.print("   ===>    "); Serial.print(Y_goal); Serial.print("   ===>    "); Serial.println(pwmToWritePos_Y);
+    Serial.print(Y_encoderTicks); Serial.print("   ===>    "); Serial.print(Y_goal); Serial.print("   ===>    "); Serial.println(speed_Y);
 
     //If gantry is within the position error and not moving, set that the desired position has been reached
     if ((abs(positionError_Y) <= Error_Y) && (prevPositionError_Y == positionError_Y)){ 
