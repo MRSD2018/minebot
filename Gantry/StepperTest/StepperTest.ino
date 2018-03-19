@@ -8,7 +8,7 @@ void setup() {
   Serial.begin(9600);
   // put your setup code here, to run once:
   stepper_rot.setMaxSpeed(1000);
-  stepper_rot.setAcceleration(5000);
+  stepper_rot.setAcceleration(2000);
   stepper_rot.setSpeed(400);
   stepper_rot.setCurrentPosition(0.0); 
 //  stepper_rot.setEnablePin(18);
@@ -28,13 +28,13 @@ void loop() {
 //  stepper_rot.enableOutputs();
 //  stepper_rot.runSpeed();
 //  digitalWrite(enable, LOW);
-  stepper_rot.runToNewPosition(800);
-  stepper_probe.runToNewPosition(800);
+  stepper_rot.runToNewPosition(400);
+//  stepper_probe.runToNewPosition(800);
   Serial.print(stepper_rot.currentPosition());
   Serial.print('\n');
   delay(1000);
-  stepper_rot.runToNewPosition(-800);
-  stepper_probe.runToNewPosition(-800);
+  stepper_rot.runToNewPosition(-400);
+//  stepper_probe.runToNewPosition(-800);
   Serial.print(stepper_rot.currentPosition());
   Serial.print('\n');
   delay(1000);
