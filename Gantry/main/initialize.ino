@@ -26,10 +26,10 @@ double pwmToWritePos_Y = 0;
 
 //Constants
 //X
-double kp_X = 2;
+double kp_X = 5;
 double kd_X = .5;
 //Y
-double kp_Y = 2;
+double kp_Y = 7;
 double kd_Y = .5;
 
 /*****************************************************************/
@@ -41,7 +41,9 @@ double kd_Y = .5;
 bool PIDControl_X(int X_goal) {
 
   //Move gantry plate if position command is valid.
-  if (X_goal < X_max && X_goal > 0 && Initialization_Flag){
+  if (X_goal < X_max-1000 && X_goal > 1000 && Initialization_Flag){
+    
+    arrived_X = false;
     
     // calculate current time and timestep
     nowTime_X = millis();
@@ -64,7 +66,7 @@ bool PIDControl_X(int X_goal) {
 
     // calculate current time and timestepive Motor
     analogWrite(X_Motor, speed_X);
-    Serial.print(X_encoderTicks); Serial.print("   ===>    "); Serial.print(X_goal); Serial.print("   ===>    "); Serial.println(pwmToWritePos_X);
+    Serial.print(X_encoderTicks); Serial.print("   ===>    "); Serial.print(X_goal); Serial.print("   ===>    "); Serial.println(speed_X);
 
     //If gantry is within the position error and not moving, set that the desired position has been reached
     if ((abs(positionError_X) <= Error_X) && (prevPositionError_X == positionError_X)){ 
@@ -84,7 +86,9 @@ bool PIDControl_X(int X_goal) {
 bool PIDControl_Y(int Y_goal) {
 
   //Move gantry plate if position command is valid.
-  if (Y_goal < Y_max && Y_goal > 0 && Initialization_Flag){
+  if (Y_goal < Y_max-100 && Y_goal > 100 && Initialization_Flag){
+
+    arrived_Y = false;
     
     // calculate current time and timestep
     nowTime_Y = millis();

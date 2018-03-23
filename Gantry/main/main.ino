@@ -2,12 +2,26 @@
 
 //******** Define Variables ********//
 
-//Motors
+///Motors
 #define X_Motor 29
 #define Y_Motor 30
 extern int zeroSpeed = 90;
 
-//Rotational Steppre Motor
+//Encoder X
+#define X_channelAPin 15
+#define X_channelBPin 16
+volatile bool X_channelAVal;
+volatile bool X_channelBVal;
+extern volatile int X_encoderTicks = 0;
+
+//Encoder Y
+#define Y_channelAPin 38
+#define Y_channelBPin 39
+volatile bool Y_channelAVal;
+volatile bool Y_channelBVal;
+extern volatile int Y_encoderTicks = 0;
+
+//Rotational Stepper Motor
 #define Enable 18
 AccelStepper stepper_rot(1, 20, 17) ;
 
@@ -37,10 +51,15 @@ extern volatile int but_interrupt_flag = 1;
 
 //State
 extern volatile int STATE = 0; //Start in a Hold state
-extern volatile bool arrived_X = false;
-extern volatile bool arrived_Y = false;
+extern volatile bool arrived_X = true;
+extern volatile bool arrived_Y = true;
+extern volatile bool arrived_R = true;
 extern volatile int init_state = 0;
 extern volatile bool Initialization_Flag = false;
+String incoming = "";
+int Y_desired = 2000;
+int X_desired = 2000;
+int R_desired = 0;
 
 //Gantry Params
 extern volatile int X_max = 0;
@@ -92,12 +111,50 @@ void loop() {
   }
 
   if (STATE == 4) {
-    PIDControl_Y(1000);
-    PIDControl_X(500);
-    Serial.print(arrived_Y); Serial.print(arrived_X);
+//    if (Serial.available() <= 0 && incoming == "") {
+//      analogWrite(X_Motor, zeroSpeed);
+//      analogWrite(Y_Motor, zeroSpeed);
+//    }
+    if (Serial.available() > 0 ) {
+      incoming = Serial.readString();
+      if (incoming.startsWith("Y")) {
+        arrived_Y = 0;
+        incoming.remove(0,1);
+        Y_desired = incoming.toInt();
+        incoming = "";
+      }
+      else if (incoming.startsWith("X")) {
+        arrived_X = 0;
+        incoming.remove(0,1);
+        X_desired = incoming.toInt();
+        incoming = "";
+      }
+      else if (incoming.startsWith("R")) {
+        incoming.remove(0,1);
+        R_desired = incoming.toInt();
+        stepper_rot.runToNewPosition(R_desired);
+        arrived_R = true;
+        incoming = "";
+      }
+    }
+    
+    if (incoming == "") { 
+      if (arrived_Y) {
+        Y_desired = Y_encoderTicks; 
+      }
+      if (arrived_X) {
+        X_desired = X_encoderTicks;
+      }
+    }
+
+  
+    PIDControl_Y(Y_desired);
+    PIDControl_X(X_desired);
+    Serial.print ("Y:  "); Serial.print(Y_desired); Serial.println(arrived_Y);
+    Serial.print ("X:  ");Serial.print(X_desired); Serial.println(arrived_X);
   }
   
-  delay(10);
+  delay(1);
 }
 
 void stateChange() {

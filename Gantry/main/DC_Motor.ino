@@ -1,21 +1,4 @@
 /******** Motor Specific Variables ********/
-//Motors
-#define X_Motor 29
-#define Y_Motor 30
-
-//Encoder X
-#define X_channelAPin 15
-#define X_channelBPin 16
-volatile bool X_channelAVal;
-volatile bool X_channelBVal;
-extern volatile int X_encoderTicks = 0;
-
-//Encoder Y
-#define Y_channelAPin 38
-#define Y_channelBPin 39
-volatile bool Y_channelAVal;
-volatile bool Y_channelBVal;
-extern volatile int Y_encoderTicks = 0;
 
 //Speeds
 extern volatile int speed_X = zeroSpeed;
