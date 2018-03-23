@@ -27,10 +27,10 @@ double pwmToWritePos_Y = 0;
 //Constants
 //X
 double kp_X = 5;
-double kd_X = .5;
+double kd_X = 0;
 //Y
-double kp_Y = 7;
-double kd_Y = .5;
+double kp_Y = 10;
+double kd_Y = 0;
 
 /*****************************************************************/
 /* POSITION CONTROL
@@ -41,7 +41,7 @@ double kd_Y = .5;
 bool PIDControl_X(int X_goal) {
 
   //Move gantry plate if position command is valid.
-  if (X_goal < X_max-1000 && X_goal > 1000 && Initialization_Flag){
+  if (X_goal < X_max && X_goal > 0 && Initialization_Flag){
     
     arrived_X = false;
     
@@ -61,8 +61,8 @@ bool PIDControl_X(int X_goal) {
     speed_X = zeroSpeed + pwmToWritePos_X; //Calcualte PWM as a reference to the zero speed PWM for Sabertooth Driver
 
     //Truncate PWMs above and below limits
-    if (speed_X > zeroSpeed+60){ speed_X = zeroSpeed+60; }
-    if (speed_X < zeroSpeed-50){ speed_X = zeroSpeed-50; }
+    if (speed_X > zeroSpeed+80){ speed_X = zeroSpeed+80; }
+    if (speed_X < zeroSpeed-30){ speed_X = zeroSpeed-30; }
 
     // calculate current time and timestepive Motor
     analogWrite(X_Motor, speed_X);
@@ -86,7 +86,7 @@ bool PIDControl_X(int X_goal) {
 bool PIDControl_Y(int Y_goal) {
 
   //Move gantry plate if position command is valid.
-  if (Y_goal < Y_max-100 && Y_goal > 100 && Initialization_Flag){
+  if (Y_goal < Y_max && Y_goal > 0 && Initialization_Flag){
 
     arrived_Y = false;
     
@@ -106,8 +106,8 @@ bool PIDControl_Y(int Y_goal) {
     speed_Y = zeroSpeed + pwmToWritePos_Y; //Calcualte PWM as a reference to the zero speed PWM for Sabertooth Driver
 
     //Truncate PWMs above and below limits
-    if (speed_Y > zeroSpeed+60){ speed_Y = zeroSpeed+60; }
-    if (speed_Y < zeroSpeed-50){ speed_Y = zeroSpeed-50; }
+    if (speed_Y > zeroSpeed+80){ speed_Y = zeroSpeed+80; }
+    if (speed_Y < zeroSpeed-30){ speed_Y = zeroSpeed-30; }
 
     // calculate current time and timestepive Motor
     analogWrite(Y_Motor, speed_Y);

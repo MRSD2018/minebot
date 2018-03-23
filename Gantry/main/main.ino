@@ -121,17 +121,29 @@ void loop() {
         arrived_Y = 0;
         incoming.remove(0,1);
         Y_desired = incoming.toInt();
+//        if (Y_desired > Y_max-100 || Y_desired < 100) {
+//          Serial.println("Y Value out of range");
+//          Y_desired = Y_encoderTicks;
+//        }
         incoming = "";
       }
-      else if (incoming.startsWith("X")) {
+      if (incoming.startsWith("X")) {
         arrived_X = 0;
         incoming.remove(0,1);
         X_desired = incoming.toInt();
+//        if (X_desired > X_max-50 || X_desired < 50) {
+//          Serial.println("X Value out of range");
+//          X_desired = X_encoderTicks;
+//        }
         incoming = "";
       }
-      else if (incoming.startsWith("R")) {
+      if (incoming.startsWith("R")) {
         incoming.remove(0,1);
         R_desired = incoming.toInt();
+        if (R_desired > 800 || R_desired < -800) {
+          Serial.println("R Value out of range");
+          R_desired = 0;
+        }
         stepper_rot.runToNewPosition(R_desired);
         arrived_R = true;
         incoming = "";
