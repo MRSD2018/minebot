@@ -33,7 +33,7 @@ void loop() {
   Serial.print(stepper_rot.currentPosition());
   Serial.print('\n');
   delay(1000);
-  stepper_rot.runToNewPosition(-400);
+  stepper_rot.runToNewPosition(800);
 //  stepper_probe.runToNewPosition(-800);
   Serial.print(stepper_rot.currentPosition());
   Serial.print('\n');

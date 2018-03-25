@@ -1,4 +1,8 @@
 #import <AccelStepper.h>
+#include <ros.h>
+#include <ros/time.h>
+#include <gantry/to_gantry_msg.h>
+#include <gantry/gantry_status.h>
 
 //******** Define Variables ********//
 
@@ -67,6 +71,11 @@ bool PID_switch = true;
 extern volatile int X_max = 0;
 extern volatile int Y_max = 0;
 
+//ROS setup
+ros::NodeHandle nh;
+gantry::gantry_status gantry_status;
+ros::Publisher gantryStatus("gantry_current_status", &gantry_status);
+
 //Debug mode
 extern bool Debug = false;
 
@@ -75,6 +84,8 @@ extern bool Debug = false;
 void setup() {
   
   if (Debug) { Serial.begin(9600);}
+  
+  rosSetup();
 
   motor_setup();
 
@@ -101,20 +112,27 @@ void setup() {
 }
 
 void loop() {
-  if (STATE != 2 && STATE != 3 && STATE !=4) {
+  
+  if (!Debug) { 
+//    //ROS gantry_status message publisher
+    publishGantryStatus();
+    nh.spinOnce();
+  }
+  
+  if (STATE == 0 || STATE == 4) {
     set_speed(zeroSpeed, zeroSpeed);
   }
   
-  if (STATE == 2) {
+  if (STATE == 1) {
     initialize();
   }
   
-  if (STATE == 3) {
+  if (STATE == 2) {
     sweep();
     PID_switch = true;
   }
 
-  if (STATE == 4) {
+  if (STATE == 3) {
     if (PID_switch) {
       Y_desired = Y_encoderTicks;
       X_desired = X_encoderTicks;
@@ -178,35 +196,40 @@ void stateChange() {
       debounce(state_but);
       
      switch(STATE) {
-        case 0:
+        case 4:
           if (Debug) {Serial.println("State: Hold");}
-          STATE = 1;
+          STATE = 0;
           break;
           
-        case 1:
+        case 0:
           if (Debug) {Serial.println("State: Initialize");}
-          STATE = 2;
+          STATE = 1;
           init_state = 0;
           Initialization_Flag = false;
           break;
           
-        case 2:
+        case 1:
           if (Debug) {Serial.println("State: Sweep");}
-          STATE = 3;
+          STATE = 2;
           set_speed(zeroSpeed, 10);
           break;
           
-        case 3:
+        case 2:
           if (Debug) {Serial.println("State: PID");}
-          STATE = 4;
+          STATE = 3;
           break;
 
-        case 4:
+        case 3:
           if (Debug) {Serial.println("State: WAITING");}
-          STATE = 0;
+          STATE = 4;
           break;
       } 
     }
   }
 }
 
+
+void messageCb(const gantry::to_gantry_msg& gantry_cmd)
+{
+  //do something here
+}
