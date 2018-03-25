@@ -51,6 +51,7 @@ extern volatile int but_interrupt_flag = 1;
 
 //State
 extern volatile int STATE = 0; //Start in a Hold state
+extern volatile bool arrived = false;
 extern volatile bool arrived_X = true;
 extern volatile bool arrived_Y = true;
 extern volatile bool arrived_R = true;
@@ -60,6 +61,7 @@ String incoming = "";
 int Y_desired = 2000;
 int X_desired = 2000;
 int R_desired = 0;
+bool PID_switch = true;
 
 //Gantry Params
 extern volatile int X_max = 0;
@@ -96,10 +98,7 @@ void setup() {
 
 void loop() {
   if (STATE != 2 && STATE != 3 && STATE !=4) {
-    digitalWrite(relay_X, LOW);
-    digitalWrite(relay_Y, LOW);
-    analogWrite(X_Motor, zeroSpeed);
-    analogWrite(Y_Motor, zeroSpeed);
+    set_speed(zeroSpeed, zeroSpeed);
   }
   
   if (STATE == 2) {
@@ -108,33 +107,30 @@ void loop() {
   
   if (STATE == 3) {
     sweep();
+    PID_switch = true;
   }
 
   if (STATE == 4) {
-//    if (Serial.available() <= 0 && incoming == "") {
-//      analogWrite(X_Motor, zeroSpeed);
-//      analogWrite(Y_Motor, zeroSpeed);
-//    }
+    if (PID_switch) {
+      Y_desired = Y_encoderTicks;
+      X_desired = X_encoderTicks;
+      set_speed(zeroSpeed, zeroSpeed);
+      PID_switch = false;
+    }
+    
     if (Serial.available() > 0 ) {
       incoming = Serial.readString();
       if (incoming.startsWith("Y")) {
-        arrived_Y = 0;
+        arrived_Y = false;
         incoming.remove(0,1);
         Y_desired = incoming.toInt();
-//        if (Y_desired > Y_max-100 || Y_desired < 100) {
-//          Serial.println("Y Value out of range");
-//          Y_desired = Y_encoderTicks;
-//        }
         incoming = "";
       }
+      
       if (incoming.startsWith("X")) {
         arrived_X = 0;
         incoming.remove(0,1);
         X_desired = incoming.toInt();
-//        if (X_desired > X_max-50 || X_desired < 50) {
-//          Serial.println("X Value out of range");
-//          X_desired = X_encoderTicks;
-//        }
         incoming = "";
       }
       if (incoming.startsWith("R")) {
@@ -159,11 +155,12 @@ void loop() {
       }
     }
 
-  
-    PIDControl_Y(Y_desired);
-    PIDControl_X(X_desired);
+      PIDControl(X_desired, Y_desired);
+//    PIDControl_Y(Y_desired);
+//    PIDControl_X(X_desired);
     Serial.print ("Y:  "); Serial.print(Y_desired); Serial.println(arrived_Y);
     Serial.print ("X:  ");Serial.print(X_desired); Serial.println(arrived_X);
+    Serial.println(arrived);
   }
   
   delay(1);
