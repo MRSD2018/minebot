@@ -60,13 +60,15 @@ void motor_setup() {
  */
  /*****************************************************************/
 void initialize() {
-  Serial.print("Y Speed:  "); Serial.print(speed_Y);
-  Serial.print("   Y Encoder:  "); Serial.print(Y_encoderTicks);
-  Serial.print("   Y_Max:  "); Serial.println(Y_max);
-  Serial.print("X Speed:  "); Serial.print(speed_X);
-  Serial.print("   X Encoder:  "); Serial.print(X_encoderTicks);
-  Serial.print("   X_Max:  "); Serial.println(X_max);
-  Serial.print("   state:  "); Serial.println(init_state);
+  if (Debug) {
+    Serial.print("Y Speed:  "); Serial.print(speed_Y);
+    Serial.print("   Y Encoder:  "); Serial.print(Y_encoderTicks);
+    Serial.print("   Y_Max:  "); Serial.println(Y_max);
+    Serial.print("X Speed:  "); Serial.print(speed_X);
+    Serial.print("   X Encoder:  "); Serial.print(X_encoderTicks);
+    Serial.print("   X_Max:  "); Serial.println(X_max);
+    Serial.print("   state:  "); Serial.println(init_state);
+  }
 
   //Init_State 0: go to Y_min limit switch and encoderTicks to 0
   if (init_state == 0) {

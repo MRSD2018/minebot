@@ -67,10 +67,14 @@ bool PID_switch = true;
 extern volatile int X_max = 0;
 extern volatile int Y_max = 0;
 
+//Debug mode
+extern bool Debug = false;
+
 
 //******** Setup for Main ********//
 void setup() {
-  Serial.begin(9600);
+  
+  if (Debug) { Serial.begin(9600);}
 
   motor_setup();
 
@@ -117,33 +121,39 @@ void loop() {
       set_speed(zeroSpeed, zeroSpeed);
       PID_switch = false;
     }
-    
-    if (Serial.available() > 0 ) {
-      incoming = Serial.readString();
-      if (incoming.startsWith("Y")) {
-        arrived_Y = false;
-        incoming.remove(0,1);
-        Y_desired = incoming.toInt();
-        incoming = "";
+
+    if (Debug) {
+      if (Serial.available() > 0 ) {
+        incoming = Serial.readString();
+        if (incoming.startsWith("Y")) {
+          arrived_Y = false;
+          incoming.remove(0,1);
+          Y_desired = incoming.toInt();
+          incoming = "";
+        }
+        
+        if (incoming.startsWith("X")) {
+          arrived_X = 0;
+          incoming.remove(0,1);
+          X_desired = incoming.toInt();
+          incoming = "";
+        }
+        if (incoming.startsWith("R")) {
+          incoming.remove(0,1);
+          R_desired = incoming.toInt();
+          if (R_desired > 800 || R_desired < -800) {
+            Serial.println("R Value out of range");
+            R_desired = 0;
+          }
+          stepper_rot.runToNewPosition(R_desired);
+          arrived_R = true;
+          incoming = "";
+        }
       }
       
-      if (incoming.startsWith("X")) {
-        arrived_X = 0;
-        incoming.remove(0,1);
-        X_desired = incoming.toInt();
-        incoming = "";
-      }
-      if (incoming.startsWith("R")) {
-        incoming.remove(0,1);
-        R_desired = incoming.toInt();
-        if (R_desired > 800 || R_desired < -800) {
-          Serial.println("R Value out of range");
-          R_desired = 0;
-        }
-        stepper_rot.runToNewPosition(R_desired);
-        arrived_R = true;
-        incoming = "";
-      }
+      Serial.print ("Y:  "); Serial.print(Y_desired); Serial.println(arrived_Y);
+      Serial.print ("X:  ");Serial.print(X_desired); Serial.println(arrived_X);
+      Serial.println(arrived);
     }
     
     if (incoming == "") { 
@@ -156,11 +166,6 @@ void loop() {
     }
 
       PIDControl(X_desired, Y_desired);
-//    PIDControl_Y(Y_desired);
-//    PIDControl_X(X_desired);
-    Serial.print ("Y:  "); Serial.print(Y_desired); Serial.println(arrived_Y);
-    Serial.print ("X:  ");Serial.print(X_desired); Serial.println(arrived_X);
-    Serial.println(arrived);
   }
   
   delay(1);
@@ -174,32 +179,30 @@ void stateChange() {
       
      switch(STATE) {
         case 0:
-          Serial.println("State: Hold");
+          if (Debug) {Serial.println("State: Hold");}
           STATE = 1;
           break;
           
         case 1:
-          Serial.println("State: Initialize");
-          digitalWrite(relay_X, LOW);
-          digitalWrite(relay_Y, LOW);
+          if (Debug) {Serial.println("State: Initialize");}
           STATE = 2;
           init_state = 0;
           Initialization_Flag = false;
           break;
           
         case 2:
-          Serial.println("State: Sweep");
+          if (Debug) {Serial.println("State: Sweep");}
           STATE = 3;
-          analogWrite(Y_Motor, 20);
+          set_speed(zeroSpeed, 10);
           break;
           
         case 3:
-          Serial.println("State: PID");
+          if (Debug) {Serial.println("State: PID");}
           STATE = 4;
           break;
 
         case 4:
-          Serial.println("State: WAITING");
+          if (Debug) {Serial.println("State: WAITING");}
           STATE = 0;
           break;
       } 

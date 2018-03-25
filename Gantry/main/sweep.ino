@@ -9,11 +9,11 @@ void sweep() {
   if (Initialization_Flag) {
     if (Y_encoderTicks < buffer) {
       set_speed(zeroSpeed, sweepLeft);
-      Serial.println("going left");
+      if (Debug) {Serial.println("going left");}
     }
     else if (Y_encoderTicks > Y_max-buffer){
       set_speed(zeroSpeed, sweepRight);
-      Serial.println("going right");
+      if (Debug) {Serial.println("going right");}
     }
   }
 }

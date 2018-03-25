@@ -71,8 +71,10 @@ bool PIDControl(int X_goal, int Y_goal) {
 
     // calculate current time and timestepive Motor
     set_speed(speed_X, speed_Y);
-    Serial.print(X_encoderTicks); Serial.print("   ===>    "); Serial.print(X_goal); Serial.print("   ===>    "); Serial.println(speed_X);
-    Serial.print(Y_encoderTicks); Serial.print("   ===>    "); Serial.print(Y_goal); Serial.print("   ===>    "); Serial.println(speed_Y);
+    if (Debug) {
+      Serial.print(X_encoderTicks); Serial.print("   ===>    "); Serial.print(X_goal); Serial.print("   ===>    "); Serial.println(speed_X);
+      Serial.print(Y_encoderTicks); Serial.print("   ===>    "); Serial.print(Y_goal); Serial.print("   ===>    "); Serial.println(speed_Y);
+    }
 
     //If gantry is within the position error and not moving, set that the desired position has been reached
     if ((abs(positionError_X) <= Error_X) && (prevPositionError_X == positionError_X)){ 
