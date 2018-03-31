@@ -1,10 +1,6 @@
 //saftey buffer
 int buffer = 500;
 
-//Sweep speeds
-int sweepRight = 0;
-int sweepLeft = 230;
-
 void sweep() {
   if (Initialization_Flag) {
     if (Y_encoderTicks < buffer) {

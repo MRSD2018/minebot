@@ -11,19 +11,23 @@
 #define Y_Motor 30
 extern int zeroSpeed = 90;
 
+//Sweep speeds
+extern volatile double sweepRight = 0;
+extern volatile double sweepLeft = 230;
+
 //Encoder X
 #define X_channelAPin 15
 #define X_channelBPin 16
 volatile bool X_channelAVal;
 volatile bool X_channelBVal;
-extern volatile int X_encoderTicks = 0;
+extern volatile double X_encoderTicks = 0;
 
 //Encoder Y
 #define Y_channelAPin 38
 #define Y_channelBPin 39
 volatile bool Y_channelAVal;
 volatile bool Y_channelBVal;
-extern volatile int Y_encoderTicks = 0;
+extern volatile double Y_encoderTicks = 0;
 
 //Rotational Stepper Motor
 #define Enable 18
@@ -62,9 +66,9 @@ extern volatile bool arrived_R = true;
 extern volatile int init_state = 0;
 extern volatile bool Initialization_Flag = false;
 String incoming = "";
-int Y_desired = 2000;
-int X_desired = 2000;
-int R_desired = 0;
+double Y_desired = 2000;
+double X_desired = 2000;
+double R_desired = 0;
 bool PID_switch = true;
 
 //Gantry Params
@@ -77,7 +81,7 @@ gantry::gantry_status gantry_status;
 ros::Publisher gantryStatus("gantry_current_status", &gantry_status);
 
 //Debug mode
-extern bool Debug = true;
+extern bool Debug = false;
 
 
 //******** Setup for Main ********//
@@ -115,8 +119,10 @@ void loop() {
   
   if (!Debug) { 
 //    //ROS gantry_status message publisher
-    publishGantryStatus();
+    readyGantryMsg();
+    gantryStatus.publish(&gantry_status);
     nh.spinOnce();
+    delay(1);
   }
   
   if (STATE == 0 || STATE == 4) {
@@ -183,7 +189,7 @@ void loop() {
       }
     }
 
-      PIDControl(X_desired, Y_desired);
+    PIDControl(X_desired, Y_desired);
   }
   
   delay(1);
@@ -226,10 +232,4 @@ void stateChange() {
       } 
     }
   }
-}
-
-
-void messageCb(const gantry::to_gantry_msg& gantry_cmd)
-{
-  //do something here
 }

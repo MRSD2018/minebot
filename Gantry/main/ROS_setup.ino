@@ -1,10 +1,10 @@
 //setup subscriber
 ros::Subscriber<gantry::to_gantry_msg> sub("gantry_cmd", messageCb);
 
-double cmToTicksY = (1/.508)*(1/24)*644.424;
+double cmToTicksY = 52.8562;
 double ticksToCmY = 1/cmToTicksY;
 
-double cmToTicksX = (1/.8)*644.424;
+double cmToTicksX = 805.53;
 double ticksToCmX = 1/cmToTicksX;
 
 void rosSetup() {
@@ -12,7 +12,7 @@ void rosSetup() {
   delay(1000);
   
   if (!Debug) {
-    nh.getHardware()->setBaud(57600); //115200
+    nh.getHardware()->setBaud(115200); //115200
     nh.initNode();
   }
   
@@ -35,7 +35,7 @@ void rosSetup() {
    * gantry_status.position_reached <== arrived
 */
 /**************************************************************************/
-void publishGantryStatus()
+void readyGantryMsg()
 {
    gantry_status.state = STATE;
    gantry_status.sweep_speed = speed_Y - 90;
@@ -58,13 +58,13 @@ void publishGantryStatus()
    * gantry_status.probe_angle_desired; ==>
 */
 /**************************************************************************/
-void gantryCommands( const gantry::to_gantry_msg gantry_cmd_send){
-//  STATE = messageCb.state_desired;
-//  sweepRight = 90 - to_gantry_msg.sweep_speed_desired;
-//  sweepLeft = 90 + to_gantry_msg.sweep_speed_desired;
-//  if (sweepRight < 0) {sweepRight == 0;} 
-//  if (sweepLeft > 255) {sweepLeft == 255;} 
-//  X_desired = int(to_gantry_msg.x_desired * cmToTicksX);
-//  Y_desired = int(to_gantry_msg.y_desired * cmToTicksY);
-//  R_desired = 0;
+void messageCb( const gantry::to_gantry_msg& gantry_cmd){
+  STATE = gantry_cmd.state_desired;
+  sweepRight = 90 - gantry_cmd.sweep_speed_desired;
+  sweepLeft = 90 + gantry_cmd.sweep_speed_desired;
+  if (sweepRight < 0) {sweepRight == 0;} 
+  if (sweepLeft > 255) {sweepLeft == 255;} 
+  X_desired = gantry_cmd.x_desired * cmToTicksX;
+  Y_desired = gantry_cmd.y_desired * cmToTicksY;
+  R_desired = gantry_cmd.yaw_desired;
 }
