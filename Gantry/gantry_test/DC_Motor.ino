@@ -1,5 +1,5 @@
 /******** Motor Specific Variables ********/
-
+//
 //Speeds
 extern volatile int speed_X = zeroSpeed;
 extern volatile int speed_Y = zeroSpeed;
@@ -83,7 +83,7 @@ void X_encoderCount(){
   X_channelAVal = digitalRead(X_channelAPin);
   X_channelBVal = digitalRead(X_channelBPin);
   
-//  Serial.print(channelBVal); Serial.print(channelAVal); Serial.println(encoderTicks);
+  Serial.print("X:  ");  Serial.println(X_encoderTicks);
   if (X_channelAVal == X_channelBVal) {
     X_encoderTicks++;
   }
@@ -96,7 +96,7 @@ void Y_encoderCount(){
   Y_channelAVal = digitalRead(Y_channelAPin);
   Y_channelBVal = digitalRead(Y_channelBPin);
   
-//  Serial.print(channelBVal); Serial.print(channelAVal); Serial.println(encoderTicks);
+  Serial.print("Y:  ");Serial.println(Y_encoderTicks);
   if (Y_channelAVal == Y_channelBVal) {
     Y_encoderTicks++;
   }

@@ -5,8 +5,8 @@ extern volatile int speed_X = zeroSpeed;
 extern volatile int speed_Y = zeroSpeed;
 int Right = 20;
 int Left = 180;
-int Forward = 180;
-int Backward = 20;
+int Forward = 200;
+int Backward = 0;
 
 //State
 int X_count = 0;
@@ -114,9 +114,9 @@ void initialize() {
 
   //Init_State 6: rotate rotary plate forward and back to 800 ticks
   else if (init_state == 6){
-    set_speed(zeroSpeed, zeroSpeed);
-    stepper_rot.runToNewPosition(800);
-    stepper_rot.runToNewPosition(-800);
+//    set_speed(zeroSpeed, zeroSpeed);
+//    stepper_rot.runToNewPosition(800);
+//    stepper_rot.runToNewPosition(-800);
     init_state = 7;
     Initialization_Flag = true;
   }

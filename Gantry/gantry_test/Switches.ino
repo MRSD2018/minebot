@@ -10,9 +10,9 @@ int debounce_time = 100;
 #define limSwitch4 7
 //X_min axis switches
 #define limSwitch5 8
-//#define limSwitch6 22
+#define limSwitch6 22
 
-void switch_setup () {
+void switch_setup() {
   
   //Limit ISR
   attachInterrupt(digitalPinToInterrupt(limSwitch1),limitState_Y_max, RISING);
@@ -20,7 +20,7 @@ void switch_setup () {
   attachInterrupt(digitalPinToInterrupt(limSwitch3),limitState_X_max, RISING);
   attachInterrupt(digitalPinToInterrupt(limSwitch4),limitState_X_max, RISING);
   attachInterrupt(digitalPinToInterrupt(limSwitch5),limitState_X_min, RISING);
-//  attachInterrupt(digitalPinToInterrupt(limSwitch6),limitState_X_min, RISING);
+  attachInterrupt(digitalPinToInterrupt(limSwitch6),limitState_X_min, RISING);
 
 }
 
@@ -118,11 +118,11 @@ void limitState_X_min() {
         init_state = 4;
       }
     }
-//    if (digitalRead(limSwitch6) == HIGH && init_state == 3){
-//      but_interrupt_flag = 0;
-//      debounce(limSwitch6);
-//      init_state = 4;
-//    }
+    if (digitalRead(limSwitch6) == HIGH && init_state == 3){
+      but_interrupt_flag = 0;
+      debounce(limSwitch6);
+      init_state = 4;
+    }
   }
 }
 

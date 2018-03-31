@@ -77,7 +77,7 @@ gantry::gantry_status gantry_status;
 ros::Publisher gantryStatus("gantry_current_status", &gantry_status);
 
 //Debug mode
-extern bool Debug = false;
+extern bool Debug = true;
 
 
 //******** Setup for Main ********//

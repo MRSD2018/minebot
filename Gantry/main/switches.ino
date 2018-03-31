@@ -26,7 +26,7 @@ void switch_setup () {
 
 void debounce(int button) {
   if (Debug) {Serial.print("Debouncing "); Serial.println(button);}
-  if (STATE != 2 && button != state_but) {
+  if (STATE != 1 && button != state_but) {
     if (Debug) {Serial.println("EMERGENCY STOP - LIMIT HIT");}
     STATE = 0;
   }

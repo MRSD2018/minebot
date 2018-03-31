@@ -93,10 +93,10 @@ void setup() {
   digitalWrite(LED3, HIGH);
 
   stepper_rot.setMaxSpeed(1000);
-  stepper_rot.setAcceleration(2000);
+  stepper_rot.setAcceleration(150);
   stepper_rot.setSpeed(400);
   stepper_rot.setCurrentPosition(0.0);
-  pinMode(enable, OUTPUT);
+  //pinMode(enable, OUTPUT);
   
 }
 
@@ -108,5 +108,12 @@ void loop() {
 //  set_speed(180, zeroSpeed);
 //  Serial.println('X');
 
+  stepper_rot.runToNewPosition(400);
+  delay(1000);
+  stepper_rot.runToNewPosition(-400);
+  delay(1000);
+  
+
 }
+
 
