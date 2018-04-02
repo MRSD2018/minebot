@@ -39,8 +39,8 @@ void readyGantryMsg()
 {
    gantry_status.state = STATE;
    gantry_status.sweep_speed = speed_Y - 90;
-   gantry_status.x =  X_encoderTicks*ticksToCmX;
-   gantry_status.y =  Y_encoderTicks*ticksToCmY;
+   gantry_status.x =  X_encoderTicks * ticksToCmX;
+   gantry_status.y =  Y_encoderTicks * ticksToCmY;
    gantry_status.yaw = 0;
    gantry_status.probe_angle = 0;
    gantry_status.position_reached = arrived;

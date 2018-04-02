@@ -12,8 +12,10 @@
 extern int zeroSpeed = 90;
 
 //Sweep speeds
-extern volatile double sweepRight = 0;
-extern volatile double sweepLeft = 230;
+extern volatile int speed_X = zeroSpeed;
+extern volatile int speed_Y = zeroSpeed;
+extern volatile double sweepRight = 30;
+extern volatile double sweepLeft = 200;
 
 //Encoder X
 #define X_channelAPin 15
@@ -72,8 +74,8 @@ double R_desired = 0;
 bool PID_switch = true;
 
 //Gantry Params
-extern volatile int X_max = 0;
-extern volatile int Y_max = 0;
+extern volatile double X_max = 0;
+extern volatile double Y_max = 0;
 
 //ROS setup
 ros::NodeHandle nh;
@@ -135,6 +137,7 @@ void loop() {
   
   if (STATE == 2) {
     sweep();
+    Serial.println(speed_Y);
     PID_switch = true;
   }
 

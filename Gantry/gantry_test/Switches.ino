@@ -118,7 +118,7 @@ void limitState_X_min() {
         init_state = 4;
       }
     }
-    if (digitalRead(limSwitch6) == HIGH && init_state == 3){
+    if (digitalRead(limSwitch6) == HIGH ){
       but_interrupt_flag = 0;
       debounce(limSwitch6);
       init_state = 4;

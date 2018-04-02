@@ -26,7 +26,7 @@ void motor_setup() {
   pinMode(limSwitch3, INPUT);
   pinMode(limSwitch4, INPUT);
   pinMode(limSwitch5, INPUT);
-//  pinMode(limSwitch6, INPUT);
+  pinMode(limSwitch6, INPUT);
 
   //Motor Init
   pinMode(X_Motor, OUTPUT);

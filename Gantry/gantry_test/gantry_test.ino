@@ -40,7 +40,7 @@ AccelStepper stepper_rot(1, 20, 17) ;
 #define limSwitch4 7
 //X_min axis switches
 #define limSwitch5 8
-//#define limSwitch6 22
+#define limSwitch6 22
 
 extern volatile int but_interrupt_flag = 1;
 
@@ -108,10 +108,10 @@ void loop() {
 //  set_speed(180, zeroSpeed);
 //  Serial.println('X');
 
-  stepper_rot.runToNewPosition(400);
-  delay(1000);
-  stepper_rot.runToNewPosition(-400);
-  delay(1000);
+//  stepper_rot.runToNewPosition(400);
+//  delay(1000);
+//  stepper_rot.runToNewPosition(-400);
+//  delay(1000);
   
 
 }

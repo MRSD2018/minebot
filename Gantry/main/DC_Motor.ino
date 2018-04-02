@@ -1,8 +1,6 @@
 /******** Motor Specific Variables ********/
 
 //Speeds
-extern volatile int speed_X = zeroSpeed;
-extern volatile int speed_Y = zeroSpeed;
 double Right = 20;
 double Left = 180;
 double Forward = 200;
